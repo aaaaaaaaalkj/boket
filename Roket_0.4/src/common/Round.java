@@ -1,0 +1,24 @@
+package common;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public enum Round {
+	PREFLOP, FLOP, TURN, RIVER;
+
+	public Round next() {
+		if (this == RIVER)
+			return null;
+		else
+			return Round.values()[this.ordinal() + 1];
+	}
+
+	public boolean followsAfter(Round round) {
+		return this.ordinal() - round.ordinal() == 1;
+	}
+
+	public static final List<Round> VALUES = Collections
+			.unmodifiableList(Arrays
+					.asList(values()));
+}
