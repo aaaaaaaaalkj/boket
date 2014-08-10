@@ -33,22 +33,6 @@ public class Strategy2 implements IStrategy {
 
 	}
 
-	public void preFlop(ICondition cond, TypeOfDecision d) {
-		preflop.put(cond, new StrategyDec(d));
-	}
-
-	public void flop(ICondition cond, TypeOfDecision d) {
-		flop.put(cond, new StrategyDec(d));
-	}
-
-	public void turn(ICondition cond, TypeOfDecision d) {
-		turn.put(cond, new StrategyDec(d));
-	}
-
-	public void river(ICondition cond, TypeOfDecision d) {
-		river.put(cond, new StrategyDec(d));
-	}
-
 	public Map<Round, List<ICondition>> getConditions() {
 		Map<Round, List<ICondition>> res = new LinkedHashMap<>();
 		for (Round r : maps.keySet()) {

@@ -19,6 +19,8 @@ public enum ContributionType implements ICondition {
 		return (sit -> sit.getContribution().ordinal() >= ordinal());
 	}
 
-
+	public ICondition orLower() {
+		return (sit -> sit.getContribution().ordinal() <= ordinal());
+	}
 
 }

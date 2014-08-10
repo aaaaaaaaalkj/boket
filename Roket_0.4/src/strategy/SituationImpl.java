@@ -1,30 +1,30 @@
 package strategy;
 
-import static strategy.ConditionType.CONNECTOR;
-import static strategy.ConditionType.DOUBLE_GUTSHOT;
-import static strategy.ConditionType.FLOP;
-import static strategy.ConditionType.FLUSH;
-import static strategy.ConditionType.FLUSH_DRAW;
-import static strategy.ConditionType.FOUR_OF_A_KIND;
-import static strategy.ConditionType.FULL_HOUSE;
-import static strategy.ConditionType.GOOD_SET;
-import static strategy.ConditionType.GUTSHOT;
-import static strategy.ConditionType.MONSTER_DRAW;
-import static strategy.ConditionType.OESD;
-import static strategy.ConditionType.POCKET_PAIR;
-import static strategy.ConditionType.PREFLOP;
-import static strategy.ConditionType.RAINBOW;
-import static strategy.ConditionType.RIVER;
-import static strategy.ConditionType.STRAIGHT;
-import static strategy.ConditionType.STRAIGHT_FLUSH;
-import static strategy.ConditionType.SUITED;
-import static strategy.ConditionType.THREE_OF_A_KIND;
-import static strategy.ConditionType.TURN;
-import static strategy.ConditionType.TWO_PAIR;
+import static common.Round.FLOP;
+import static common.Round.PREFLOP;
+import static common.Round.RIVER;
+import static common.Round.TURN;
+import static strategy.conditions.postflop.ComboType.FLUSH;
+import static strategy.conditions.postflop.ComboType.FOUR_OF_A_KIND;
+import static strategy.conditions.postflop.ComboType.FULL_HOUSE;
+import static strategy.conditions.postflop.ComboType.GOOD_SET;
+import static strategy.conditions.postflop.ComboType.STRAIGHT;
+import static strategy.conditions.postflop.ComboType.STRAIGHT_FLUSH;
+import static strategy.conditions.postflop.ComboType.THREE_OF_A_KIND;
+import static strategy.conditions.postflop.ComboType.TWO_PAIR;
+import static strategy.conditions.postflop.DrawType.DOUBLE_GUTSHOT;
+import static strategy.conditions.postflop.DrawType.FLUSH_DRAW;
+import static strategy.conditions.postflop.DrawType.GUTSHOT;
+import static strategy.conditions.postflop.DrawType.MONSTER_DRAW;
+import static strategy.conditions.postflop.DrawType.OESD;
+import static strategy.conditions.preflop.ConnectorType.CONNECTOR;
+import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
+import static strategy.conditions.preflop.SuitedType.SUITED;
 
 import java.util.Collection;
-import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import managementCards.CardManagement;
 import managementCards.cards.Card;
@@ -37,6 +37,7 @@ import managementCards.cat_rec_new.Result;
 import managementPayments.AmountOfJetons;
 import managementPayments.PaymentManagement;
 import managementState.StateManagement;
+import strategy.conditions.ICondition;
 import strategy.conditions.ISituation;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
@@ -52,8 +53,7 @@ import common.PlayerId;
 import common.Round;
 
 public class SituationImpl implements ISituation {
-	private final EnumSet<ConditionType> conditions = EnumSet
-			.of(ConditionType.TRUE);
+	private final Set<ICondition> conditions = new HashSet<>();
 
 	public final Hand hand;
 
@@ -87,7 +87,7 @@ public class SituationImpl implements ISituation {
 		num_active_players = stateManagement.getActivePlayers().size();
 		stack = payManagement.getStack(currentPlayer);
 
-		conditions.add(ConditionType.fromRound(table.getRound()));
+		conditions.add(table.getRound());
 
 		if (table.isRainbow()) {
 			conditions.add(RAINBOW);
@@ -194,7 +194,7 @@ public class SituationImpl implements ISituation {
 		return flush_danger;
 	}
 
-	public boolean isApplicably(ConditionType c) {
+	public boolean isApplicably(ICondition c) {
 		return conditions.contains(c);
 	}
 

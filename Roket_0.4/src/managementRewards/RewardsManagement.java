@@ -4,29 +4,29 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import managementPayments.AmountOfJetons;
-import strategy.Condition;
 import strategy.Stat;
+import strategy.conditions.ICondition;
 import strategy.conditions.ISituation;
 
 import common.Round;
 
 public class RewardsManagement {
-	private Map<Round, Map<Condition, Stat>> stats = new LinkedHashMap<Round, Map<Condition, Stat>>();
+	private Map<Round, Map<ICondition, Stat>> stats = new LinkedHashMap<>();
 
 	public RewardsManagement() {
-		stats.put(Round.PREFLOP, new LinkedHashMap<Condition, Stat>());
-		stats.put(Round.FLOP, new LinkedHashMap<Condition, Stat>());
-		stats.put(Round.TURN, new LinkedHashMap<Condition, Stat>());
-		stats.put(Round.RIVER, new LinkedHashMap<Condition, Stat>());
+		stats.put(Round.PREFLOP, new LinkedHashMap<>());
+		stats.put(Round.FLOP, new LinkedHashMap<>());
+		stats.put(Round.TURN, new LinkedHashMap<>());
+		stats.put(Round.RIVER, new LinkedHashMap<>());
 	}
 
-	public void add(Round round, Condition cond) {
+	public void add(Round round, ICondition cond) {
 		stats.get(round).put(cond, new Stat());
 	}
 
 	public void saveStat(ISituation situation, AmountOfJetons amount) {
-		Map<Condition, Stat> map = stats.get(situation.getRound());
-		for (Condition c : map.keySet()) {
+		Map<ICondition, Stat> map = stats.get(situation.getRound());
+		for (ICondition c : map.keySet()) {
 			if (c.eval(situation)) {
 				// map.get(c).payed(amount);
 

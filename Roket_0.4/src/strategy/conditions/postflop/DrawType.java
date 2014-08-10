@@ -6,7 +6,7 @@ import strategy.conditions.ICondition;
 import strategy.conditions.ISituation;
 
 public enum DrawType implements ICondition {
-	NONE, GUTSHOT, OESD, DOUBLEGUTSHOT, FLUSH_DRAW, MONSTER_DRAW;
+	NONE, GUTSHOT, OESD, DOUBLE_GUTSHOT, FLUSH_DRAW, MONSTER_DRAW;
 	public static final EnumSet<DrawType> VALUES = EnumSet
 			.allOf(DrawType.class);
 	boolean bothCardsInvolved;

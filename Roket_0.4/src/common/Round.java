@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public enum Round {
+import strategy.conditions.ICondition;
+import strategy.conditions.ISituation;
+
+public enum Round implements ICondition {
 	PREFLOP, FLOP, TURN, RIVER;
 
 	public Round next() {
@@ -21,4 +24,9 @@ public enum Round {
 	public static final List<Round> VALUES = Collections
 			.unmodifiableList(Arrays
 					.asList(values()));
+
+	@Override
+	public boolean eval(ISituation sit) {
+		return sit.getRound() == this;
+	}
 }
