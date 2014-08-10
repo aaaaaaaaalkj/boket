@@ -56,7 +56,9 @@ public class NewStrategy implements IStrategy {
 			PostflopSelector sel2 = new PostflopSelector();
 
 			sel2.setCombo(situation.getCombo());
-			sel2.setDanger(situation.getDanger());
+			sel2.setStraightDanger(situation.getStraightDanger());
+			sel2.setPairBasedDanger(situation.getPairBasedDanger());
+			sel2.setFlushDanger(situation.getFlushDanger());
 			sel2.setDraw(situation.getDraw());
 			sel2.setNumActive(situation.getNumActivePlayers());
 			sel2.setPot(situation.getPot());

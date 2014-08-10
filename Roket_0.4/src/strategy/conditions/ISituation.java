@@ -4,8 +4,10 @@ import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
 import strategy.conditions.postflop.ComboType;
-import strategy.conditions.postflop.DangerType;
 import strategy.conditions.postflop.DrawType;
+import strategy.conditions.postflop.FlushDanger;
+import strategy.conditions.postflop.PairBasedDanger;
+import strategy.conditions.postflop.StraightDanger;
 import strategy.conditions.preflop.ConnectorType;
 import strategy.conditions.preflop.SuitedType;
 
@@ -20,7 +22,11 @@ public interface ISituation {
 
 	ComboType getCombo();
 
-	DangerType getDanger();
+	StraightDanger getStraightDanger();
+
+	FlushDanger getFlushDanger();
+
+	PairBasedDanger getPairBasedDanger();
 
 	DrawType getDraw();
 

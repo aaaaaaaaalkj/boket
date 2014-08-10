@@ -54,7 +54,7 @@ public class Simulation {
 	public void addDefaultPlayer() {
 		for (String name : new String[] { "Alex", "Maria", "Natascha",
 				"Penelope", "Christine", "Lena", "Anna", "Karina" }) {
-			addPlayer(new Player2(name), Test.nutStrategy);
+			addPlayer(new Player2(name), Test.s);
 		}
 	}
 

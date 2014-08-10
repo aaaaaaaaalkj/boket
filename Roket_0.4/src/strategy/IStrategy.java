@@ -40,6 +40,18 @@ public interface IStrategy {
 		return extend(FLOP.and(cond), dec);
 	}
 
+	default StrategyWaiting flop(ICondition cond) {
+		return new StrategyWaiting(FLOP.and(cond), this);
+	}
+
+	default StrategyWaiting turn(ICondition cond) {
+		return new StrategyWaiting(TURN.and(cond), this);
+	}
+
+	default StrategyWaiting river(ICondition cond) {
+		return new StrategyWaiting(RIVER.and(cond), this);
+	}
+
 	default IStrategy turn(ICondition cond, TypeOfDecision dec) {
 		return extend(TURN.and(cond), dec);
 	}

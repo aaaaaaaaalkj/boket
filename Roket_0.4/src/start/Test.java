@@ -24,13 +24,16 @@ import static strategy.conditions.preflop.SuitedType.SUITED;
 import strategy.IStrategy;
 import strategy.Strategy2;
 import strategy.conditions.common.ContributionType;
+import strategy.conditions.postflop.FlushDanger;
+import strategy.conditions.postflop.PairBasedDanger;
+import strategy.conditions.postflop.StraightDanger;
 
 public class Test {
-	public final static IStrategy nutStrategy = new Strategy2();
+	public static IStrategy s = (sit -> FOLD);
 	public final static IStrategy shitStrategy = new Strategy2();
 
 	static {
-		nutStrategy.preflop(
+		s = s.preflop(
 				SUITED.or(CONNECTOR).or(POCKET_PAIR)
 				, CALL);
 		// nutStrategy
@@ -43,20 +46,20 @@ public class Test {
 		// .or(CONTRIBUTION_LESS_THAN(0.125))))),
 		// CALL);
 
-		nutStrategy.flop(MONSTER_DRAW // 15 outs
-				.and(NO_FULL_HOUSE_DANGER) // no pair in flop
+		s = s.flop(MONSTER_DRAW // 15 outs
+				.and(PairBasedDanger.LOW) // no pair in flop
 				.and(ContributionType.HIGH.orLower()), CALL);
 
-		nutStrategy.flop(OESD.or(DOUBLE_GUTSHOT).and(NO_FLUSH_DANGER) // rainbow
-				.and(NO_FULL_HOUSE_DANGER) // no pair in flop
+		s = s.flop(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.LOW) // rainbow
+				.and(PairBasedDanger.LOW) // no pair in flop
 				.and(ContributionType.MIDDLE.orLower()), CALL); // pay more
 																// here?
 
 		// strategy.flop(OESD.or(DOUBLE_GUTSHOT) // dangerous
 		// .and(CONTRIBUTION_LESS_THAN(0.1)), CALL); // cheap chance
 
-		nutStrategy.flop(FLUSH_DRAW // 9 outs
-				.and(NO_FULL_HOUSE_DANGER) // no pair in flop
+		s = s.flop(FLUSH_DRAW // 9 outs
+				.and(PairBasedDanger.LOW) // no pair in flop
 				.and(ContributionType.MIDDLE.orLower()), CALL);
 
 		// nutStrategy.flop( // besser formulieren und ausarbeiten. Sonst ist
@@ -65,62 +68,67 @@ public class Test {
 		// .and(NO_FLUSH_DANGER).and(NO_STRAIGHT_DANGER)
 		// .and(CONTRIBUTION_LESS_THAN(0.1)), RAISE(15));
 
-		nutStrategy.flop(TWO_PAIR // 4 outs
+		s = s.flop(TWO_PAIR // 4 outs
 				.and(ContributionType.LOW), CALL);
 
-		nutStrategy.flop(GOOD_SET)
-				.if_(STRAIGHT_DANGER_HIGHER(10).or(FLUSH_DANGER)).then(FOLD)
+		s = s.flop(GOOD_SET)
+				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH))
+				.then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_QUARTER_POT)
-				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT);
+				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT)
+				.build();
 
-		nutStrategy.flop(STRAIGHT, RAISE_HALF_POT);
-		nutStrategy.flop(FLUSH, RAISE_POT_SIZE);
-		nutStrategy.flop(FULL_HOUSE, RAISE_POT_SIZE);
-		nutStrategy.flop(FOUR_OF_A_KIND, RAISE_POT_SIZE);
-		nutStrategy.flop(STRAIGHT_FLUSH, RAISE_POT_SIZE);
+		s = s.flop(STRAIGHT, RAISE_HALF_POT);
+		s = s.flop(FLUSH, RAISE_POT_SIZE);
+		s = s.flop(FULL_HOUSE, RAISE_POT_SIZE);
+		s = s.flop(FOUR_OF_A_KIND, RAISE_POT_SIZE);
+		s = s.flop(STRAIGHT_FLUSH, RAISE_POT_SIZE);
 
-		nutStrategy.turn(STRAIGHT, RAISE_DOUBLE_POT);
-		nutStrategy.turn(FLUSH, RAISE_DOUBLE_POT);
-		nutStrategy.turn(FULL_HOUSE, RAISE_DOUBLE_POT);
-		nutStrategy.turn(FOUR_OF_A_KIND, RAISE_DOUBLE_POT);
-		nutStrategy.turn(STRAIGHT_FLUSH, RAISE_DOUBLE_POT);
+		s = s.turn(STRAIGHT, RAISE_DOUBLE_POT);
+		s = s.turn(FLUSH, RAISE_DOUBLE_POT);
+		s = s.turn(FULL_HOUSE, RAISE_DOUBLE_POT);
+		s = s.turn(FOUR_OF_A_KIND, RAISE_DOUBLE_POT);
+		s = s.turn(STRAIGHT_FLUSH, RAISE_DOUBLE_POT);
 
-		nutStrategy.turn(MONSTER_DRAW // 15 outs
-				.and(NO_FULL_HOUSE_DANGER) // no pair in flop
+		s = s.turn(MONSTER_DRAW // 15 outs
+				.and(PairBasedDanger.LOW) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL);
 
-		nutStrategy.turn(OESD.or(DOUBLE_GUTSHOT).and(NO_FLUSH_DANGER) // rainbow
-				.and(NO_FULL_HOUSE_DANGER) // no pair in flop
+		s = s.turn(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.LOW) // rainbow
+				.and(PairBasedDanger.LOW) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL); // pay more here?
 
-		nutStrategy.turn(FLUSH_DRAW // 9 outs
-				.and(NO_FULL_HOUSE_DANGER) // no pair in flop
+		s = s.turn(FLUSH_DRAW // 9 outs
+				.and(PairBasedDanger.LOW) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL);
 
-		nutStrategy.turn(TWO_PAIR // 4 outs
+		s = s.turn(TWO_PAIR // 4 outs
 				.and(ContributionType.LOW), CALL);
 
-		nutStrategy.turn(GOOD_SET)
-				.if_(STRAIGHT_DANGER_HIGHER(10).or(FLUSH_DANGER)).then(FOLD)
+		s = s.turn(GOOD_SET)
+				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH)).then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_HALF_POT)
-				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT);
+				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT)
+				.build();
 
-		nutStrategy
-				.river(STRAIGHT.and(NO_FLUSH_DANGER).and(NO_FULL_HOUSE_DANGER),
-						ALL_IN);
-		nutStrategy.river(STRAIGHT.and(FLUSH_DANGER.or(FULL_HOUSE_DANGER)),
+		s = s.river(STRAIGHT.and(FlushDanger.LOW).and(PairBasedDanger.LOW),
+				ALL_IN);
+		s = s.river(
+				STRAIGHT.and(FlushDanger.HIGH.or(PairBasedDanger.HIGH)),
 				CALL);
-		nutStrategy.river(FLUSH, ALL_IN);
-		nutStrategy.river(FULL_HOUSE, ALL_IN);
-		nutStrategy.river(FOUR_OF_A_KIND, ALL_IN);
-		nutStrategy.river(STRAIGHT_FLUSH, ALL_IN);
+		s = s.river(FLUSH, ALL_IN);
+		s = s.river(FULL_HOUSE, ALL_IN);
+		s = s.river(FOUR_OF_A_KIND, ALL_IN);
+		s = s.river(STRAIGHT_FLUSH, ALL_IN);
 
-		nutStrategy.river(TWO_PAIR.and(ContributionType.LOW), CALL);
+		s = s.river(TWO_PAIR.and(ContributionType.LOW), CALL);
 
-		nutStrategy.river(GOOD_SET)
-				.if_(STRAIGHT_DANGER_HIGHER(10).or(FLUSH_DANGER)).then(FOLD)
+		s = s.river(GOOD_SET)
+				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH)).then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_QUARTER_POT)
-				.if_(ContributionType.HIGH.orLower()).then(RAISE_HALF_POT);
+				.if_(ContributionType.HIGH.or(ContributionType.MIDDLE))
+				.then(RAISE_HALF_POT)
+				.build();
 
 	}
 

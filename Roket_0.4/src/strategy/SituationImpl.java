@@ -43,8 +43,10 @@ import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
 import strategy.conditions.postflop.ComboType;
-import strategy.conditions.postflop.DangerType;
 import strategy.conditions.postflop.DrawType;
+import strategy.conditions.postflop.FlushDanger;
+import strategy.conditions.postflop.PairBasedDanger;
+import strategy.conditions.postflop.StraightDanger;
 import strategy.conditions.preflop.ConnectorType;
 import strategy.conditions.preflop.SuitedType;
 import tools.MapOfInteger;
@@ -89,9 +91,9 @@ public class SituationImpl implements ISituation {
 
 		conditions.add(table.getRound());
 
-		if (table.isRainbow()) {
-			conditions.add(RAINBOW);
-		}
+		// if (table.isRainbow()) {
+		// conditions.add(RAINBOW);
+		// }
 
 		List<Card> community = table.getCommunityCards();
 		List<Card> allOpen = table.getOpenCards(currentPlayer);
@@ -236,12 +238,6 @@ public class SituationImpl implements ISituation {
 	}
 
 	@Override
-	public DangerType getDanger() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public DrawType getDraw() {
 		// TODO Auto-generated method stub
 		return null;
@@ -267,6 +263,24 @@ public class SituationImpl implements ISituation {
 
 	@Override
 	public NumActiveType getNumActivePlayers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StraightDanger getStraightDanger() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FlushDanger getFlushDanger() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PairBasedDanger getPairBasedDanger() {
 		// TODO Auto-generated method stub
 		return null;
 	}
