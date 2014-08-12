@@ -16,9 +16,9 @@ public final class PreflopSelector implements ISelector {
 	private static final int n0 = 1;
 	private static final int n1 = SuitedType.VALUES.size();
 	private static final int n2 = n1 * ConnectorType.VALUES.size();
-	private static final int n3 = n2 * PotType.VALUES.size();
-	private static final int n4 = n3 * NumActiveType.VALUES.size();
-	private static final int n5 = n4 * ContributionType.VALUES.size();
+	private static final int n3 = n2 * PotType.getCount();
+	private static final int n4 = n3 * NumActiveType.getCount();
+	private static final int n5 = n4 * ContributionType.getCount();
 
 	public static final int size = n5;
 

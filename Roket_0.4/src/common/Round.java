@@ -29,4 +29,5 @@ public enum Round implements ICondition {
 	public boolean eval(ISituation sit) {
 		return sit.getRound() == this;
 	}
+
 }

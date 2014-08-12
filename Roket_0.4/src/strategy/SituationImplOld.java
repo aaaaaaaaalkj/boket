@@ -1,9 +1,5 @@
 package strategy;
 
-import static common.Round.FLOP;
-import static common.Round.PREFLOP;
-import static common.Round.RIVER;
-import static common.Round.TURN;
 import static strategy.conditions.postflop.ComboType.FLUSH;
 import static strategy.conditions.postflop.ComboType.FOUR_OF_A_KIND;
 import static strategy.conditions.postflop.ComboType.FULL_HOUSE;
@@ -21,10 +17,10 @@ import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
 import static strategy.conditions.preflop.SuitedType.OFF_SUIT;
 import static strategy.conditions.preflop.SuitedType.SUITED;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import managementCards.CardManagement;
 import managementCards.cards.Card;
@@ -34,10 +30,10 @@ import managementCards.cards.Suit;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.Cathegory;
 import managementCards.cat_rec_new.Result;
+import managementCards.cat_rec_new.Window;
 import managementPayments.AmountOfJetons;
 import managementPayments.PaymentManagement;
 import managementState.StateManagement;
-import strategy.conditions.ICondition;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -48,13 +44,11 @@ import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
 import strategy.conditions.preflop.ConnectorType;
 import strategy.conditions.preflop.SuitedType;
-import tools.MapOfInteger;
 
 import common.PlayerId;
 import common.Round;
 
 public class SituationImplOld implements ISituation {
-	private final Set<ICondition> conditions = new HashSet<>();
 
 	private final Hand hand;
 
@@ -68,11 +62,12 @@ public class SituationImplOld implements ISituation {
 	private final FlushDanger flushDanger;
 	private final StraightDanger straightDanger;
 	private final DrawType draw;
+	private final Round round;
 
 	private final AmountOfJetons to_pay;
 	private final AmountOfJetons highest_bid;
 	private final AmountOfJetons pot2;
-	private final AmountOfJetons stack;
+	private final AmountOfJetons stack2;
 
 	// private final int open_faces;
 
@@ -82,19 +77,24 @@ public class SituationImplOld implements ISituation {
 			PaymentManagement payManagement) {
 		PlayerId currentPlayer = stateManagement.getCurrent();
 		hand = table.getHand(currentPlayer);
-		if (hand != null) {
-			conditions.add(hand.isSuited() ? SUITED : OFF_SUIT);
-			conditions.add(ConnectorType.fromInt(hand.getDifference()));
-		}
+
+		connector = ConnectorType.fromInt(hand.getDifference());
+		suited = hand.isSuited() ? SUITED : OFF_SUIT;
 
 		to_pay = payManagement.toPay(currentPlayer);
 		highest_bid = payManagement.getHighestBid(currentPlayer);
 		pot2 = payManagement.computeTotalPot(currentPlayer);
+
 		numActive = NumActiveType.fromInt(stateManagement.getActivePlayers()
 				.size());
-		stack = payManagement.getStack(currentPlayer);
+		stack2 = payManagement.getStack(currentPlayer);
 
-		conditions.add(table.getRound());
+		pot = pot2.greaterOrEqual(stack2) ?
+				PotType.HIGH : pot2.greaterOrEqual(stack2.divideToEven(2)) ?
+						PotType.MIDDLE
+						: PotType.LOW;
+
+		round = table.getRound();
 
 		// if (table.isRainbow()) {
 		// conditions.add(RAINBOW);
@@ -107,113 +107,106 @@ public class SituationImplOld implements ISituation {
 		straightDanger = computeStraightDanger(community);
 		pairBasedDanger = computePairBasedDanger(community);
 
-		if (isApplicably(FLOP) || isApplicably(TURN) || isApplicably(RIVER)) {
-
-			if (Cat_Rec.checkOESD(allOpen))
-				conditions.add(OESD);
+		DrawType draw2 = null;
+		ComboType combo2 = null;
+		if (round != Round.PREFLOP) {
 
 			if (Cat_Rec.checkGutshot(allOpen))
-				conditions.add(GUTSHOT);
+				draw2 = GUTSHOT;
 
-			if (Cat_Rec.checkDoubleGutshot(allOpen))
-				conditions.add(DOUBLE_GUTSHOT);
+			if (Cat_Rec.checkOESD(allOpen))
+				draw2 = OESD;
 
-			if (Cat_Rec.checkFlushDraw(allOpen))
-				conditions.add(FLUSH_DRAW);
+			if (Cat_Rec.checkDoubleGutshot(allOpen)) {
+				draw2 = DOUBLE_GUTSHOT;
+			}
 
-			if (isApplicably(FLUSH_DRAW)
-					&& (isApplicably(DOUBLE_GUTSHOT) || isApplicably(OESD)))
-				conditions.add(MONSTER_DRAW);
+			if (Cat_Rec.checkFlushDraw(allOpen)) {
+				if (draw2 == OESD || draw2 == DOUBLE_GUTSHOT) {
+					draw2 = MONSTER_DRAW;
+				} else {
+					draw2 = FLUSH_DRAW;
+				}
+			}
 
 			Result r2 = Cat_Rec.check(allOpen);
 
 			if (r2.getCathegory() == Cathegory.Two_Pair)
-				conditions.add(TWO_PAIR);
+				combo2 = TWO_PAIR;
 			if (r2.getCathegory() == Cathegory.Three_Of_A_Kind)
-				conditions.add(THREE_OF_A_KIND);
+				combo2 = THREE_OF_A_KIND;
 
 			if (r2.getCathegory() == Cathegory.Straight)
-				conditions.add(STRAIGHT);
+				combo2 = STRAIGHT;
 
 			if (r2.getCathegory() == Cathegory.Flush)
-				conditions.add(FLUSH);
+				combo2 = FLUSH;
 
 			if (r2.getCathegory() == Cathegory.Full_House)
-				conditions.add(FULL_HOUSE);
+				combo2 = FULL_HOUSE;
 
 			if (r2.getCathegory() == Cathegory.Four_Of_A_Kind)
-				conditions.add(FOUR_OF_A_KIND);
+				combo2 = FOUR_OF_A_KIND;
+
 			if (r2.getCathegory() == Cathegory.Straight_Flush)
-				conditions.add(STRAIGHT_FLUSH);
-
-			// Result r = Cat_Rec.checkPairBased(community);
-
+				combo2 = STRAIGHT_FLUSH;
 		}
-		open_faces = table.getCommunityCards2().count(Rank.Ace, Rank.King,
-				Rank.Queen, Rank.Jack);
-		if (isApplicably(POCKET_PAIR) && isApplicably(THREE_OF_A_KIND))
-			conditions.add(GOOD_SET);
-		contribution = ((double) to_pay.numSmallBlinds())
-				/ (pot.numSmallBlinds() + to_pay.numSmallBlinds());
+		if (connector == POCKET_PAIR && combo2 == THREE_OF_A_KIND) {
+			combo2 = GOOD_SET;
+		}
+		combo = combo2;
+		draw = draw2;
+		double contribution2 = ((double) to_pay.numSmallBlinds())
+				/ (pot2.numSmallBlinds() + to_pay.numSmallBlinds());
+		contribution = contribution2 < .15 ?
+				ContributionType.LOW : (contribution2 < .3 ?
+						ContributionType.MIDDLE :
+						ContributionType.HIGH);
 
 	}
 
-	private int computeStraightDanger(Collection<Card> community) {
-		int[] ar = new int[Rank.VALUES.size()];
-		for (Card c : community)
-			ar[c.getRank().ordinal()] = 1;
-
-		int sum = 0;
-		for (int i = -1; i < 9; i++) {
-			int sum2 = 0;
-			for (int j = i; j < i + 5; j++) {
-				if (j > 0)
-					sum2 += ar[j];
-				else
-					sum2 += ar[ar.length - 1]; // ACE
-			}
-			if (sum2 > 1)
-				sum += sum2;
-		}
-		return sum; // [2,25]
+	private PairBasedDanger computePairBasedDanger(Collection<Card> community) {
+		return Arrays.stream(Rank.values())
+				.map(
+						rank -> community.stream()
+								.map(Card::getRank)
+								.filter(rank::equals)
+								.count()
+				)
+				.max(Comparator.naturalOrder())
+				.map(PairBasedDanger::fromLong)
+				.orElse(PairBasedDanger.LOW);
 	}
 
-	private int computeFlushDanger(Collection<Card> community) {
-		int flush_danger = 0;
-		MapOfInteger<Suit> map = new MapOfInteger<>();
-		for (Card c : community)
-			map.inc(c.getSuit());
-		int sameColor = map.max();
-
-		if (isApplicably(FLOP) || isApplicably(TURN)) {
-			flush_danger = sameColor;
-		} else if (isApplicably(RIVER)) {
-			if (sameColor >= 3)
-				flush_danger = sameColor;
-			else
-				// No Danger if sameColor < 3
-				flush_danger = 0;
-		} else { // PREFLOP
-			flush_danger = 0;
-		}
-		return flush_danger;
+	private StraightDanger computeStraightDanger(Collection<Card> community) {
+		return Window.getDescValues().stream()
+				.map(
+						window -> community.stream()
+								.map(Card::getRank)
+								.filter(window::contains)
+								.distinct()
+								.count()
+				)
+				.max(Comparator.naturalOrder())
+				.map(StraightDanger::fromLong)
+				.orElse(StraightDanger.LOW);
 	}
 
-	public boolean isApplicably(ICondition c) {
-		return conditions.contains(c);
+	private FlushDanger computeFlushDanger(Collection<Card> community) {
+		return Arrays.stream(Suit.values())
+				.map(
+						suit -> community.stream()
+								.map(Card::getSuit)
+								.filter(suit::equals)
+								.count()
+				)
+				.max(Comparator.naturalOrder())
+				.map(FlushDanger::fromLong)
+				.orElse(FlushDanger.LOW);
 	}
 
 	public Round getRound() {
-		if (conditions.contains(RIVER))
-			return Round.RIVER;
-		if (conditions.contains(TURN))
-			return Round.TURN;
-		if (conditions.contains(FLOP))
-			return Round.FLOP;
-		if (conditions.contains(PREFLOP))
-			return Round.PREFLOP;
-		throw new IllegalStateException(
-				"round is neither of the four allowed rounds");
+		return round;
 	}
 
 	@Override

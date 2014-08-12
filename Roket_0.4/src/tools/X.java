@@ -81,7 +81,9 @@ public class X {
 			System.err.println(e.getMessage());
 		} finally {
 			try {
-				fr.close();
+				if (null != fr) {
+					fr.close();
+				}
 			} catch (Exception e) {
 			}
 		}

@@ -5,13 +5,12 @@ import static managementCards.cards.Rank.Four;
 import static managementCards.cards.Rank.Jack;
 import static managementCards.cards.Rank.King;
 import static managementCards.cards.Rank.Queen;
-import static old.Super_category.*;
+import static old.Super_category.PAIR;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import managementCards.cards.Rank;
-import tools.MapOfInteger;
 
 public class Category {
 	Super_category super_category;
@@ -33,14 +32,5 @@ public class Category {
 
 	public final static Category PAIR_OF_KINGS = new Category(PAIR, King, King,
 			Queen, Jack, Four);
-
-	public void test(Hand hand, Category c) {
-
-		MapOfInteger<Rank> need = new MapOfInteger<>();
-
-		for (Rank t : c.list)
-			need.inc(t);
-
-	}
 
 }

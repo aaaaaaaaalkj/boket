@@ -33,9 +33,17 @@ public enum Window {
 	King_High(King, Queen, Jack, Ten, Nine),
 	Ace_High(Ace, King, Queen, Jack, Ten);
 
-	public List<Rank> list;
+	private final List<Rank> list;
 
-	public static final List<Window> VALUES_DESC;
+	private static final List<Window> VALUES_DESC;
+
+	public static List<Window> getDescValues() {
+		return VALUES_DESC;
+	}
+
+	public boolean contains(Rank rank) {
+		return list.contains(rank);
+	}
 
 	static {
 		List<Window> desc = Arrays.asList(values());
@@ -44,7 +52,11 @@ public enum Window {
 	}
 
 	Window(Rank... ranks) {
-		list = Arrays.asList(ranks);
+		list = Collections.unmodifiableList(Arrays.asList(ranks));
+	}
+
+	public List<Rank> getRanks() {
+		return list;
 	}
 
 	public boolean applies(Collection<Rank> ranks) {

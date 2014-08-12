@@ -92,9 +92,10 @@ public class Cat_Rec {
 	public Result getFlushResult() {
 		// StraightFlush
 		for (Suit c : Suit.VALUES) {
-			for (Window w : Window.VALUES_DESC) {
+			for (Window w : Window.getDescValues()) {
 				if (w.applies(cards.flush.get(c))) {
-					return new ResultImpl(Cathegory.Straight_Flush, w.list);
+					return new ResultImpl(Cathegory.Straight_Flush,
+							w.getRanks());
 				}
 			}
 		}
@@ -106,9 +107,9 @@ public class Cat_Rec {
 			}
 		}
 		// Straight
-		for (Window w : Window.VALUES_DESC) {
+		for (Window w : Window.getDescValues()) {
 			if (w.applies(cards.ranks)) {
-				return new ResultImpl(Cathegory.Straight, w.list);
+				return new ResultImpl(Cathegory.Straight, w.getRanks());
 			}
 		}
 		// Nothing

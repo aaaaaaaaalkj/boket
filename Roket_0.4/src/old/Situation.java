@@ -129,10 +129,12 @@ public class Situation {
 		// buttonPlayer.setGamePos(k);
 
 		// TODO: Nullpointer
-		if (buttonPlayer == null)
+		if (buttonPlayer == null) {
 			System.out.println("buttonPlayer is null");
-		else
+			return;
+		} else {
 			player = buttonPlayer.getLeftNeighbour().getLeftNeighbour();
+		}
 
 		player.setPosition(Position.BB);
 

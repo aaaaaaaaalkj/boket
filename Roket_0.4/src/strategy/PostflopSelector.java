@@ -21,13 +21,13 @@ public class PostflopSelector implements ISelector {
 
 	private static final int n0 = 1;
 	private static final int n1 = DrawType.VALUES.size();
-	private static final int n2 = n1 * PairBasedDanger.VALUES.size();
-	private static final int n3 = n2 * FlushDanger.VALUES.size();
-	private static final int n4 = n3 * StraightDanger.VALUES.size();
-	private static final int n5 = n4 * ComboType.VALUES.size();
-	private static final int n6 = n5 * PotType.VALUES.size();
-	private static final int n7 = n6 * NumActiveType.VALUES.size();
-	private static final int n8 = n7 * ContributionType.VALUES.size();
+	private static final int n2 = n1 * PairBasedDanger.getCount();
+	private static final int n3 = n2 * FlushDanger.getCount();
+	private static final int n4 = n3 * StraightDanger.getCount();
+	private static final int n5 = n4 * ComboType.getCount();
+	private static final int n6 = n5 * PotType.getCount();
+	private static final int n7 = n6 * NumActiveType.getCount();
+	private static final int n8 = n7 * ContributionType.getCount();
 
 	public static final int size = n6;
 

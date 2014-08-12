@@ -1,14 +1,15 @@
 package strategy.conditions.common;
 
-import java.util.EnumSet;
-
 import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum NumActiveType implements ICondition {
 	TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE;
-	public static final EnumSet<NumActiveType> VALUES = EnumSet
-			.allOf(NumActiveType.class);
+	public static final NumActiveType[] VALUES = values();
+
+	public static int getCount() {
+		return VALUES.length;
+	}
 
 	@Override
 	public boolean eval(ISituation sit) {

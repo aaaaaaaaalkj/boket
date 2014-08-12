@@ -1,14 +1,15 @@
 package strategy.conditions.common;
 
-import java.util.EnumSet;
-
 import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum ContributionType implements ICondition {
 	LOW, MIDDLE, HIGH;
-	public static final EnumSet<ContributionType> VALUES = EnumSet
-			.allOf(ContributionType.class);
+	public static final ContributionType[] VALUES = values();
+
+	public static int getCount() {
+		return VALUES.length;
+	}
 
 	@Override
 	public boolean eval(ISituation sit) {
