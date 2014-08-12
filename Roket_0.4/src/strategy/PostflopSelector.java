@@ -1,4 +1,4 @@
-package strategy.conditions;
+package strategy;
 
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
@@ -10,14 +10,14 @@ import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
 
 public class PostflopSelector implements ISelector {
-	ContributionType contribution;
-	NumActiveType numActive;
-	PotType pot;
-	ComboType combo;
-	PairBasedDanger pairBasedDanger;
-	FlushDanger flushDanger;
-	StraightDanger straightDanger;
-	DrawType draw;
+	private final ContributionType contribution;
+	private final NumActiveType numActive;
+	private final PotType pot;
+	private final ComboType combo;
+	private final PairBasedDanger pairBasedDanger;
+	private final FlushDanger flushDanger;
+	private final StraightDanger straightDanger;
+	private final DrawType draw;
 
 	private static final int n0 = 1;
 	private static final int n1 = DrawType.VALUES.size();
@@ -31,6 +31,19 @@ public class PostflopSelector implements ISelector {
 
 	public static final int size = n6;
 
+	public PostflopSelector(ContributionType contr, NumActiveType numAct,
+			PotType pot, ComboType combo, PairBasedDanger pairb,
+			FlushDanger flush, StraightDanger straight, DrawType draw) {
+		this.contribution = contr;
+		this.numActive = numAct;
+		this.pot = pot;
+		this.combo = combo;
+		this.pairBasedDanger = pairb;
+		this.flushDanger = flush;
+		this.straightDanger = straight;
+		this.draw = draw;
+	}
+
 	public int getPosition() {
 		return n8 * contribution.ordinal()
 				+ n7 * numActive.ordinal()
@@ -40,46 +53,6 @@ public class PostflopSelector implements ISelector {
 				+ n3 * flushDanger.ordinal()
 				+ n2 * pairBasedDanger.ordinal()
 				+ n0 * draw.ordinal();
-	}
-
-	public void setContribution(ContributionType contribution) {
-		this.contribution = contribution;
-	}
-
-	public void setNumActive(NumActiveType numActive) {
-		this.numActive = numActive;
-	}
-
-	public void setPot(PotType pot) {
-		this.pot = pot;
-	}
-
-	public void setCombo(ComboType combo) {
-		this.combo = combo;
-	}
-
-	public void setPairBasedDanger(PairBasedDanger danger) {
-		this.pairBasedDanger = danger;
-	}
-
-	public FlushDanger getFlushDanger() {
-		return flushDanger;
-	}
-
-	public void setFlushDanger(FlushDanger flushDanger) {
-		this.flushDanger = flushDanger;
-	}
-
-	public StraightDanger getStraightDanger() {
-		return straightDanger;
-	}
-
-	public void setStraightDanger(StraightDanger straightDanger) {
-		this.straightDanger = straightDanger;
-	}
-
-	public void setDraw(DrawType draw) {
-		this.draw = draw;
 	}
 
 	@Override

@@ -2,8 +2,8 @@ package strategy.conditions.postflop;
 
 import java.util.EnumSet;
 
+import strategy.ISituation;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
 
 public enum PairBasedDanger implements ICondition {
 	LOW, // no pair in community-cards

@@ -2,8 +2,8 @@ package strategy.conditions.postflop;
 
 import java.util.EnumSet;
 
+import strategy.ISituation;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
 
 public enum StraightDanger implements ICondition {
 	LOW, // max 1 community-card in each straight-window

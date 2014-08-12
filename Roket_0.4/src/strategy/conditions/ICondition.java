@@ -1,5 +1,7 @@
 package strategy.conditions;
 
+import strategy.ISituation;
+
 public interface ICondition {
 	public boolean eval(ISituation sit);
 

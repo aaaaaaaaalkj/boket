@@ -2,8 +2,8 @@ package strategy.conditions.common;
 
 import java.util.EnumSet;
 
+import strategy.ISituation;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
 
 public enum NumActiveType implements ICondition {
 	TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE;
@@ -23,6 +23,9 @@ public enum NumActiveType implements ICondition {
 		return (sit -> sit.getNumActive().ordinal() <= ordinal());
 	}
 
-
+	public static NumActiveType fromInt(int size) {
+		assert size >= 2 && size <= 9 : "Too many or too few active players";
+		return values()[size - 2];
+	}
 
 }

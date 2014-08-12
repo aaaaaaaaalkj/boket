@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import strategy.ISituation;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
 
 public enum Round implements ICondition {
 	PREFLOP, FLOP, TURN, RIVER;

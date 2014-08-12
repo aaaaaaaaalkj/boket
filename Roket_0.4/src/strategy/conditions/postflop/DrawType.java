@@ -2,8 +2,8 @@ package strategy.conditions.postflop;
 
 import java.util.EnumSet;
 
+import strategy.ISituation;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
 
 public enum DrawType implements ICondition {
 	NONE, GUTSHOT, OESD, DOUBLE_GUTSHOT, FLUSH_DRAW, MONSTER_DRAW;

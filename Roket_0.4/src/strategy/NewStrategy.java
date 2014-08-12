@@ -1,7 +1,4 @@
-package strategy.conditions;
-
-import strategy.IStrategy;
-import strategy.TypeOfDecision;
+package strategy;
 
 import common.Round;
 
@@ -25,11 +22,11 @@ public class NewStrategy implements IStrategy {
 		return s;
 	}
 
-	public TypeOfDecision preflop(ISelector sel) {
+	public TypeOfDecision getPreflop(ISelector sel) {
 		return preflop[sel.getPosition()];
 	}
 
-	public TypeOfDecision postflop(ISelector sel) {
+	public TypeOfDecision getPostflop(ISelector sel) {
 		return preflop[sel.getPosition()];
 	}
 
@@ -41,29 +38,33 @@ public class NewStrategy implements IStrategy {
 		postflop[sel.getPosition()] = dec;
 	}
 
+	private TypeOfDecision get(PreflopSelector sel) {
+		return preflop[sel.getPosition()];
+	}
+
+	private TypeOfDecision get(PostflopSelector sel) {
+		return postflop[sel.getPosition()];
+	}
+
 	@Override
 	public TypeOfDecision decide(ISituation situation) {
 		if (Round.PREFLOP == situation.getRound()) {
-			PreflopSelector sel = new PreflopSelector();
-			sel.setConnector(situation.getConnectorType());
-			sel.setContribution(situation.getContribution());
-			sel.setNumActive(situation.getNumActivePlayers());
-			sel.setPot(situation.getPot());
-			sel.setSuited(situation.getSuit());
-
+			return get(new PreflopSelector(
+					situation.getContribution(),
+					situation.getNumActive(),
+					situation.getPot(),
+					situation.getConnector(),
+					situation.getSuit()));
 		} else {
-
-			PostflopSelector sel2 = new PostflopSelector();
-
-			sel2.setCombo(situation.getCombo());
-			sel2.setStraightDanger(situation.getStraightDanger());
-			sel2.setPairBasedDanger(situation.getPairBasedDanger());
-			sel2.setFlushDanger(situation.getFlushDanger());
-			sel2.setDraw(situation.getDraw());
-			sel2.setNumActive(situation.getNumActivePlayers());
-			sel2.setPot(situation.getPot());
-			sel2.setContribution(situation.getContribution());
+			return get(new PostflopSelector(
+					situation.getContribution(),
+					situation.getNumActivePlayers(),
+					situation.getPot(),
+					situation.getCombo(),
+					situation.getPairBasedDanger(),
+					situation.getFlushDanger(),
+					situation.getStraightDanger(),
+					situation.getDraw()));
 		}
-		return null;
 	}
 }

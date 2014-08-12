@@ -22,13 +22,13 @@ import static strategy.conditions.preflop.ConnectorType.CONNECTOR;
 import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
 import static strategy.conditions.preflop.SuitedType.SUITED;
 import strategy.IStrategy;
-import strategy.Strategy2;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
+import strategy.manualStrategy.Strategy2;
 
-public class Test {
+public class StrategyDefinitions {
 	public static IStrategy s = (sit -> FOLD);
 	public final static IStrategy shitStrategy = new Strategy2();
 
@@ -75,8 +75,7 @@ public class Test {
 				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH))
 				.then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_QUARTER_POT)
-				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT)
-				.build();
+				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT);
 
 		s = s.flop(STRAIGHT, RAISE_HALF_POT);
 		s = s.flop(FLUSH, RAISE_POT_SIZE);
@@ -108,8 +107,7 @@ public class Test {
 		s = s.turn(GOOD_SET)
 				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH)).then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_HALF_POT)
-				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT)
-				.build();
+				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT);
 
 		s = s.river(STRAIGHT.and(FlushDanger.LOW).and(PairBasedDanger.LOW),
 				ALL_IN);
@@ -127,8 +125,7 @@ public class Test {
 				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH)).then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_QUARTER_POT)
 				.if_(ContributionType.HIGH.or(ContributionType.MIDDLE))
-				.then(RAISE_HALF_POT)
-				.build();
+				.then(RAISE_HALF_POT);
 
 	}
 

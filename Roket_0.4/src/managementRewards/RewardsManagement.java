@@ -4,10 +4,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import managementPayments.AmountOfJetons;
+import strategy.ISituation;
 import strategy.Stat;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
-
 import common.Round;
 
 public class RewardsManagement {

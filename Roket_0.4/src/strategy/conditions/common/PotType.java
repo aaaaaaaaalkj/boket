@@ -2,8 +2,8 @@ package strategy.conditions.common;
 
 import java.util.EnumSet;
 
+import strategy.ISituation;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
 
 public enum PotType implements ICondition {
 	LOW, MIDDLE, HIGH;

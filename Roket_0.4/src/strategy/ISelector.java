@@ -1,4 +1,4 @@
-package strategy.conditions;
+package strategy;
 
 public interface ISelector {
 	public int getPosition();

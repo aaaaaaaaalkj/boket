@@ -5,7 +5,7 @@ import static common.Round.PREFLOP;
 import static common.Round.RIVER;
 import static common.Round.TURN;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
+import strategy.manualStrategy.StrategyWaiting;
 
 public interface IStrategy {
 	public TypeOfDecision decide(ISituation situation);

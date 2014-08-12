@@ -1,4 +1,4 @@
-package strategy.conditions;
+package strategy;
 
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;

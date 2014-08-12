@@ -1,4 +1,4 @@
-package strategy.conditions;
+package strategy;
 
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
@@ -6,12 +6,12 @@ import strategy.conditions.common.PotType;
 import strategy.conditions.preflop.ConnectorType;
 import strategy.conditions.preflop.SuitedType;
 
-public class PreflopSelector implements ISelector {
-	private ContributionType contribution;
-	private NumActiveType numActive;
-	private PotType pot;
-	private ConnectorType connector;
-	private SuitedType suited;
+public final class PreflopSelector implements ISelector {
+	private final ContributionType contribution;
+	private final NumActiveType numActive;
+	private final PotType pot;
+	private final ConnectorType connector;
+	private final SuitedType suited;
 
 	private static final int n0 = 1;
 	private static final int n1 = SuitedType.VALUES.size();
@@ -22,32 +22,21 @@ public class PreflopSelector implements ISelector {
 
 	public static final int size = n5;
 
+	public PreflopSelector(ContributionType contr, NumActiveType numAct,
+			PotType pot, ConnectorType conn, SuitedType suit) {
+		this.contribution = contr;
+		this.numActive = numAct;
+		this.pot = pot;
+		this.connector = conn;
+		this.suited = suit;
+	}
+
 	public int getPosition() {
 		return n4 * contribution.ordinal()
 				+ n3 * numActive.ordinal()
 				+ n2 * pot.ordinal()
 				+ n1 * connector.ordinal()
 				+ n0 * suited.ordinal();
-	}
-
-	public void setContribution(ContributionType contribution) {
-		this.contribution = contribution;
-	}
-
-	public void setNumActive(NumActiveType numActive) {
-		this.numActive = numActive;
-	}
-
-	public void setPot(PotType pot) {
-		this.pot = pot;
-	}
-
-	public void setConnector(ConnectorType connector) {
-		this.connector = connector;
-	}
-
-	public void setSuited(SuitedType suited) {
-		this.suited = suited;
 	}
 
 	@Override

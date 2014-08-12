@@ -1,6 +1,6 @@
 package managementCards.cards;
 
-public class Hand {
+public final class Hand {
 	private final Card first;
 	private final Card second;
 
@@ -20,6 +20,10 @@ public class Hand {
 	public static Hand fromDeck(Deck deck) {
 		assert deck.size() >= 2 : "not enough cards in deck";
 		return new Hand(deck.get(), deck.get());
+	}
+
+	public int getDifference() {
+		return first.getRank().ordinal() - second.getRank().ordinal();
 	}
 
 	public boolean isPocketPair() {

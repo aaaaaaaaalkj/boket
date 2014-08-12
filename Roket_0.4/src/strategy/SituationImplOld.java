@@ -17,8 +17,8 @@ import static strategy.conditions.postflop.DrawType.FLUSH_DRAW;
 import static strategy.conditions.postflop.DrawType.GUTSHOT;
 import static strategy.conditions.postflop.DrawType.MONSTER_DRAW;
 import static strategy.conditions.postflop.DrawType.OESD;
-import static strategy.conditions.preflop.ConnectorType.CONNECTOR;
 import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
+import static strategy.conditions.preflop.SuitedType.OFF_SUIT;
 import static strategy.conditions.preflop.SuitedType.SUITED;
 
 import java.util.Collection;
@@ -38,7 +38,6 @@ import managementPayments.AmountOfJetons;
 import managementPayments.PaymentManagement;
 import managementState.StateManagement;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -54,39 +53,45 @@ import tools.MapOfInteger;
 import common.PlayerId;
 import common.Round;
 
-public class SituationImpl implements ISituation {
+public class SituationImplOld implements ISituation {
 	private final Set<ICondition> conditions = new HashSet<>();
 
-	public final Hand hand;
+	private final Hand hand;
 
-	public final int num_active_players;
-	public final AmountOfJetons to_pay;
-	public final AmountOfJetons highest_bid;
-	public final AmountOfJetons pot;
-	public final AmountOfJetons stack;
-	public final int flush_danger;
-	public final int straight_danger;
-	public final int open_faces;
-	public final int pairbased_danger;
-	public final double contribution;
+	private final ContributionType contribution;
+	private final NumActiveType numActive;
+	private final PotType pot;
+	private final ConnectorType connector;
+	private final SuitedType suited;
+	private final ComboType combo;
+	private final PairBasedDanger pairBasedDanger;
+	private final FlushDanger flushDanger;
+	private final StraightDanger straightDanger;
+	private final DrawType draw;
 
-	public SituationImpl(CardManagement table, StateManagement stateManagement,
+	private final AmountOfJetons to_pay;
+	private final AmountOfJetons highest_bid;
+	private final AmountOfJetons pot2;
+	private final AmountOfJetons stack;
+
+	// private final int open_faces;
+
+	public SituationImplOld(
+			CardManagement table,
+			StateManagement stateManagement,
 			PaymentManagement payManagement) {
 		PlayerId currentPlayer = stateManagement.getCurrent();
 		hand = table.getHand(currentPlayer);
 		if (hand != null) {
-			if (hand.isSuited())
-				conditions.add(SUITED);
-			if (hand.isPocketPair())
-				conditions.add(POCKET_PAIR);
-			if (hand.isConnector())
-				conditions.add(CONNECTOR);
+			conditions.add(hand.isSuited() ? SUITED : OFF_SUIT);
+			conditions.add(ConnectorType.fromInt(hand.getDifference()));
 		}
 
 		to_pay = payManagement.toPay(currentPlayer);
 		highest_bid = payManagement.getHighestBid(currentPlayer);
-		pot = payManagement.computeTotalPot(currentPlayer);
-		num_active_players = stateManagement.getActivePlayers().size();
+		pot2 = payManagement.computeTotalPot(currentPlayer);
+		numActive = NumActiveType.fromInt(stateManagement.getActivePlayers()
+				.size());
 		stack = payManagement.getStack(currentPlayer);
 
 		conditions.add(table.getRound());
@@ -98,8 +103,9 @@ public class SituationImpl implements ISituation {
 		List<Card> community = table.getCommunityCards();
 		List<Card> allOpen = table.getOpenCards(currentPlayer);
 
-		flush_danger = computeFlushDanger(community);
-		straight_danger = computeStraightDanger(community);
+		flushDanger = computeFlushDanger(community);
+		straightDanger = computeStraightDanger(community);
+		pairBasedDanger = computePairBasedDanger(community);
 
 		if (isApplicably(FLOP) || isApplicably(TURN) || isApplicably(RIVER)) {
 
@@ -140,11 +146,8 @@ public class SituationImpl implements ISituation {
 			if (r2.getCathegory() == Cathegory.Straight_Flush)
 				conditions.add(STRAIGHT_FLUSH);
 
-			Result r = Cat_Rec.checkPairBased(community);
-			pairbased_danger = r.getCathegory().ordinal();
+			// Result r = Cat_Rec.checkPairBased(community);
 
-		} else {
-			pairbased_danger = 0;
 		}
 		open_faces = table.getCommunityCards2().count(Rank.Ace, Rank.King,
 				Rank.Queen, Rank.Jack);
@@ -215,73 +218,61 @@ public class SituationImpl implements ISituation {
 
 	@Override
 	public ContributionType getContribution() {
-		// TODO Auto-generated method stub
-		return null;
+		return contribution;
 	}
 
 	@Override
 	public NumActiveType getNumActive() {
-		// TODO Auto-generated method stub
-		return null;
+		return numActive;
 	}
 
 	@Override
 	public PotType getPot() {
-		// TODO Auto-generated method stub
-		return null;
+		return pot;
 	}
 
 	@Override
 	public ComboType getCombo() {
-		// TODO Auto-generated method stub
-		return null;
+		return combo;
 	}
 
 	@Override
 	public DrawType getDraw() {
-		// TODO Auto-generated method stub
-		return null;
+		return draw;
 	}
 
 	@Override
 	public ConnectorType getConnector() {
-		// TODO Auto-generated method stub
-		return null;
+		return connector;
 	}
 
 	@Override
 	public SuitedType getSuit() {
-		// TODO Auto-generated method stub
-		return null;
+		return suited;
 	}
 
 	@Override
 	public ConnectorType getConnectorType() {
-		// TODO Auto-generated method stub
-		return null;
+		return connector;
 	}
 
 	@Override
 	public NumActiveType getNumActivePlayers() {
-		// TODO Auto-generated method stub
-		return null;
+		return numActive;
 	}
 
 	@Override
 	public StraightDanger getStraightDanger() {
-		// TODO Auto-generated method stub
-		return null;
+		return straightDanger;
 	}
 
 	@Override
 	public FlushDanger getFlushDanger() {
-		// TODO Auto-generated method stub
-		return null;
+		return flushDanger;
 	}
 
 	@Override
 	public PairBasedDanger getPairBasedDanger() {
-		// TODO Auto-generated method stub
-		return null;
+		return pairBasedDanger;
 	}
 }

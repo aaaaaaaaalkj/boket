@@ -12,14 +12,13 @@ import managementPayments.PaymentManagement;
 import managementPayments.StateInfo;
 import managementRewards.RewardsManagement;
 import managementState.StateManagement;
-import start.Test;
+import start.StrategyDefinitions;
+import strategy.ISituation;
 import strategy.IStrategy;
 import strategy.PlayerDecision;
-import strategy.SituationImpl;
+import strategy.SituationImplOld;
 import strategy.TypeOfDecision;
-import strategy.conditions.ISituation;
 import tools.Logger;
-
 import common.Outcome;
 import common.Player2;
 import common.PlayerId;
@@ -54,7 +53,7 @@ public class Simulation {
 	public void addDefaultPlayer() {
 		for (String name : new String[] { "Alex", "Maria", "Natascha",
 				"Penelope", "Christine", "Lena", "Anna", "Karina" }) {
-			addPlayer(new Player2(name), Test.s);
+			addPlayer(new Player2(name), StrategyDefinitions.s);
 		}
 	}
 
@@ -124,7 +123,7 @@ public class Simulation {
 		StateInfo stateChange;
 		AmountOfJetons a;
 
-		sit = new SituationImpl(cardMandagement, stateManagement, payManagement);
+		sit = new SituationImplOld(cardMandagement, stateManagement, payManagement);
 
 		TypeOfDecision t = strategies.get(player).decide(sit);
 

@@ -1,7 +1,8 @@
-package strategy;
+package strategy.manualStrategy;
 
+import strategy.Stat;
+import strategy.TypeOfDecision;
 import common.PlayerId;
-
 import managementPayments.AmountOfJetons;
 
 public class StrategyDec {

@@ -1,4 +1,4 @@
-package strategy;
+package strategy.manualStrategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import managementPayments.AmountOfJetons;
+import strategy.ISituation;
+import strategy.IStrategy;
+import strategy.TypeOfDecision;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
-
 import common.PlayerId;
 import common.Round;
 

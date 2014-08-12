@@ -2,8 +2,8 @@ package strategy.conditions.preflop;
 
 import java.util.EnumSet;
 
+import strategy.ISituation;
 import strategy.conditions.ICondition;
-import strategy.conditions.ISituation;
 
 public enum SuitedType implements ICondition {
 	SUITED, OFF_SUIT;
