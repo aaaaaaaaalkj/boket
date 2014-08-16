@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import common.PlayerId;
+import common.IPlayer;
 
 public class StateManagement {
-	private final LinkedList<PlayerId> allPlayers;
-	private final Map<PlayerId, PlayerState> states;
-	private final Set<PlayerId> waitingPlayers;
+	private final LinkedList<IPlayer> allPlayers;
+	private final Map<IPlayer, PlayerState> states;
+	private final Set<IPlayer> waitingPlayers;
 	private int currentIndex;
 
 	public StateManagement() {
@@ -22,18 +22,18 @@ public class StateManagement {
 		this.waitingPlayers = new HashSet<>();
 	}
 
-	public void register(PlayerId p) {
+	public void register(IPlayer p) {
 		states.put(p, PlayerState.ACTIVE);
 		waitingPlayers.add(p);
 		allPlayers.add(p);
 		currentIndex = allPlayers.size() - 1; // button
 	}
 
-	public List<PlayerId> roundEnd() {
+	public List<IPlayer> roundEnd() {
 		currentIndex = allPlayers.size() - 1; // button
 		waitingPlayers.addAll(getActivePlayers());
 
-		List<PlayerId> res = getActivePlayers();
+		List<IPlayer> res = getActivePlayers();
 		res.addAll(getAllInPlayers());
 		return res;
 	}
@@ -46,23 +46,23 @@ public class StateManagement {
 		inc();
 	}
 
-	public List<PlayerId> getPlayersInGame() {
-		List<PlayerId> res = getActivePlayers();
+	public List<IPlayer> getPlayersInGame() {
+		List<IPlayer> res = getActivePlayers();
 		res.addAll(getAllInPlayers());
 		return res;
 	}
 
-	public List<PlayerId> getActivePlayers() {
+	public List<IPlayer> getActivePlayers() {
 		return getPlayersByStatus(PlayerState.ACTIVE);
 	}
 
-	public List<PlayerId> getAllInPlayers() {
+	public List<IPlayer> getAllInPlayers() {
 		return getPlayersByStatus(PlayerState.ALL_IN);
 	}
 
-	private List<PlayerId> getPlayersByStatus(PlayerState s) {
-		List<PlayerId> list = new ArrayList<>();
-		for (PlayerId p : states.keySet()) {
+	private List<IPlayer> getPlayersByStatus(PlayerState s) {
+		List<IPlayer> list = new ArrayList<>();
+		for (IPlayer p : states.keySet()) {
 			if (states.get(p).equals(s))
 				list.add(p);
 		}
@@ -73,11 +73,11 @@ public class StateManagement {
 		return states.get(get(index));
 	}
 
-	private PlayerId get(int index) {
+	private IPlayer get(int index) {
 		return allPlayers.get(index);
 	}
 
-	public PlayerId getCurrent() {
+	public IPlayer getCurrent() {
 		return get(currentIndex);
 	}
 
@@ -85,7 +85,7 @@ public class StateManagement {
 		waitingPlayers.remove(getCurrent());
 	}
 
-	public PlayerId next() {
+	public IPlayer next() {
 		inc();
 		return getCurrent();
 	}
@@ -113,7 +113,7 @@ public class StateManagement {
 		}
 	}
 
-	public void fold(PlayerId player) {
+	public void fold(IPlayer player) {
 		states.put(player, PlayerState.FOLDED);
 	}
 

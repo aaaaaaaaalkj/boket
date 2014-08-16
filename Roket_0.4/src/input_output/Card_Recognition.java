@@ -15,7 +15,6 @@ import managementCards.cards.CommunityCards;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 import old.Hand;
-import tools.Pattern;
 import tools.Pos;
 
 public class Card_Recognition {

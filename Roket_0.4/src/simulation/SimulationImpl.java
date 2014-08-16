@@ -1,9 +1,9 @@
 package simulation;
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import managementCards.CardManagement;
 import managementPayments.AmountOfJetons;
@@ -14,27 +14,27 @@ import managementRewards.RewardsManagement;
 import managementState.StateManagement;
 import start.StrategyDefinitions;
 import strategy.ISituation;
-import strategy.IStrategy;
 import strategy.PlayerDecision;
-import strategy.SituationImplOld;
+import strategy.SituationImpl;
 import strategy.TypeOfDecision;
 import tools.Logger;
-import common.Outcome;
-import common.Player2;
-import common.PlayerId;
+
+import common.IOutcome;
+import common.IPlayer;
+import common.PlayerImpl;
+import common.PlayerResult;
 import common.Round;
 
-public class Simulation {
+public class SimulationImpl implements ISimulation {
 	CardManagement cardMandagement;
 	PaymentManagement payManagement;
 	StateManagement stateManagement;
 	RewardsManagement rewards;
 	Random rand;
 	Round round;
-	Map<PlayerId, IStrategy> strategies = new HashMap<>();
 	Logger logger;
 
-	public Simulation(long l) {
+	public SimulationImpl(long l) {
 		logger = new Logger();
 		this.round = Round.PREFLOP;
 		this.rand = new Random();
@@ -53,12 +53,11 @@ public class Simulation {
 	public void addDefaultPlayer() {
 		for (String name : new String[] { "Alex", "Maria", "Natascha",
 				"Penelope", "Christine", "Lena", "Anna", "Karina" }) {
-			addPlayer(new Player2(name), StrategyDefinitions.s);
+			addPlayer(new PlayerImpl(name, StrategyDefinitions.s));
 		}
 	}
 
-	public void addPlayer(PlayerId player, IStrategy str) {
-		strategies.put(player, str);
+	public void addPlayer(IPlayer player) {
 		cardMandagement.register(player);
 		stateManagement.register(player);
 		payManagement.register(player);
@@ -82,27 +81,43 @@ public class Simulation {
 		logger.emptyLine();
 		logger.info("== " + round + "== " + cardMandagement.getCommunityCards());
 		while (stateManagement.hasNext()) {
-			PlayerId p = stateManagement.next();
+			IPlayer p = stateManagement.next();
 			playerAction(p);
 			stateManagement.playerDone();
 		}
-		List<PlayerId> inGame = stateManagement.roundEnd();
+		List<IPlayer> inGame = stateManagement.roundEnd();
 		payManagement.roundEnd(inGame);
 		round = round.next();
 		return round;
 	}
 
-	public void showDown() {
+	public Collection<PlayerResult> showDown() {
 		logger.info("showdown");
-		Outcome result = cardMandagement.getOutcome();
+		IOutcome result = cardMandagement.getOutcome();
 		PayOuts payOuts = payManagement.payOut(result);
-		List<PlayerId> loosers = stateManagement.getPlayersInGame();
 
-		for (PlayerId player : payOuts.keySet()) {
-			loosers.remove(player);
-			logger.info(player + " won " + payOuts.get(player));
-			// strategies.get(player).won(player, payOuts.get(player));
-		}
+		return payOuts.keySet().stream()
+				.map(player -> PlayerResult.create(
+						player,
+						result.getResult(player),
+						null,
+						payOuts.get(player))
+				)
+				.collect(Collectors.toList());
+
+		// for (IPlayer player : payOuts.keySet()) {
+		// logger.info(player + " won " + payOuts.get(player));
+		//
+		// PlayerResult r = PlayerResult.create(
+		// player,
+		// result.getResult(player),
+		// null,
+		// payOuts.get(player));
+		// res.add(r);
+		//
+		// // strategies.get(player).won(player, payOuts.get(player));
+		// }
+		// return res;
 		// for (PlayerId p : loosers) {
 		// strategies.get(p).lost(p);
 		// }
@@ -111,21 +126,25 @@ public class Simulation {
 	public void start() {
 		logger.info(cardMandagement);
 
-		Round b;
-		do {
-			b = playOneRound();
-		} while (b != null);
+		playOneRound(); // Preflop
+		playOneRound(); // Flop
+		playOneRound(); // Turn
+		playOneRound(); // River
+
+		// do {
+		// b = playOneRound();
+		// } while (b != null);
 	}
 
-	public void playerAction(PlayerId player) {
+	public void playerAction(IPlayer player) {
 		ISituation sit;
 		PlayerDecision playerDec;
 		StateInfo stateChange;
 		AmountOfJetons a;
 
-		sit = new SituationImplOld(cardMandagement, stateManagement, payManagement);
+		sit = new SituationImpl(cardMandagement, stateManagement, payManagement);
 
-		TypeOfDecision t = strategies.get(player).decide(sit);
+		TypeOfDecision t = player.getStrategy().decide(sit);
 
 		playerDec = payManagement.modifyTypeOfDecision(player, t);
 		a = payManagement.computePost(player, t);
@@ -162,7 +181,7 @@ public class Simulation {
 			l = rand.nextLong();
 			l = -5698969505933893441l;
 			// l = 4460683238130048118l;
-			Simulation sim = new Simulation(l);
+			SimulationImpl sim = new SimulationImpl(l);
 			sim.addDefaultPlayer();
 			sim.postBlinds();
 			sim.dealCards();
@@ -171,5 +190,15 @@ public class Simulation {
 		}
 		System.out.println();
 		// System.out.println(Test.nutStrategy);
+	}
+
+	@Override
+	public Collection<PlayerResult> run() {
+		// SimulationImpl sim = new SimulationImpl(l);
+		addDefaultPlayer();
+		postBlinds();
+		dealCards();
+		start();
+		return showDown();
 	}
 }

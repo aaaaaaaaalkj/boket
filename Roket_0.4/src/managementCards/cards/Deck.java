@@ -22,7 +22,7 @@ public class Deck {
 		Collections.shuffle(cards, rand);
 	}
 
-	public Card get() {
+	public Card pop() {
 		assert cards.size() > 0;
 		return cards.remove(cards.size() - 1);
 	}

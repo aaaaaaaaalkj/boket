@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 import tools.Pos;
-import tools.X;
 
 public class MyOutput {
 	Robot robot;
@@ -18,7 +17,7 @@ public class MyOutput {
 		try {
 			robot = new Robot();
 		} catch (AWTException e) {
-			X.throwE(e);
+			throw new RuntimeException(e);
 		}
 	}
 

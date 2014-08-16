@@ -1,9 +1,9 @@
-package strategy;
+package strategy.manualStrategy;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import common.PlayerId;
+import common.IPlayer;
 import managementPayments.AmountOfJetons;
 
 public class Stat {
@@ -12,7 +12,7 @@ public class Stat {
 	private AmountOfJetons payed = AmountOfJetons.ZERO;
 	private AmountOfJetons won = AmountOfJetons.ZERO;
 
-	private Map<PlayerId, AmountOfJetons> payedInThisGame = new HashMap<>();
+	private Map<IPlayer, AmountOfJetons> payedInThisGame = new HashMap<>();
 
 	public Stat() {
 	}
@@ -34,7 +34,7 @@ public class Stat {
 		return s;
 	}
 
-	public void payed(PlayerId player, AmountOfJetons amount) {
+	public void payed(IPlayer player, AmountOfJetons amount) {
 		if (payedInThisGame.get(player) == null)
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
 		payedInThisGame.put(player, payedInThisGame.get(player).plus(amount));
@@ -42,7 +42,7 @@ public class Stat {
 		numPaid++;
 	}
 
-	public void won(PlayerId player, AmountOfJetons wonAmount,
+	public void won(IPlayer player, AmountOfJetons wonAmount,
 			AmountOfJetons sumPaid) {
 		if (payedInThisGame.get(player) == null)
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
@@ -53,7 +53,7 @@ public class Stat {
 		payedInThisGame.put(player, AmountOfJetons.ZERO);
 	}
 
-	public void lost(PlayerId player) {
+	public void lost(IPlayer player) {
 		if (payedInThisGame.get(player) == null)
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
 		payed = payed.plus(payedInThisGame.get(player));

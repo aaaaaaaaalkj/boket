@@ -1,8 +1,7 @@
 package strategy.manualStrategy;
 
-import strategy.Stat;
 import strategy.TypeOfDecision;
-import common.PlayerId;
+import common.IPlayer;
 import managementPayments.AmountOfJetons;
 
 public class StrategyDec {
@@ -18,16 +17,16 @@ public class StrategyDec {
 		return this.decision;
 	}
 
-	public void payed(PlayerId player, AmountOfJetons amount) {
+	public void payed(IPlayer player, AmountOfJetons amount) {
 		stat.payed(player, amount);
 
 	}
 
-	public void lost(PlayerId player) {
+	public void lost(IPlayer player) {
 		stat.lost(player);
 	}
 
-	public void won(PlayerId player, AmountOfJetons amountOfJetons,
+	public void won(IPlayer player, AmountOfJetons amountOfJetons,
 			AmountOfJetons payed) {
 		stat.won(player, amountOfJetons, payed);
 	}

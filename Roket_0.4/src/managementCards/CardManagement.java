@@ -8,41 +8,15 @@ import java.util.stream.Collectors;
 import managementCards.cards.Card;
 import managementCards.cards.CommunityCards;
 import managementCards.cards.Deck;
-import managementCards.cards.Hand;
 
-import common.Outcome;
-import common.PlayerId;
+import common.IOutcome;
+import common.IPlayer;
 import common.Round;
 
 public class CardManagement {
 	private final Deck deck;
 	private final CommunityCards communityCards;
-	private final List<PlayerHand> players;
-
-	private static final class PlayerHand {
-		private PlayerId player;
-		private Hand hand;
-
-		PlayerHand(PlayerId player) {
-			this.player = player;
-		}
-
-		public void assignHand(Hand hand) {
-			this.hand = hand;
-		}
-
-		public Hand getHand() {
-			return hand;
-		}
-
-		public PlayerId getPlayerId() {
-			return player;
-		}
-
-		public String toString() {
-			return player + ": " + hand;
-		}
-	}
+	private final List<IPlayer> players;
 
 	public CardManagement(Random rand) {
 		this.deck = new Deck(rand);
@@ -54,12 +28,14 @@ public class CardManagement {
 		return this.communityCards.getRound();
 	}
 
-	public void register(PlayerId player) {
-		this.players.add(new PlayerHand(player));
+	public void register(IPlayer player) {
+		this.players.add(player);
 	}
 
 	public void dealCards() {
-		players.stream().forEach(p -> p.assignHand(Hand.fromDeck(deck)));
+		for (IPlayer p : players) {
+			p.dealCards(deck.pop(), deck.pop());
+		}
 	}
 
 	public void openCards(Round r) {
@@ -74,15 +50,8 @@ public class CardManagement {
 		return res;
 	}
 
-	public Hand getHand(PlayerId player) {
-		return players
-				.stream()
-				.filter(p -> p.getPlayerId().equals(player))
-				.map(PlayerHand::getHand)
-				.findAny()
-				.orElseThrow(
-						() -> new IllegalStateException("player " + player
-								+ " is unknown"));
+	public List<Card> getHand(IPlayer player) {
+		return player.getHand();
 	}
 
 	public boolean isRainbow() {
@@ -97,20 +66,30 @@ public class CardManagement {
 		return communityCards;
 	}
 
-	public List<Card> getOpenCards(PlayerId player) {
-		List<Card> open = communityCards.getCards();
-		open.add(getHand(player).getFirst());
-		open.add(getHand(player).getSecond());
+	public List<Card> getOpenCards(IPlayer player) {
+		List<Card> open = new ArrayList<>();
+		open.addAll(communityCards.getCards());
+		open.addAll(player.getHand());
 		return open;
 	}
 
-	public Outcome getOutcome() {
-		Outcome1 outcome = new Outcome1();
+	public IOutcome getOutcome() {
+		OutcomeImpl outcome = new OutcomeImpl();
 
+		// List<Optional<Card>> list = new ArrayList<>();
+		// list.add(Optional.of(hand.getFirst()));
+		// list.add(Optional.of(hand.getSecond()));
+		// list.add(communityCards.getFlop1());
+		// list.add(communityCards.getFlop2());
+		// list.add(communityCards.getFlop3());
+		// list.add(communityCards.getTurn());
+		// list.add(communityCards.getRiver());
+		//
+		// List<Card> present = StreamTools.unpack(list);
+		//
 		players.forEach(player ->
 				outcome.computeResult(
-						player.getPlayerId(),
-						player.getHand(),
+						player,
 						communityCards)
 				);
 		return outcome;

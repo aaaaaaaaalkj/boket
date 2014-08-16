@@ -80,10 +80,10 @@ public class CommunityCards {
 			return;
 		}
 		if (r.followsAfter(round)) { // valid state-transition
-			communityCards.add(deck.get());
+			communityCards.add(deck.pop());
 			if (r == Round.FLOP) {
-				communityCards.add(deck.get());
-				communityCards.add(deck.get());
+				communityCards.add(deck.pop());
+				communityCards.add(deck.pop());
 			}
 			round = round.next();
 		} else {

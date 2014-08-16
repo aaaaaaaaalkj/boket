@@ -5,7 +5,7 @@ import java.util.List;
 
 import managementCards.cards.Rank;
 
-public final class ResultImpl implements Result {
+public final class ResultImpl implements IResult {
 	private final Cathegory cathegory;
 	private final List<Rank> tieBreaker;
 
@@ -55,7 +55,7 @@ public final class ResultImpl implements Result {
 	}
 
 	@Override
-	public int compareTo(Result res2) {
+	public int compareTo(IResult res2) {
 		if (res2 instanceof ResultImpl) {
 			ResultImpl res = (ResultImpl) res2;
 			if (cathegory.ordinal() > res.cathegory.ordinal())

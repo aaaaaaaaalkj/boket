@@ -8,7 +8,6 @@ import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 import managementCards.cat_rec_new.Cathegory;
-import tools.X;
 
 public class Cat_Rec_old {
 
@@ -35,24 +34,25 @@ public class Cat_Rec_old {
 	}
 
 	public static Result_old checkFlush(Set<Card> set) {
-		for (Suit color : Suit.values()) {
-			int counter = 0;
-			ArrayList<Integer> tieBreakers = new ArrayList<Integer>();
-			for (Card c : set) {
-				if (c.getSuit() == color) {
-					counter++;
-					tieBreakers.add(c.getRank().ordinal());
-				}
-			}
-			if (counter >= 5) {
-				int[] arr = X.castIntArr(tieBreakers.toArray());
-				Arrays.sort(arr);
-				arr = X.reverse(arr);
-				int[] arr2 = Arrays.copyOfRange(arr, 0, 5);
-				return Result_old.newInstance(Cathegory.Flush, arr2);
-			}
-		}
-		return null;
+		throw new RuntimeException("not supported");
+		// for (Suit color : Suit.values()) {
+		// int counter = 0;
+		// ArrayList<Integer> tieBreakers = new ArrayList<Integer>();
+		// for (Card c : set) {
+		// if (c.getSuit() == color) {
+		// counter++;
+		// tieBreakers.add(c.getRank().ordinal());
+		// }
+		// }
+		// if (counter >= 5) {
+		// int[] arr = X.castIntArr(tieBreakers.toArray());
+		// Arrays.sort(arr);
+		// arr = X.reverse(arr);
+		// int[] arr2 = Arrays.copyOfRange(arr, 0, 5);
+		// return Result_old.newInstance(Cathegory.Flush, arr2);
+		// }
+		// }
+		// return null;
 	}
 
 	public static boolean checkFlushDraw(Set<Card> set) {

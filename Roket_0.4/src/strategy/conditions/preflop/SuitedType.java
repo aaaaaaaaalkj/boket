@@ -6,7 +6,7 @@ import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum SuitedType implements ICondition {
-	SUITED, OFF_SUIT;
+	SUITED, OFF_SUIT, NONE;
 
 	public static final EnumSet<SuitedType> VALUES = EnumSet
 			.allOf(SuitedType.class);

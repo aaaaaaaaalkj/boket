@@ -36,7 +36,4 @@ public interface ISituation {
 
 	Round getRound();
 
-	ConnectorType getConnectorType();
-
-	NumActiveType getNumActivePlayers();
 }

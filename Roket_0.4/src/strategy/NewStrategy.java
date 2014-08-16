@@ -58,7 +58,7 @@ public class NewStrategy implements IStrategy {
 		} else {
 			return get(new PostflopSelector(
 					situation.getContribution(),
-					situation.getNumActivePlayers(),
+					situation.getNumActive(),
 					situation.getPot(),
 					situation.getCombo(),
 					situation.getPairBasedDanger(),

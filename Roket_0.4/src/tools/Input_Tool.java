@@ -1,6 +1,8 @@
 package tools;
 
 
+import input_output.Pattern;
+
 import java.awt.Color;
 
 public class Input_Tool {

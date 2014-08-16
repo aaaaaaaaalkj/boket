@@ -36,16 +36,16 @@ public class Cat_Rec {
 		this.cards = new CardFeatures(cards);
 	}
 
-	public static Result checkPairBased(Collection<Card> cards) {
+	public static IResult checkPairBased(Collection<Card> cards) {
 		Cat_Rec catReq = new Cat_Rec(cards);
 		return catReq.getPairBasedResult();
 	}
 
-	public static Result check(Collection<Card> cards) {
+	public static IResult check(Collection<Card> cards) {
 		Cat_Rec catReq = new Cat_Rec(cards);
 
-		Result pairB = catReq.getPairBasedResult();
-		Result flushB = catReq.getFlushResult();
+		IResult pairB = catReq.getPairBasedResult();
+		IResult flushB = catReq.getFlushResult();
 
 		return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
 	}
@@ -89,7 +89,7 @@ public class Cat_Rec {
 		return new ResultImpl(cat, fixedTieBreakers);
 	}
 
-	public Result getFlushResult() {
+	public IResult getFlushResult() {
 		// StraightFlush
 		for (Suit c : Suit.VALUES) {
 			for (Window w : Window.getDescValues()) {

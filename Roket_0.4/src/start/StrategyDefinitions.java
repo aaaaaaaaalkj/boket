@@ -23,6 +23,7 @@ import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
 import static strategy.conditions.preflop.SuitedType.SUITED;
 import strategy.IStrategy;
 import strategy.conditions.common.ContributionType;
+import strategy.conditions.common.PotType;
 import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
@@ -35,16 +36,8 @@ public class StrategyDefinitions {
 	static {
 		s = s.preflop(
 				SUITED.or(CONNECTOR).or(POCKET_PAIR)
+						.and(ContributionType.LOW.or(PotType.LOW))
 				, CALL);
-		// nutStrategy
-		// .preFlop(
-		// SUITED.or(CONNECTOR)
-		// .or(POCKET_PAIR)
-		// .and(TO_PAY_LESS_OR_EQ_TO(3)
-		// .and(POT_LESS_OR_EQ_TO(18)
-		// .and(NUM_ACTIVE_PLAYERS(5)
-		// .or(CONTRIBUTION_LESS_THAN(0.125))))),
-		// CALL);
 
 		s = s.flop(MONSTER_DRAW // 15 outs
 				.and(PairBasedDanger.LOW) // no pair in flop

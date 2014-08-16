@@ -14,8 +14,6 @@ import static strategy.conditions.postflop.DrawType.GUTSHOT;
 import static strategy.conditions.postflop.DrawType.MONSTER_DRAW;
 import static strategy.conditions.postflop.DrawType.OESD;
 import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
-import static strategy.conditions.preflop.SuitedType.OFF_SUIT;
-import static strategy.conditions.preflop.SuitedType.SUITED;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,12 +22,11 @@ import java.util.List;
 
 import managementCards.CardManagement;
 import managementCards.cards.Card;
-import managementCards.cards.Hand;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.Cathegory;
-import managementCards.cat_rec_new.Result;
+import managementCards.cat_rec_new.IResult;
 import managementCards.cat_rec_new.Window;
 import managementPayments.AmountOfJetons;
 import managementPayments.PaymentManagement;
@@ -45,13 +42,10 @@ import strategy.conditions.postflop.StraightDanger;
 import strategy.conditions.preflop.ConnectorType;
 import strategy.conditions.preflop.SuitedType;
 
-import common.PlayerId;
+import common.IPlayer;
 import common.Round;
 
-public class SituationImplOld implements ISituation {
-
-	private final Hand hand;
-
+public final class SituationImpl implements ISituation {
 	private final ContributionType contribution;
 	private final NumActiveType numActive;
 	private final PotType pot;
@@ -65,24 +59,42 @@ public class SituationImplOld implements ISituation {
 	private final Round round;
 
 	private final AmountOfJetons to_pay;
-	private final AmountOfJetons highest_bid;
+	// private final AmountOfJetons highest_bid;
 	private final AmountOfJetons pot2;
 	private final AmountOfJetons stack2;
 
 	// private final int open_faces;
 
-	public SituationImplOld(
+	public SituationImpl(
 			CardManagement table,
 			StateManagement stateManagement,
 			PaymentManagement payManagement) {
-		PlayerId currentPlayer = stateManagement.getCurrent();
-		hand = table.getHand(currentPlayer);
+		IPlayer currentPlayer = stateManagement.getCurrent();
 
-		connector = ConnectorType.fromInt(hand.getDifference());
-		suited = hand.isSuited() ? SUITED : OFF_SUIT;
+		connector = ConnectorType.fromInt(
+				currentPlayer.getHand().stream()
+						.map(Card::getRank)
+						.mapToInt(Rank::ordinal)
+						.reduce((x, y) -> Math.abs(x - y))
+				);
+		long count = currentPlayer.getHand().stream()
+				.map(Card::getSuit)
+				.distinct()
+				.count();
+		switch ((int) count) {
+		case 0:
+			suited = SuitedType.NONE;
+			break;
+		case 1:
+			suited = SuitedType.SUITED;
+			break;
+		default:
+			suited = SuitedType.OFF_SUIT;
+			break;
+		}
 
 		to_pay = payManagement.toPay(currentPlayer);
-		highest_bid = payManagement.getHighestBid(currentPlayer);
+		// highest_bid = payManagement.getHighestBid(currentPlayer);
 		pot2 = payManagement.computeTotalPot(currentPlayer);
 
 		numActive = NumActiveType.fromInt(stateManagement.getActivePlayers()
@@ -129,7 +141,7 @@ public class SituationImplOld implements ISituation {
 				}
 			}
 
-			Result r2 = Cat_Rec.check(allOpen);
+			IResult r2 = Cat_Rec.check(allOpen);
 
 			if (r2.getCathegory() == Cathegory.Two_Pair)
 				combo2 = TWO_PAIR;
@@ -245,16 +257,6 @@ public class SituationImplOld implements ISituation {
 	}
 
 	@Override
-	public ConnectorType getConnectorType() {
-		return connector;
-	}
-
-	@Override
-	public NumActiveType getNumActivePlayers() {
-		return numActive;
-	}
-
-	@Override
 	public StraightDanger getStraightDanger() {
 		return straightDanger;
 	}
@@ -268,4 +270,5 @@ public class SituationImplOld implements ISituation {
 	public PairBasedDanger getPairBasedDanger() {
 		return pairBasedDanger;
 	}
+
 }

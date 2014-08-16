@@ -7,7 +7,6 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 
 import tools.Pos;
-import tools.X;
 
 public class MyRobot {
 	private static Robot rb;
@@ -16,7 +15,7 @@ public class MyRobot {
 		try {
 			rb = new Robot();
 		} catch (AWTException e) {
-			X.throwE(e);
+			throw new RuntimeException(e);
 		}
 	}
 

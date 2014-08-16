@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
-import tools.X;
-
 public final class Card implements Comparable<Card> {
 	private final Rank rank;
 	private final Suit suit;
@@ -82,10 +80,10 @@ public final class Card implements Comparable<Card> {
 		return i;
 	}
 
-	public static Card getCard(int k1, Set<Card> deck) {
-		int c = X.randomIndex(Suit.values().length);
-		return getCard(k1, Suit.values()[c], deck);
-	}
+	// public static Card getCard(int k1, Set<Card> deck) {
+	// int c = X.randomIndex(Suit.values().length);
+	// return getCard(k1, Suit.values()[c], deck);
+	// }
 
 	public static Card getCard(int k1, Suit color, Set<Card> deck) {
 		Card c = Card.newInstance(k1, color);

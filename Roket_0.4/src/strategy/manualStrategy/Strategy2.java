@@ -11,7 +11,7 @@ import strategy.ISituation;
 import strategy.IStrategy;
 import strategy.TypeOfDecision;
 import strategy.conditions.ICondition;
-import common.PlayerId;
+import common.IPlayer;
 import common.Round;
 
 public class Strategy2 implements IStrategy {
@@ -21,7 +21,7 @@ public class Strategy2 implements IStrategy {
 	private Map<ICondition, StrategyDec> river = new LinkedHashMap<>();
 	private Map<Round, Map<ICondition, StrategyDec>> maps = new LinkedHashMap<>();
 
-	private Map<PlayerId, AmountOfJetons> payed = new HashMap<>();
+	private Map<IPlayer, AmountOfJetons> payed = new HashMap<>();
 
 	public Strategy2() {
 		maps.put(Round.PREFLOP, preflop);
@@ -67,7 +67,7 @@ public class Strategy2 implements IStrategy {
 		return res;
 	}
 
-	public void won(PlayerId player, AmountOfJetons amountOfJetons) {
+	public void won(IPlayer player, AmountOfJetons amountOfJetons) {
 		AmountOfJetons payed2 = payed.get(player);
 		if (null == payed2) {
 			// possible, because BB-Player can win without payments
@@ -82,7 +82,7 @@ public class Strategy2 implements IStrategy {
 		payed.put(player, AmountOfJetons.ZERO);
 	}
 
-	public void lost(PlayerId player) {
+	public void lost(IPlayer player) {
 		for (Round r : maps.keySet()) {
 			Map<ICondition, StrategyDec> map = maps.get(r);
 			for (ICondition c : map.keySet()) {
@@ -92,7 +92,7 @@ public class Strategy2 implements IStrategy {
 		payed.put(player, AmountOfJetons.ZERO);
 	}
 
-	public void payed(PlayerId player, ISituation situation,
+	public void payed(IPlayer player, ISituation situation,
 			AmountOfJetons amount) {
 		if (payed.get(player) == null)
 			payed.put(player, AmountOfJetons.ZERO);

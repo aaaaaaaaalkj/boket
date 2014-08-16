@@ -6,7 +6,7 @@ import java.util.List;
 
 import managementCards.cards.Rank;
 import managementCards.cat_rec_new.Cathegory;
-import managementCards.cat_rec_new.Result;
+import managementCards.cat_rec_new.IResult;
 import managementCards.cat_rec_new.ResultImpl;
 
 public class Result_old  {
@@ -69,7 +69,7 @@ public class Result_old  {
 	}
 
 
-	public int compareTo(Result res2) {
+	public int compareTo(IResult res2) {
 		if (res2.getClass() == Result_old.class) {
 			Result_old res = (Result_old) res2;
 			if (cathegory.ordinal() > res.cathegory.ordinal())
@@ -106,10 +106,10 @@ public class Result_old  {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Result)) {
+		if (!(obj instanceof IResult)) {
 			return false;
 		}
-		Result other = (Result) obj;
+		IResult other = (IResult) obj;
 		return this.compareTo(other) == 0;
 
 	}

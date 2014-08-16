@@ -1,6 +1,7 @@
 package strategy.conditions.preflop;
 
 import java.util.EnumSet;
+import java.util.OptionalInt;
 
 import strategy.ISituation;
 import strategy.conditions.ICondition;
@@ -15,11 +16,13 @@ public enum ConnectorType implements ICondition {
 		return this == sit.getConnector();
 	}
 
-	public static ConnectorType fromInt(int i) {
-		if (i > 4 || i < 0) {
-			return NONE;
+	public static ConnectorType fromInt(OptionalInt optionalInt) {
+		if (optionalInt.isPresent()
+				&& optionalInt.getAsInt() <= 4
+				&& optionalInt.getAsInt() >= 0) {
+			return ConnectorType.values()[optionalInt.getAsInt()];
 		}
-		return ConnectorType.values()[i];
+		return NONE;
 	}
 
 }
