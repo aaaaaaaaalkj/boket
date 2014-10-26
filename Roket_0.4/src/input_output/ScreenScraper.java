@@ -30,9 +30,6 @@ public class ScreenScraper extends Thread {
 		situation.hand = Card_Recognition.recognizeHand(logo);
 		situation.communityCards = Card_Recognition
 				.recognizeCommunityCards(logo);
-
-		System.out.println("situation:");
-		System.out.println(situation);
 	}
 
 	private static Pos pos(int x, int y) {
@@ -293,7 +290,7 @@ public class ScreenScraper extends Thread {
 	}
 
 	private void recognizeBrownButtons(Raw_Situation situation) {
-		Pos brownButton1 = new Pos(413, 525).plus(logo);
+		Pos brownButton1 = new Pos(550, 525).plus(logo);
 		Color brown1 = getPixelColor(brownButton1);
 
 		int difference = Math.abs(brown1.getRed() - 148)

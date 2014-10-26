@@ -16,20 +16,33 @@ public class Start {
 	}
 
 	public static void main(String[] _) throws InterruptedException {
-		ScreenScraper scraper = new ScreenScraper();
-		scraper.start();
-		scraper.join();
+		while (true) {
+			ScreenScraper scraper = new ScreenScraper();
+			scraper.run();
 
-		Raw_Situation raw = scraper.getSituation();
+			Raw_Situation raw = scraper.getSituation();
 
-		ISituation sit = new BoketSituation(raw);
+			if (raw.isItsMyTurn()) {
+				ISituation sit = new BoketSituation(raw);
+				IStrategy shitStrategy = StrategyDefinitions.s;
 
-		IStrategy shitStrategy = StrategyDefinitions.s;
+				System.out.println("situation:");
+				System.out.println(raw);
 
-		TypeOfDecision d = shitStrategy.decide(sit);
+				TypeOfDecision d = shitStrategy.decide(sit);
 
-		System.out.println(d);
-		decision2ouput(d, scraper.logo, raw);
+				System.out.println(d);
+				decision2ouput(d, scraper.logo, raw);
+			} else {
+				System.out.println("not my turn");
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				return;
+			}
+		}
 
 	}
 

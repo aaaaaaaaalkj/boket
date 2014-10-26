@@ -53,8 +53,6 @@ public class Card_Recognition {
 		if (null == hit) {
 			System.out.println("no hit found");
 			return null;
-		} else {
-			System.out.println("hit: " + hit);
 		}
 		Card first = recognizeCard(hit);
 
