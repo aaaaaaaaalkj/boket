@@ -1,6 +1,6 @@
 package managementPayments;
 
-public class AmountOfJetons {
+public class AmountOfJetons implements Comparable<AmountOfJetons> {
 	private final int numSmallBlinds;
 	public static final AmountOfJetons INFINITY = new AmountOfJetons(
 			Integer.MAX_VALUE);
@@ -127,5 +127,10 @@ public class AmountOfJetons {
 
 	public double divide(AmountOfJetons amount) {
 		return ((double) numSmallBlinds) / ((double) amount.numSmallBlinds);
+	}
+
+	@Override
+	public int compareTo(AmountOfJetons o) {
+		return numSmallBlinds - o.numSmallBlinds;
 	}
 }

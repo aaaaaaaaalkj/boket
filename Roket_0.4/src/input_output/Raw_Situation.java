@@ -1,8 +1,10 @@
 package input_output;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import managementCards.cards.CommunityCards;
+import managementCards.cards.Card;
 import old.Hand;
 
 public class Raw_Situation {
@@ -10,7 +12,7 @@ public class Raw_Situation {
 	public static final double BIG_BLIND = 0.02;
 
 	public Hand hand;
-	public CommunityCards communityCards = CommunityCards.empty();
+	public List<Card> communityCards = new ArrayList<>();
 
 	public int checkSum;
 	public boolean[] activeStatus = new boolean[NUM_SEATS];
@@ -26,6 +28,46 @@ public class Raw_Situation {
 				+ "\n activePlayer=" + Arrays.toString(activeStatus)
 				+ "\n pot=" + pot + "\n posts=" + Arrays.toString(posts)
 				+ "\n checkSum=" + checkSum + "]";
+	}
+
+	public static int getNumSeats() {
+		return NUM_SEATS;
+	}
+
+	public static double getBigBlind() {
+		return BIG_BLIND;
+	}
+
+	public Hand getHand() {
+		return hand;
+	}
+
+	public List<Card> getCommunityCards() {
+		return communityCards;
+	}
+
+	public int getCheckSum() {
+		return checkSum;
+	}
+
+	public boolean[] getActiveStatus() {
+		return activeStatus;
+	}
+
+	public double[] getPosts() {
+		return posts;
+	}
+
+	public int getButton() {
+		return button;
+	}
+
+	public double getPot() {
+		return pot;
+	}
+
+	public boolean isItsMyTurn() {
+		return itsMyTurn;
 	}
 
 }

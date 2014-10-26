@@ -1,124 +1,198 @@
 package managementCards.cat_rec_new;
 
+import static java.util.Comparator.naturalOrder;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
 import static managementCards.cards.Rank.Ace;
 import static managementCards.cards.Rank.Eight;
 import static managementCards.cards.Rank.Jack;
 import static managementCards.cards.Rank.Seven;
 import static managementCards.cards.Rank.Six;
 import static managementCards.cards.Rank.Two;
-import static managementCards.cat_rec_new.Cathegory.Four_Of_A_Kind;
-import static managementCards.cat_rec_new.Cathegory.Full_House;
-import static managementCards.cat_rec_new.Cathegory.High_Card;
-import static managementCards.cat_rec_new.Cathegory.Pair;
-import static managementCards.cat_rec_new.Cathegory.Three_Of_A_Kind;
-import static managementCards.cat_rec_new.Cathegory.Two_Pair;
+import static managementCards.cat_rec_new.Cathegory.FOUR_OF_A_KIND;
+import static managementCards.cat_rec_new.Cathegory.FULL_HOUSE;
+import static managementCards.cat_rec_new.Cathegory.HIGH_CARD;
+import static managementCards.cat_rec_new.Cathegory.PAIR;
+import static managementCards.cat_rec_new.Cathegory.THREE_OF_A_KIND;
+import static managementCards.cat_rec_new.Cathegory.TWO_PAIR;
 import static managementCards.cat_rec_new.Freq.FOUR;
 import static managementCards.cat_rec_new.Freq.ONE;
 import static managementCards.cat_rec_new.Freq.THREE;
 import static managementCards.cat_rec_new.Freq.TWO;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumMap;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
+import strategy.conditions.postflop.DrawType;
+import strategy.conditions.postflop.FlushDanger;
+import strategy.conditions.postflop.PairBasedDanger;
+import strategy.conditions.postflop.StraightDanger;
 
-public class Cat_Rec {
-	CardFeatures cards;
+public final class Cat_Rec implements ICatRec {
+	List<Card> all;
+	List<Card> community;
 
-	private Cat_Rec(Collection<Card> cards) {
-		this.cards = new CardFeatures(cards);
+	final List<Rank> ranks; // Pair-Based
+
+	public Cat_Rec(List<Card> hand, List<Card> community_cards) {
+		all = new ArrayList<>();
+		all.addAll(hand);
+		all.addAll(community_cards);
+		Collections.sort(all);
+		Collections.reverse(all);
+
+		community = new ArrayList<>(community_cards);
+
+		ranks = all.stream()
+				.map(Card::getRank)
+				.collect(toList());
 	}
 
-	public static IResult checkPairBased(Collection<Card> cards) {
-		Cat_Rec catReq = new Cat_Rec(cards);
-		return catReq.getPairBasedResult();
-	}
-
-	public static IResult check(Collection<Card> cards) {
-		Cat_Rec catReq = new Cat_Rec(cards);
-
-		IResult pairB = catReq.getPairBasedResult();
-		IResult flushB = catReq.getFlushResult();
+	public ResultImpl check() {
+		ResultImpl pairB = getPairBasedResult();
+		ResultImpl flushB = getFlushOrStraightResult();
 
 		return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
 	}
 
-	public ResultImpl getPairBasedResult() {
-		if (cards.has(FOUR)) {
-			return result(Four_Of_A_Kind, cards.extract(FOUR), cards.getTop());
+	private ResultImpl getPairBasedResult() {
+		List<List<Rank>> choosenCards;
+		if (has(FOUR)) {
+			choosenCards = Arrays.asList(extract(FOUR), getTop(1));
+			return result(FOUR_OF_A_KIND, choosenCards);
 		}
-		if (cards.num(THREE) > 1) {
-			return result(Full_House, cards.extract(THREE),
-					cards.extract(THREE));
+		if (num(THREE) > 1) {
+			choosenCards = Arrays.asList(extract(THREE),
+					extract(THREE));
+			return result(FULL_HOUSE, choosenCards);
 		}
-		if ((cards.has(THREE) && cards.has(TWO))) {
-			return result(Full_House, cards.extract(THREE), cards.extract(TWO));
+		if ((has(THREE) && has(TWO))) {
+			choosenCards = Arrays.asList(extract(THREE),
+					extract(TWO));
+			return result(FULL_HOUSE, choosenCards);
 		}
-		if (cards.has(THREE)) {
-			return result(Three_Of_A_Kind, cards.extract(THREE),
-					cards.getTop(2));
+		if (has(THREE)) {
+			choosenCards = Arrays.asList(extract(THREE), getTop(2));
+			return result(THREE_OF_A_KIND, choosenCards);
 		}
-		if (cards.num(TWO) > 1) {
-			return result(Two_Pair, cards.extract(TWO), cards.extract(TWO),
-					cards.getTop());
+		if (num(TWO) > 1) {
+			choosenCards = Arrays.asList(extract(TWO), extract(TWO), getTop(1));
+			return result(TWO_PAIR, choosenCards);
 		}
-		if (cards.has(TWO)) {
-			return result(Pair, cards.extract(TWO), cards.getTop(3));
+		if (has(TWO)) {
+			choosenCards = Arrays.asList(extract(TWO), getTop(3));
+			return result(PAIR, choosenCards);
 		}
-		if (cards.has(ONE)) {
-			return result(High_Card, cards.getTop(5));
+		if (has(ONE)) {
+			choosenCards = Arrays.asList(getTop(5));
+			return result(HIGH_CARD, choosenCards);
 		}
-		return result(High_Card);
+		return result(HIGH_CARD, Collections.emptyList());
 	}
 
-	@SafeVarargs
-	private final ResultImpl result(Cathegory cat, List<Rank>... tieBreakers) {
-		List<Rank> fixedTieBreakers = new ArrayList<>();
-		for (List<Rank> list : tieBreakers)
-			fixedTieBreakers.addAll(list);
+	// +++++++++++++++++++++++++
 
-		if (fixedTieBreakers.size() > 5)
-			fixedTieBreakers = fixedTieBreakers.subList(0, 5);
-		return new ResultImpl(cat, fixedTieBreakers);
+	private List<Rank> getTop(int num) {
+		Collections.sort(ranks); // ascending
+		Collections.reverse(ranks); // desc
+
+		List<Rank> top = ranks.subList(0, Math.min(num, ranks.size()));
+		List<Rank> res = new ArrayList<>(top);
+		top.clear(); // remove elems from ranks
+
+		return res;
 	}
 
-	public IResult getFlushResult() {
+	private List<Rank> extract(Freq f) {
+		List<Rank> list = Rank.VALUES.stream()
+				.filter(c -> Collections.frequency(ranks, c) == f.value)
+				.collect(Collectors.toList());
+		Collections.sort(list); // ascending
+		Rank rank = list.get(list.size() - 1); // get last elem
+		List<Rank> res = Collections.nCopies(f.value, rank);
+		ranks.removeAll(res);
+		return res;
+	}
+
+	private long num(Freq f) {
+		return Rank.VALUES.stream()
+				.filter(c -> Collections.frequency(ranks, c) == f.value)
+				.count();
+	}
+
+	private boolean has(Freq f) {
+		return num(f) > 0;
+	}
+
+	// +++++++++++++++++++++++++
+	private ResultImpl result(Cathegory cat, List<List<Rank>> tieBreakers) {
+		List<Rank> tie = tieBreakers.stream()
+				.flatMap(Collection::stream)
+				.limit(5)
+				.collect(toList());
+		return new ResultImpl(cat, tie);
+	}
+
+	private ResultImpl getFlushOrStraightResult() {
+
+		Map<Suit, List<Rank>> map = all
+				.stream()
+				.collect(
+						groupingBy(
+								Card::getSuit,
+								mapping(Card::getRank, toList())
+						)
+				);
+
 		// StraightFlush
 		for (Suit c : Suit.VALUES) {
 			for (Window w : Window.getDescValues()) {
-				if (w.applies(cards.flush.get(c))) {
-					return new ResultImpl(Cathegory.Straight_Flush,
+				if (map.get(c) != null && w.applies(map.get(c))) {
+					return new ResultImpl(
+							Cathegory.STRAIGHT_FLUSH,
 							w.getRanks());
 				}
 			}
 		}
 		// Flush
 		for (Suit c : Suit.values()) {
-			if (cards.flush.get(c).size() >= 5) {
-				return new ResultImpl(Cathegory.Flush, cards.flush.get(c)
+			if (map.get(c) != null && map.get(c).size() >= 5) {
+				return new ResultImpl(Cathegory.FLUSH, map.get(c)
 						.subList(0, 5));
 			}
 		}
 		// Straight
+
+		List<Rank> ranks2 = all.stream()
+				.map(Card::getRank)
+				.collect(toList());
+
 		for (Window w : Window.getDescValues()) {
-			if (w.applies(cards.ranks)) {
-				return new ResultImpl(Cathegory.Straight, w.getRanks());
+			if (w.applies(ranks2)) {
+				return new ResultImpl(Cathegory.STRAIGHT, w.getRanks());
 			}
 		}
 		// Nothing
-		return new ResultImpl(Cathegory.High_Card); // worst possible result
+		return new ResultImpl(Cathegory.HIGH_CARD); // worst possible result
 	}
 
-	public static boolean checkOESD(Collection<Card> cards) {
+	private boolean checkOESD() {
 		Set<Rank> ranks = new HashSet<>();
-		for (Card c : cards) {
+		for (Card c : all) {
 			ranks.add(c.getRank());
 		}
 		boolean res = false;
@@ -139,9 +213,9 @@ public class Cat_Rec {
 		return res;
 	}
 
-	public static boolean checkGutshot(Collection<Card> cards) {
+	private boolean checkGutshot() {
 		Set<Rank> ranks = new HashSet<>();
-		for (Card c : cards) {
+		for (Card c : all) {
 			ranks.add(c.getRank());
 		}
 		boolean res = false;
@@ -165,9 +239,9 @@ public class Cat_Rec {
 		return res;
 	}
 
-	public static boolean checkDoubleGutshot(Collection<Card> cards) {
+	private boolean checkDoubleGutshot() {
 		Set<Rank> ranks = new HashSet<>();
-		for (Card c : cards) {
+		for (Card c : all) {
 			ranks.add(c.getRank());
 		}
 		boolean res = false;
@@ -217,20 +291,80 @@ public class Cat_Rec {
 		return res;
 	}
 
-	public static boolean checkFlushDraw(Collection<Card> cards) {
-		EnumMap<Suit, Integer> map = new EnumMap<>(Suit.class);
-		for (Card c : cards) {
-			if (map.get(c.getSuit()) == null)
-				map.put(c.getSuit(), 0);
-			map.put(c.getSuit(), map.get(c.getSuit()) + 1);
-		}
-		for (Integer i : map.values()) {
-			if (i == 4)
-				return true;
-			if (i > 4)
-				return false;
-		}
-		return false;
+	private boolean checkFlushDraw() {
+		return all.stream()
+				.collect(groupingBy(Card::getSuit, counting()))
+				.values().stream()
+				.max(naturalOrder())
+				.map(x -> x == 4)
+				.orElse(false);
 	}
+
+	public PairBasedDanger checkPairBasedDanger() {
+		return Rank.VALUES.stream()
+				.map(
+						rank -> community.stream()
+								.map(Card::getRank)
+								.filter(rank::equals)
+								.count()
+				)
+				.max(Comparator.naturalOrder())
+				.map(PairBasedDanger::fromLong)
+				.orElse(PairBasedDanger.NONE);
+	}
+
+	public StraightDanger checkStraightDanger() {
+		return Window.getDescValues().stream()
+				.map(
+						window -> community.stream()
+								.map(Card::getRank)
+								.filter(window::contains)
+								.distinct()
+								.count()
+				)
+				.max(Comparator.naturalOrder())
+				.map(StraightDanger::fromLong)
+				.orElse(StraightDanger.NONE);
+	}
+
+	public FlushDanger checkFlushDanger() {
+		return Suit.VALUES.stream()
+				.map(
+						suit -> community.stream()
+								.map(Card::getSuit)
+								.filter(suit::equals)
+								.count()
+				)
+				.max(Comparator.naturalOrder())
+				.map(FlushDanger::fromLong)
+				.orElse(FlushDanger.NONE);
+	}
+
+	public DrawType checkDraw() {
+		if (checkDoubleGutshot()) {
+			if (checkFlushDraw()) {
+				return DrawType.MONSTER_DRAW;
+			} else {
+				return DrawType.DOUBLE_GUTSHOT;
+			}
+		} else if (checkOESD()) {
+			if (checkFlushDraw()) {
+				return DrawType.MONSTER_DRAW;
+			} else {
+				return DrawType.OESD;
+			}
+		} else if (checkFlushDraw()) {
+			return DrawType.FLUSH_DRAW;
+		} else if (checkGutshot()) {
+			return DrawType.GUTSHOT;
+		} else {
+			return DrawType.NONE;
+		}
+	}
+
+	// public static ResultImpl check(List<Card> list) {
+	// return new Cat_Rec(list.subList(0, 2), list.subList(2, list.size()))
+	// .check();
+	// }
 
 }

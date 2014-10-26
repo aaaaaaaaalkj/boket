@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import managementCards.cards.Card;
-import managementCards.cards.CommunityCards;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 import old.Hand;
@@ -31,7 +30,7 @@ public class Card_Recognition {
 		return hit;
 	}
 
-	public static CommunityCards recognizeCommunityCards(Pos logo) {
+	public static List<Card> recognizeCommunityCards(Pos logo) {
 
 		Pos pos = Constants.flop.plus(logo);
 		List<Card> list = new ArrayList<>();
@@ -44,17 +43,19 @@ public class Card_Recognition {
 			pos = hit.plus(Constants.cardOffset, 0);
 		}
 		// TODO: maybe its possible that list.get(0) == null
-		CommunityCards cards = CommunityCards.fromList(list);
-
-		return cards;
+		return list;
 	}
 
 	public static Hand recognizeHand(Pos logo) {
 		Pos pos = logo.plus(handPos).minus(radius, radius);
 
 		Pos hit = searchCard(pos);
-		if (null == hit)
+		if (null == hit) {
+			System.out.println("no hit found");
 			return null;
+		} else {
+			System.out.println("hit: " + hit);
+		}
 		Card first = recognizeCard(hit);
 
 		pos = hit.plus(4, 1);
@@ -67,11 +68,15 @@ public class Card_Recognition {
 
 	public static Card recognizeCard(Pos pos) {
 		Suit resColor = recognizeCardColor(pos);
-		if (null == resColor)
+		if (null == resColor) {
+			System.out.println("no card color found");
 			return null;
+		}
 		Rank resNum = recognizeCardNum(pos);
-		if (resNum == null)
+		if (resNum == null) {
+			System.out.println("no card num found");
 			return null;
+		}
 		return Card.newInstance(resNum, resColor);
 	}
 

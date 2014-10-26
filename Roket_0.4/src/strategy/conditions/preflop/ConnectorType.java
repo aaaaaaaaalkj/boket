@@ -16,6 +16,10 @@ public enum ConnectorType implements ICondition {
 		return this == sit.getConnector();
 	}
 
+	public static ConnectorType fromInt(int int_value) {
+		return fromInt(OptionalInt.of(int_value));
+	}
+
 	public static ConnectorType fromInt(OptionalInt optionalInt) {
 		if (optionalInt.isPresent()
 				&& optionalInt.getAsInt() <= 4

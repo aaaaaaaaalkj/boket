@@ -31,8 +31,8 @@ public class ScreenScraper extends Thread {
 		situation.communityCards = Card_Recognition
 				.recognizeCommunityCards(logo);
 
-		// System.out.println("situation:");
-		// System.out.println(situation);
+		System.out.println("situation:");
+		System.out.println(situation);
 	}
 
 	private static Pos pos(int x, int y) {

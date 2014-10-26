@@ -1,12 +1,10 @@
 package managementCards;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import managementCards.cards.Card;
-import managementCards.cards.CommunityCards;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.IResult;
 
@@ -20,12 +18,9 @@ public class OutcomeImpl implements IOutcome {
 		this.results = new HashMap<IPlayer, IResult>();
 	}
 
-	public void computeResult(IPlayer player, CommunityCards communityCards) {
-		List<Card> list = new ArrayList<>();
-		list.addAll(player.getHand());
-		list.addAll(communityCards.getCards());
-
-		results.put(player, Cat_Rec.check(list));
+	public void computeResult(IPlayer player, List<Card> communityCards) {
+		results.put(player,
+				new Cat_Rec(player.getHand(), communityCards).check());
 	}
 
 	@Override

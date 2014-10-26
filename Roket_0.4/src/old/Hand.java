@@ -45,7 +45,11 @@ import static old.StartingHand.sQJ;
 import static old.StartingHand.sQT;
 import static old.StartingHand.sT9;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import managementCards.cards.Card;
 import old.strategy.PreflopBuket;
@@ -57,8 +61,8 @@ public final class Hand {
 	public final StartingHand h;
 
 	private Hand(Card c1, Card c2) {
-		this.first = c1;
-		this.second = c2;
+		this.first = Objects.requireNonNull(c1);
+		this.second = Objects.requireNonNull(c2);
 		String s = (first.getSuit() == second.getSuit() ? "s" : "o");
 		if (first.getRank().ordinal() > second.getRank().ordinal()) {
 			s += first.getRank().shortString();
@@ -106,7 +110,6 @@ public final class Hand {
 	public static Hand newInstance(Card c1, Card c2) {
 		return new Hand(c1, c2);
 	}
-
 
 	public PreflopBuket getPreflopBuket() {
 		StartingHand[] veryStrongHands = { oAA, oKK, oQQ, sAK, oAK };
@@ -269,5 +272,17 @@ public final class Hand {
 
 	public boolean isConnector() {
 		return Math.abs(first.getRank().ordinal() - second.getRank().ordinal()) == 1;
+	}
+
+	public int getDifference() {
+		return Math.abs(first.getRank().ordinal() - second.getRank().ordinal());
+	}
+
+	public Stream<Card> stream() {
+		return Stream.of(first, second);
+	}
+
+	public List<Card> getCards() {
+		return Arrays.asList(first, second);
 	}
 }

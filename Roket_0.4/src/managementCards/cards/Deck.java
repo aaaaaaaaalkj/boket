@@ -5,21 +5,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/*
+ * 
+ * For each game a fresh Deck should be initialized. Dont reuse
+ */
 public class Deck {
 	List<Card> cards;
 
-	public Deck(Random rand) {
+	private Deck(Random rand) {
 		cards = new ArrayList<>();
 		for (Rank n : Rank.values()) {
 			for (Suit c : Suit.values()) {
 				cards.add(new Card(n, c));
 			}
 		}
-		shuffle(rand);
+		Collections.shuffle(cards, rand);
 	}
 
-	public void shuffle(Random rand) {
-		Collections.shuffle(cards, rand);
+	public static Deck freshDeck() {
+		return new Deck(new Random());
+	}
+
+	public static Deck freshDeck(Random r) {
+		return new Deck(r);
 	}
 
 	public Card pop() {

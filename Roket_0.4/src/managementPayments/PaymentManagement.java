@@ -1,29 +1,23 @@
 package managementPayments;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
+import managementPaymentsNew.IPayManagement;
 import strategy.PlayerDecision;
 import strategy.TypeOfDecision;
 
 import common.IOutcome;
 import common.IPlayer;
 
-public class PaymentManagement {
-	private Map<IPlayer, PlayerJetons> playerJetons = new HashMap<>();
-	private AmountOfJetons start;
+public class PaymentManagement implements IPayManagement {
 	private AmountOfJetons highestBid;
 	private AmountOfJetons lastRaise;
 	private List<SidePot> pots;
-	private final List<IPlayer> players; // used only in toString
+	private final List<IPlayer> players;
 
-	// private final Random rand;
-
-	public PaymentManagement(int startAmountBB) {
-		this.start = AmountOfJetons.BB(startAmountBB);
+	public PaymentManagement() {
 		this.highestBid = AmountOfJetons.ZERO;
 		this.pots = new ArrayList<>();
 		this.lastRaise = AmountOfJetons.BB;
@@ -31,11 +25,7 @@ public class PaymentManagement {
 	}
 
 	public AmountOfJetons getStack(IPlayer player) {
-		return playerJetons.get(player).getStack();
-	}
-
-	public AmountOfJetons getPost(IPlayer player) {
-		return playerJetons.get(player).getPost();
+		return player.getStack().get();
 	}
 
 	public void postSB(IPlayer player) {
@@ -50,31 +40,26 @@ public class PaymentManagement {
 		highestBid = AmountOfJetons.BB;
 	}
 
-	public StateInfo post(IPlayer player, AmountOfJetons amount) {
-		PlayerJetons j = playerJetons.get(player);
-
+	public void post(IPlayer player, AmountOfJetons amount) {
 		amount = modifyAmount(player, amount);
-
-		boolean raised = post_intern(player, amount);
-		return new StateInfo(j.getStack().isZero(), raised);
+		post_intern(player, amount);
 	}
 
 	private boolean post_intern(IPlayer player, AmountOfJetons amount) {
-		PlayerJetons j = playerJetons.get(player);
-		AmountOfJetons wholeAmount = amount.plus(j.getPost());
+		AmountOfJetons wholeAmount = amount.plus(player.getPost());
 		boolean raised = wholeAmount.greaterAs(highestBid);
 		if (raised) {
 			lastRaise = wholeAmount.minus(highestBid);
 			highestBid = wholeAmount;
 		}
-		j.removeFromStack(amount);
-		j.addToPost(amount);
+		player.getStack().removeFromStack(amount);
+		player.setPost(player.getPost().plus(amount));
 		return raised;
 	}
 
 	public PlayerDecision modifyTypeOfDecision(IPlayer player, TypeOfDecision d) {
-		if (d == TypeOfDecision.FOLD || d == TypeOfDecision.CALL) {
-			if (highestBid.minus(getPost(player)).isZero())
+		if (d == TypeOfDecision.CALL) {
+			if (highestBid.minus(player.getPost()).isZero())
 				return PlayerDecision.CHECK;
 		}
 		if (d == TypeOfDecision.FOLD) {
@@ -89,7 +74,7 @@ public class PaymentManagement {
 		if (highestBid.isZero())
 			return PlayerDecision.BET;
 
-		if (highestBid.minus(getPost(player)).greaterOrEqual(getStack(player))) {
+		if (highestBid.minus(player.getPost()).greaterOrEqual(getStack(player))) {
 			return PlayerDecision.CALL;
 		}
 		// if (lastRaise.greaterAs(AmountOfJetons.BB))
@@ -99,15 +84,16 @@ public class PaymentManagement {
 
 	public AmountOfJetons computePost(IPlayer player, TypeOfDecision d) {
 		AmountOfJetons amount = AmountOfJetons.ZERO;
-		PlayerJetons j = playerJetons.get(player);
 		AmountOfJetons wholeAmount;
 
 		// at least we need to call the highest bid
-		amount = highestBid.minus(j.getPost());
+		amount = highestBid.minus(player.getPost());
+
+		AmountOfJetons stack = player.getStack().get();
 
 		switch (d) {
 		case ALL_IN:
-			amount = j.getStack();
+			amount = stack;
 			break;
 		case CALL:
 			// amount already computed
@@ -128,24 +114,25 @@ public class PaymentManagement {
 			amount = amount.plus(computeTotalPot(player).divideToEven(4));
 			break;
 		case RAISE_FIFTH_STACK:
-			amount = amount.plus(j.getStack().divideToEven(5));
+			amount = amount.plus(stack.divideToEven(5));
 			break;
 		case RAISE_HALF_STACK:
-			amount = amount.plus(j.getStack().divideToEven(2));
+			amount = amount.plus(stack.divideToEven(2));
 			break;
 		case RAISE_TENTH_STACK:
-			amount = amount.plus(j.getStack().divideToEven(10));
+			amount = amount.plus(stack.divideToEven(10));
 			break;
 		default:
 			throw new UnsupportedOperationException(d + " is not supported");
 		}
 
 		// cant put more jetons on table than available
-		amount = AmountOfJetons.min(amount, j.getStack());
+		amount = AmountOfJetons.min(amount, stack);
 
-		wholeAmount = amount.plus(j.getPost());
+		wholeAmount = amount.plus(player.getPost());
 
-		Post post = new Post(j, highestBid, lastRaise, amount);
+		Post post = new Post(stack, player.getPost(), highestBid, lastRaise,
+				amount);
 
 		if (post.moreThanCall()) {
 			if (post.lessThanRaise() && post.notAllIn()) {
@@ -156,15 +143,16 @@ public class PaymentManagement {
 				amount = wholeAmount.plus(AmountOfJetons.SB);
 			}
 		}
-		amount = AmountOfJetons.min(amount, j.getStack());
+		amount = AmountOfJetons.min(amount, stack);
 		return amount;
 	}
 
 	private AmountOfJetons modifyAmount(IPlayer player, AmountOfJetons amount) {
-		PlayerJetons j = playerJetons.get(player);
-		AmountOfJetons wholeAmount = amount.plus(j.getPost());
+		AmountOfJetons wholeAmount = amount.plus(player.getPost());
+		AmountOfJetons stack = player.getStack().get();
 
-		Post post = new Post(j, highestBid, lastRaise, amount);
+		Post post = new Post(stack, player.getPost(), highestBid, lastRaise,
+				amount);
 
 		if (post.lessThanHighestBid() && post.notAllIn()) {
 			amount = highestBid;
@@ -177,7 +165,7 @@ public class PaymentManagement {
 				amount = wholeAmount.plus(AmountOfJetons.SB);
 			}
 		}
-		amount = AmountOfJetons.min(amount, j.getStack());
+		amount = AmountOfJetons.min(amount, stack);
 		return amount;
 	}
 
@@ -187,18 +175,21 @@ public class PaymentManagement {
 	 * 
 	 * @param inGame
 	 */
-	public void roundEnd(List<IPlayer> inGame) {
+	public void roundEnd() {
 		AmountOfJetons minPost;
 		AmountOfJetons removed;
 
 		while ((minPost = minPost()).positive()) {
 			SidePot pot = new SidePot();
-			for (IPlayer p : playerJetons.keySet()) {
-				removed = playerJetons.get(p).removeFromPostAtMost(minPost);
-				if (inGame.contains(p))
-					pot.add(p, removed);
-				else
-					pot.add(removed);
+			for (IPlayer p : players) {
+				removed = p.getPost().min(minPost);
+				p.setPost(p.getPost().minus(removed));
+
+				if (p.getState().isInGame()) {
+					pot.add(p, removed); // all-in or active
+				} else {
+					pot.add(removed); // folded
+				}
 			}
 			pots.add(pot);
 		}
@@ -208,49 +199,47 @@ public class PaymentManagement {
 
 	private AmountOfJetons minPost() {
 		AmountOfJetons res = AmountOfJetons.INFINITY;
-		for (IPlayer p : playerJetons.keySet()) {
-			PlayerJetons j = playerJetons.get(p);
-			if (j.getStack().isZero() && j.getPost().positive()) // all-in
-				res = AmountOfJetons.min(res, j.getPost());
+		for (IPlayer p : players) {
+			if (p.getStack().isEmpty() && p.getPost().positive()) // all-in
+				res = AmountOfJetons.min(res, p.getPost());
 		}
 		if (res == AmountOfJetons.INFINITY) {
 			res = AmountOfJetons.ZERO;
-			for (IPlayer p : playerJetons.keySet()) {
-				PlayerJetons j = playerJetons.get(p);
-				res = AmountOfJetons.max(res, j.getPost());
+			for (IPlayer p : players) {
+				res = AmountOfJetons.max(res, p.getPost());
 			}
 		}
 		return res;
 	}
 
 	public void register(IPlayer player) {
-		playerJetons.put(player, new PlayerJetons(start));
+		player.setPost(AmountOfJetons.ZERO);
 		players.add(player);
 	}
 
 	public AmountOfJetons getHighestBid(IPlayer player) {
-		AmountOfJetons playerAmount = playerJetons.get(player).getStack()
-				.plus(playerJetons.get(player).getPost());
+		AmountOfJetons playerAmount = player.getStack().get()
+				.plus(player.getPost());
 		return AmountOfJetons.min(highestBid, playerAmount);
 	}
 
 	public AmountOfJetons toPay(IPlayer player) {
-		AmountOfJetons playerStack = playerJetons.get(player).getStack();
-		AmountOfJetons playerPost = playerJetons.get(player).getPost();
+		AmountOfJetons playerStack = player.getStack().get();
+		AmountOfJetons playerPost = player.getPost();
 		return AmountOfJetons.min(highestBid.minus(playerPost), playerStack);
 	}
 
 	public AmountOfJetons computeTotalPot(IPlayer player) {
 		AmountOfJetons sum = AmountOfJetons.ZERO;
-		AmountOfJetons playerAmount = playerJetons.get(player).getStack()
-				.plus(playerJetons.get(player).getPost());
+		AmountOfJetons playerAmount = player.getStack().get()
+				.plus(player.getPost());
 
 		for (SidePot pot : pots) {
 			if (pot.participants.contains(player))
 				sum = sum.plus(pot.value);
 		}
-		for (PlayerJetons j : playerJetons.values()) {
-			sum = sum.plus(AmountOfJetons.min(j.getPost(), playerAmount));
+		for (IPlayer other : players) {
+			sum = sum.plus(AmountOfJetons.min(other.getPost(), playerAmount));
 		}
 		return sum;
 	}
@@ -258,8 +247,7 @@ public class PaymentManagement {
 	public String toString() {
 		String res = "";
 		for (IPlayer player : players) {
-			PlayerJetons j = playerJetons.get(player);
-			res += player + ": " + j.getPost() + "\n";
+			res += player + ": " + player.getPost() + "\n";
 		}
 		return res;
 	}
@@ -283,7 +271,7 @@ public class PaymentManagement {
 			// split the pot to winners
 			AmountOfJetons part = pot.value.divide(pot.participants.size());
 			for (IPlayer p : pot.participants) {
-				playerJetons.get(p).won(part);
+				p.getStack().addToStack(part);
 				payOuts.add(p, part);
 			}
 			// some jetons may remain due to division with remainder
@@ -295,10 +283,16 @@ public class PaymentManagement {
 				if (pot.value.equals(AmountOfJetons.ZERO))
 					break;
 				pot.value = pot.value.minus(AmountOfJetons.SB);
-				playerJetons.get(p).won(AmountOfJetons.SB);
+				p.getStack().addToStack(AmountOfJetons.SB);
 				payOuts.add(p, AmountOfJetons.SB);
 			}
 		}
 		return payOuts;
+	}
+
+	@Override
+	public ActionInfo action(int player, TypeOfDecision dec) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

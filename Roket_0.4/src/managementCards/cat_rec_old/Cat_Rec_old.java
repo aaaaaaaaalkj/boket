@@ -1,7 +1,6 @@
 package managementCards.cat_rec_old;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 
 import managementCards.cards.Card;
@@ -21,8 +20,8 @@ public class Cat_Rec_old {
 			return r;
 		r = checkPairBased(set);
 
-		if (r.cathegory == Cathegory.Full_House
-				|| r.cathegory == Cathegory.Four_Of_A_Kind)
+		if (r.cathegory == Cathegory.FULL_HOUSE
+				|| r.cathegory == Cathegory.FOUR_OF_A_KIND)
 			return r;
 		r2 = checkFlush(set);
 		if (null != r2)
@@ -88,7 +87,7 @@ public class Cat_Rec_old {
 			if (b)
 				counter = 0;
 			if (counter == 5)
-				return Result_old.newInstance(Cathegory.Straight, high);
+				return Result_old.newInstance(Cathegory.STRAIGHT, high);
 		}
 		return null;
 	}
@@ -207,7 +206,7 @@ public class Cat_Rec_old {
 					counter = 0;
 				}
 				if (counter == 5)
-					return Result_old.newInstance(Cathegory.Straight_Flush,
+					return Result_old.newInstance(Cathegory.STRAIGHT_FLUSH,
 							high);
 			}
 		}
@@ -226,42 +225,42 @@ public class Cat_Rec_old {
 		k: for (int i = NUM - 1; i >= 0; i--) {
 			switch (res[i]) {
 			case 4:
-				cat = Cathegory.Four_Of_A_Kind;
+				cat = Cathegory.FOUR_OF_A_KIND;
 				bestI = i;
 				break k;
 			case 3:
-				if (cat == Cathegory.Pair || cat == Cathegory.Two_Pair) {
+				if (cat == Cathegory.PAIR || cat == Cathegory.TWO_PAIR) {
 					bestI2 = bestI;
 					bestI = i;
-					cat = Cathegory.Full_House;
+					cat = Cathegory.FULL_HOUSE;
 					break k;
 				}
-				cat = Cathegory.Three_Of_A_Kind;
+				cat = Cathegory.THREE_OF_A_KIND;
 				bestI = i;
 				break;
 			case 2:
-				if (cat == Cathegory.Three_Of_A_Kind) {
+				if (cat == Cathegory.THREE_OF_A_KIND) {
 					bestI2 = i;
-					cat = Cathegory.Full_House;
+					cat = Cathegory.FULL_HOUSE;
 					break k;
 				}
-				if (cat == Cathegory.Pair) {
+				if (cat == Cathegory.PAIR) {
 					bestI2 = i;
-					cat = Cathegory.Two_Pair;
+					cat = Cathegory.TWO_PAIR;
 					break k;
 				}
-				cat = Cathegory.Pair;
+				cat = Cathegory.PAIR;
 				bestI = i;
 				break;
 			}
 		}
 
-		if (cat == Cathegory.Four_Of_A_Kind)
+		if (cat == Cathegory.FOUR_OF_A_KIND)
 			return Result_old.newInstance(cat, bestI);
 
-		if (cat == Cathegory.Full_House)
+		if (cat == Cathegory.FULL_HOUSE)
 			return Result_old.newInstance(cat, bestI, bestI2);
-		if (cat == Cathegory.Three_Of_A_Kind) {
+		if (cat == Cathegory.THREE_OF_A_KIND) {
 			int tie1 = -1;
 			int tie2 = -1;
 			for (int i = NUM - 1; i >= 0; i--) {
@@ -287,7 +286,7 @@ public class Cat_Rec_old {
 			}// TODO: this happens sometimes
 			throw new RuntimeException("should never happen2");
 		}
-		if (cat == Cathegory.Two_Pair) {
+		if (cat == Cathegory.TWO_PAIR) {
 			for (int i = NUM - 1; i >= 0; i--) {
 				if (i == bestI || i == bestI2)
 					continue;
@@ -298,7 +297,7 @@ public class Cat_Rec_old {
 			// only four cards available -> no tie-breakers
 			return Result_old.newInstance(cat, bestI, bestI2);
 		}
-		if (cat == Cathegory.Pair) {
+		if (cat == Cathegory.PAIR) {
 			ArrayList<Integer> tie = new ArrayList<Integer>();
 			for (int i = NUM - 1; i >= 0; i--) {
 				if (res[i] == 1) {
@@ -309,7 +308,7 @@ public class Cat_Rec_old {
 			return Result_old.newInstance(cat, toIntArr(tie));
 		}
 		if (null == cat) {
-			cat = Cathegory.High_Card;
+			cat = Cathegory.HIGH_CARD;
 			ArrayList<Integer> tie = new ArrayList<>();
 			for (int i = NUM - 1; i >= 0; i--) {
 				if (res[i] == 1) {

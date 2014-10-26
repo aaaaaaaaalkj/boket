@@ -4,9 +4,11 @@ import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum PairBasedDanger implements ICondition {
-	LOW, // no pair in community-cards
-	MIDDLE, // one pair in community-cards
-	HIGH; // two pairs or three of a kind or higher in community-cards
+	NONE, // no pair in community-cards
+	MODERATE, // one pair in community-cards
+	HIGH, // two pairs or three of a kind in community-cards
+	CERTAIN_COMBO; // full-house of four-of-a-kind in communit-cards
+
 	public static final PairBasedDanger[] VALUES = values();
 
 	public static int getCount() {

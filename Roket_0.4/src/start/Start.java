@@ -1,7 +1,13 @@
 package start;
 
+import input_output.MyOutput;
+import input_output.Raw_Situation;
 import input_output.ScreenScraper;
 import old.Situation;
+import strategy.BoketSituation;
+import strategy.ISituation;
+import strategy.IStrategy;
+import strategy.TypeOfDecision;
 import tools.Pos;
 
 public class Start {
@@ -10,33 +16,21 @@ public class Start {
 	}
 
 	public static void main(String[] _) throws InterruptedException {
-
-		// Excel.start();Excel.getPreflopStrategy();
-//		PreflopStrategy strat = new PreflopStrategy();
-
-//		long start = System.currentTimeMillis();// timestamp
 		ScreenScraper scraper = new ScreenScraper();
 		scraper.start();
 		scraper.join();
 
-//		System.exit(1);
-//		Situation s = scraper.getSituation();
-//		if (s.getHand() != null) {
-//			s.print();
-//			PreflopSelector selector = new PreflopSelector();
-//
-//			selector.setSituation(s.pSit);
-//
-//			selector.setBuket(s.getHand().getPreflopBuket());
-//
-//			selector.setPosition(s.itsMe.getPosition());
-//
-//			selector.print();
-//			Decision d = strat.get(selector);
-//			System.out.println("Decision: " + d);
-//		}
-//		long stop = System.currentTimeMillis();// timestamp
-//		System.out.println((stop - start) + " Millisekunden.");
+		Raw_Situation raw = scraper.getSituation();
+
+		ISituation sit = new BoketSituation(raw);
+
+		IStrategy shitStrategy = StrategyDefinitions.s;
+
+		TypeOfDecision d = shitStrategy.decide(sit);
+
+		System.out.println(d);
+		decision2ouput(d, scraper.logo, raw);
+
 	}
 
 	public static void start2(Situation s) {
@@ -48,4 +42,55 @@ public class Start {
 		// Position pos = Position.BB;
 
 	}
+
+	public static void decision2ouput(TypeOfDecision d, Pos logo,
+			Raw_Situation raw) {
+		MyOutput out = new MyOutput();
+
+		double pot = raw.getPot();
+		double stack = 2;
+
+		switch (d) {
+		case ALL_IN:
+			break;
+		case CALL:
+			out.clickCallButton(logo);
+			break;
+		case FOLD:
+			out.clickFoldButton(logo);
+			break;
+		case RAISE_DOUBLE_POT:
+			out.type2(pot * 2, logo);
+			out.clickRaiseButton(logo);
+			break;
+		case RAISE_FIFTH_STACK:
+			out.type2(stack / 5, logo);
+			out.clickRaiseButton(logo);
+			break;
+		case RAISE_HALF_POT:
+			out.type2(pot / 2, logo);
+			out.clickRaiseButton(logo);
+			break;
+		case RAISE_HALF_STACK:
+			out.type2(stack / 2, logo);
+			out.clickRaiseButton(logo);
+			break;
+		case RAISE_POT_SIZE:
+			out.type2(pot, logo);
+			out.clickRaiseButton(logo);
+			break;
+		case RAISE_QUARTER_POT:
+			out.type2(pot / 4, logo);
+			out.clickRaiseButton(logo);
+			break;
+		case RAISE_TENTH_STACK:
+			out.type2(stack / 10, logo);
+			out.clickRaiseButton(logo);
+			break;
+		default:
+			throw new IllegalStateException("unexpected decision: " + d);
+		}
+
+	}
+
 }

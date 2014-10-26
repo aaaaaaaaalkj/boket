@@ -1,9 +1,9 @@
 package strategy;
 
+import managementCards.cat_rec_new.Cathegory;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
-import strategy.conditions.postflop.ComboType;
 import strategy.conditions.postflop.DrawType;
 import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
@@ -13,7 +13,7 @@ public class PostflopSelector implements ISelector {
 	private final ContributionType contribution;
 	private final NumActiveType numActive;
 	private final PotType pot;
-	private final ComboType combo;
+	private final Cathegory combo;
 	private final PairBasedDanger pairBasedDanger;
 	private final FlushDanger flushDanger;
 	private final StraightDanger straightDanger;
@@ -24,7 +24,7 @@ public class PostflopSelector implements ISelector {
 	private static final int n2 = n1 * PairBasedDanger.getCount();
 	private static final int n3 = n2 * FlushDanger.getCount();
 	private static final int n4 = n3 * StraightDanger.getCount();
-	private static final int n5 = n4 * ComboType.getCount();
+	private static final int n5 = n4 * Cathegory.getCount();
 	private static final int n6 = n5 * PotType.getCount();
 	private static final int n7 = n6 * NumActiveType.getCount();
 	private static final int n8 = n7 * ContributionType.getCount();
@@ -32,7 +32,7 @@ public class PostflopSelector implements ISelector {
 	public static final int size = n6;
 
 	public PostflopSelector(ContributionType contr, NumActiveType numAct,
-			PotType pot, ComboType combo, PairBasedDanger pairb,
+			PotType pot, Cathegory combo, PairBasedDanger pairb,
 			FlushDanger flush, StraightDanger straight, DrawType draw) {
 		this.contribution = contr;
 		this.numActive = numAct;

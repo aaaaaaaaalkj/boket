@@ -3,10 +3,12 @@ package common;
 import java.util.List;
 
 import managementCards.cards.Card;
+import managementPayments.AmountOfJetons;
+import managementState.PlayerState;
 import strategy.IStrategy;
 
 /**
- * Marker Interface for Players.
+ * Interface for Players.
  * 
  * @author Combat-Ready
  * 
@@ -17,4 +19,27 @@ public interface IPlayer {
 	List<Card> getHand();
 
 	void dealCards(Card first, Card second);
+
+	Stack getStack();
+
+	AmountOfJetons getPost();
+
+	void setPost(AmountOfJetons amount);
+
+	PlayerState getState();
+
+	void setState(PlayerState state);
+
+	/**
+	 * 0 = SMALL_BLIND
+	 * 
+	 * 1 = BIG_BLIND
+	 * 
+	 * 2 = ...
+	 * 
+	 * n = BUTTON
+	 * 
+	 * @return
+	 */
+	int getPosition();
 }

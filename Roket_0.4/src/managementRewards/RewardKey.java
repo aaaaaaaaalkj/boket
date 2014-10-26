@@ -20,7 +20,7 @@ public class RewardKey {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + s.getCombo().hashCode();
+		result = prime * result + s.getCathegory().hashCode();
 		result = prime * result + s.getConnector().hashCode();
 		result = prime * result + s.getContribution().hashCode();
 		result = prime * result + s.getDraw().hashCode();
@@ -44,7 +44,7 @@ public class RewardKey {
 		if (getClass() != obj.getClass())
 			return false;
 		RewardKey other = (RewardKey) obj;
-		if (s.getCombo() != other.s.getCombo())
+		if (s.getCathegory() != other.s.getCathegory())
 			return false;
 		if (s.getConnector() != other.s.getConnector())
 			return false;

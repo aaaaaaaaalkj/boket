@@ -4,9 +4,12 @@ import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum FlushDanger implements ICondition {
-	LOW, // rainbow
-	MIDDLE, // two cards of the same suit in community-cards
-	HIGH; // three or four of the same suit in community-cards
+	NONE, // rainbow
+	MODERATE, // flush-draw possible (2 cards of same suit)
+	SIGNIFICANT, // flush possible (3 cards of same suit)
+	HIGH, // four cards of the same suit in community-cards
+	CERTAIN_FLUSH; // five of the same suit in community-cards
+
 	public static final FlushDanger[] VALUES = values();
 
 	public static int getCount() {
@@ -18,8 +21,9 @@ public enum FlushDanger implements ICondition {
 		return this == sit.getFlushDanger();
 	}
 
-	public static FlushDanger fromLong(long i) {
-		return values()[Math.min((int) i, VALUES.length - 1)];
+	public static FlushDanger fromLong(long count_max_cards_of_same_suit) {
+		return values()[Math.min((int) count_max_cards_of_same_suit,
+				VALUES.length - 1)];
 	}
 
 	public ICondition orHigher() {

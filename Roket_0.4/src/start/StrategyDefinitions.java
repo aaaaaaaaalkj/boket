@@ -1,5 +1,12 @@
 package start;
 
+import static managementCards.cat_rec_new.Cathegory.FLUSH;
+import static managementCards.cat_rec_new.Cathegory.FOUR_OF_A_KIND;
+import static managementCards.cat_rec_new.Cathegory.FULL_HOUSE;
+import static managementCards.cat_rec_new.Cathegory.STRAIGHT;
+import static managementCards.cat_rec_new.Cathegory.STRAIGHT_FLUSH;
+import static managementCards.cat_rec_new.Cathegory.THREE_OF_A_KIND;
+import static managementCards.cat_rec_new.Cathegory.TWO_PAIR;
 import static strategy.TypeOfDecision.ALL_IN;
 import static strategy.TypeOfDecision.CALL;
 import static strategy.TypeOfDecision.FOLD;
@@ -7,13 +14,6 @@ import static strategy.TypeOfDecision.RAISE_DOUBLE_POT;
 import static strategy.TypeOfDecision.RAISE_HALF_POT;
 import static strategy.TypeOfDecision.RAISE_POT_SIZE;
 import static strategy.TypeOfDecision.RAISE_QUARTER_POT;
-import static strategy.conditions.postflop.ComboType.FLUSH;
-import static strategy.conditions.postflop.ComboType.FOUR_OF_A_KIND;
-import static strategy.conditions.postflop.ComboType.FULL_HOUSE;
-import static strategy.conditions.postflop.ComboType.GOOD_SET;
-import static strategy.conditions.postflop.ComboType.STRAIGHT;
-import static strategy.conditions.postflop.ComboType.STRAIGHT_FLUSH;
-import static strategy.conditions.postflop.ComboType.TWO_PAIR;
 import static strategy.conditions.postflop.DrawType.DOUBLE_GUTSHOT;
 import static strategy.conditions.postflop.DrawType.FLUSH_DRAW;
 import static strategy.conditions.postflop.DrawType.MONSTER_DRAW;
@@ -40,11 +40,11 @@ public class StrategyDefinitions {
 				, CALL);
 
 		s = s.flop(MONSTER_DRAW // 15 outs
-				.and(PairBasedDanger.LOW) // no pair in flop
+				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.HIGH.orLower()), CALL);
 
-		s = s.flop(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.LOW) // rainbow
-				.and(PairBasedDanger.LOW) // no pair in flop
+		s = s.flop(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.NONE) // rainbow
+				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE.orLower()), CALL); // pay more
 																// here?
 
@@ -52,7 +52,7 @@ public class StrategyDefinitions {
 		// .and(CONTRIBUTION_LESS_THAN(0.1)), CALL); // cheap chance
 
 		s = s.flop(FLUSH_DRAW // 9 outs
-				.and(PairBasedDanger.LOW) // no pair in flop
+				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE.orLower()), CALL);
 
 		// nutStrategy.flop( // besser formulieren und ausarbeiten. Sonst ist
@@ -64,8 +64,8 @@ public class StrategyDefinitions {
 		s = s.flop(TWO_PAIR // 4 outs
 				.and(ContributionType.LOW), CALL);
 
-		s = s.flop(GOOD_SET)
-				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH))
+		s = s.flop(THREE_OF_A_KIND.and(POCKET_PAIR))
+				.if_(StraightDanger.HIGH.or(FlushDanger.SIGNIFICANT))
 				.then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_QUARTER_POT)
 				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT);
@@ -83,29 +83,30 @@ public class StrategyDefinitions {
 		s = s.turn(STRAIGHT_FLUSH, RAISE_DOUBLE_POT);
 
 		s = s.turn(MONSTER_DRAW // 15 outs
-				.and(PairBasedDanger.LOW) // no pair in flop
+				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL);
 
-		s = s.turn(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.LOW) // rainbow
-				.and(PairBasedDanger.LOW) // no pair in flop
+		s = s.turn(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.NONE) // rainbow
+				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL); // pay more here?
 
 		s = s.turn(FLUSH_DRAW // 9 outs
-				.and(PairBasedDanger.LOW) // no pair in flop
+				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL);
 
 		s = s.turn(TWO_PAIR // 4 outs
 				.and(ContributionType.LOW), CALL);
 
-		s = s.turn(GOOD_SET)
-				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH)).then(FOLD)
+		s = s.turn(THREE_OF_A_KIND.and(POCKET_PAIR))
+				.if_(StraightDanger.HIGH.or(FlushDanger.SIGNIFICANT))
+				.then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_HALF_POT)
 				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT);
 
-		s = s.river(STRAIGHT.and(FlushDanger.LOW).and(PairBasedDanger.LOW),
+		s = s.river(STRAIGHT.and(FlushDanger.NONE).and(PairBasedDanger.NONE),
 				ALL_IN);
 		s = s.river(
-				STRAIGHT.and(FlushDanger.HIGH.or(PairBasedDanger.HIGH)),
+				STRAIGHT.and(FlushDanger.SIGNIFICANT.or(PairBasedDanger.HIGH)),
 				CALL);
 		s = s.river(FLUSH, ALL_IN);
 		s = s.river(FULL_HOUSE, ALL_IN);
@@ -114,8 +115,9 @@ public class StrategyDefinitions {
 
 		s = s.river(TWO_PAIR.and(ContributionType.LOW), CALL);
 
-		s = s.river(GOOD_SET)
-				.if_(StraightDanger.HIGH.or(FlushDanger.HIGH)).then(FOLD)
+		s = s.river(THREE_OF_A_KIND.and(POCKET_PAIR))
+				.if_(StraightDanger.HIGH.or(FlushDanger.SIGNIFICANT))
+				.then(FOLD)
 				.if_(ContributionType.LOW).then(RAISE_QUARTER_POT)
 				.if_(ContributionType.HIGH.or(ContributionType.MIDDLE))
 				.then(RAISE_HALF_POT);

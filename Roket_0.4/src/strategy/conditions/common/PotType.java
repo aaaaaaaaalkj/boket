@@ -20,4 +20,14 @@ public enum PotType implements ICondition {
 		return (sit -> sit.getPot().ordinal() >= ordinal());
 	}
 
+	public static PotType of(double d) {
+		if (d < .1) {
+			return LOW;
+		} else if (d < .3) {
+			return MIDDLE;
+		} else {
+			return HIGH;
+		}
+	}
+
 }

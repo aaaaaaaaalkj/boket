@@ -60,7 +60,7 @@ public class NewStrategy implements IStrategy {
 					situation.getContribution(),
 					situation.getNumActive(),
 					situation.getPot(),
-					situation.getCombo(),
+					situation.getCathegory(),
 					situation.getPairBasedDanger(),
 					situation.getFlushDanger(),
 					situation.getStraightDanger(),

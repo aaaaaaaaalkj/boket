@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 public enum TypeOfDecision {
-	FOLD, CALL, RAISE_QUARTER_POT, RAISE_HALF_POT, RAISE_POT_SIZE,
+	POST_SB, POST_BB, FOLD, CALL, RAISE_QUARTER_POT, RAISE_HALF_POT, RAISE_POT_SIZE,
 	RAISE_DOUBLE_POT, RAISE_TENTH_STACK, RAISE_FIFTH_STACK, RAISE_HALF_STACK, ALL_IN;
 
 	private static final List<TypeOfDecision> VALUES =

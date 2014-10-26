@@ -3,7 +3,9 @@ package common;
 import managementCards.cat_rec_new.IResult;
 
 public interface IOutcome {
-	public boolean betterAs(IPlayer p1, IPlayer p2);
+	default boolean betterAs(IPlayer p1, IPlayer p2) {
+		return getResult(p1).compareTo(getResult(p2)) > 0;
+	}
 
-	public IResult getResult(IPlayer player);
+	IResult getResult(IPlayer player);
 }

@@ -1,9 +1,9 @@
 package strategy;
 
+import managementCards.cat_rec_new.Cathegory;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
-import strategy.conditions.postflop.ComboType;
 import strategy.conditions.postflop.DrawType;
 import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
@@ -20,7 +20,7 @@ public interface ISituation {
 
 	PotType getPot();
 
-	ComboType getCombo();
+	Cathegory getCathegory();
 
 	StraightDanger getStraightDanger();
 

@@ -8,26 +8,25 @@ import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum Round implements ICondition {
-	PREFLOP, FLOP, TURN, RIVER;
-
-	public Round next() {
-		if (this == RIVER)
-			return null;
-		else
-			return Round.values()[this.ordinal() + 1];
-	}
-
-	public boolean followsAfter(Round round) {
-		return this.ordinal() - round.ordinal() == 1;
-	}
+	PREFLOP, FLOP, TURN, RIVER, SHOWDOWN, QUIET_END;
 
 	public static final List<Round> VALUES = Collections
-			.unmodifiableList(Arrays
-					.asList(values()));
+			.unmodifiableList(Arrays.asList(values()));
+
+	public Round next() {
+		if (this == SHOWDOWN || this == QUIET_END)
+			return null;
+		else
+			return VALUES.get(this.ordinal() + 1);
+	}
 
 	@Override
 	public boolean eval(ISituation sit) {
 		return sit.getRound() == this;
+	}
+
+	public boolean gameEnded() {
+		return this == SHOWDOWN || this == QUIET_END;
 	}
 
 }

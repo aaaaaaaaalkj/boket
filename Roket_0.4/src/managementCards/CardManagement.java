@@ -3,96 +3,71 @@ package managementCards;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import managementCards.cards.Card;
-import managementCards.cards.CommunityCards;
 import managementCards.cards.Deck;
+import managementCards.cat_rec_new.Cat_Rec;
+import managementCards.cat_rec_new.IResult;
 
-import common.IOutcome;
-import common.IPlayer;
 import common.Round;
 
-public class CardManagement {
+public class CardManagement implements ICardManagement {
 	private final Deck deck;
-	private final CommunityCards communityCards;
-	private final List<IPlayer> players;
+	private final List<Card> communityCards;
+	private final List<List<Card>> hands;
 
-	public CardManagement(Random rand) {
-		this.deck = new Deck(rand);
-		this.communityCards = CommunityCards.empty();
-		this.players = new ArrayList<>();
-	}
-
-	public Round getRound() {
-		return this.communityCards.getRound();
-	}
-
-	public void register(IPlayer player) {
-		this.players.add(player);
-	}
-
-	public void dealCards() {
-		for (IPlayer p : players) {
-			p.dealCards(deck.pop(), deck.pop());
+	public CardManagement(int countPlayers, Random rand) {
+		this.deck = Deck.freshDeck(rand);
+		this.communityCards = new ArrayList<>();
+		this.hands = new ArrayList<>();
+		for (int i = 0; i < countPlayers; i++) {
+			List<Card> hand = new ArrayList<>();
+			hand.add(deck.pop());
+			hand.add(deck.pop());
+			this.hands.add(hand);
 		}
 	}
 
 	public void openCards(Round r) {
-		communityCards.open(r, deck);
+		if (r == Round.FLOP) {
+			communityCards.add(deck.pop());
+			communityCards.add(deck.pop());
+			communityCards.add(deck.pop());
+		}
+		if (r == Round.TURN) {
+			communityCards.add(deck.pop());
+		}
+		if (r == Round.RIVER) {
+			communityCards.add(deck.pop());
+		}
 	}
 
 	public String toString() {
-		String res = players.stream()
-				.map(Object::toString)
-				.collect(Collectors.joining(","));
+		String res = "hands: ";
+		res += hands.toString();
+		res += "community: ";
 		res += communityCards.toString();
 		return res;
 	}
 
-	public List<Card> getHand(IPlayer player) {
-		return player.getHand();
-	}
-
-	public boolean isRainbow() {
-		return communityCards.isRainbow();
-	}
-
 	public List<Card> getCommunityCards() {
-		return communityCards.getCards();
-	}
-
-	public CommunityCards getCommunityCards2() {
 		return communityCards;
 	}
 
-	public List<Card> getOpenCards(IPlayer player) {
-		List<Card> open = new ArrayList<>();
-		open.addAll(communityCards.getCards());
-		open.addAll(player.getHand());
-		return open;
+	public List<Card> getHand(int player) {
+		return hands.get(player);
 	}
 
-	public IOutcome getOutcome() {
-		OutcomeImpl outcome = new OutcomeImpl();
+	public Cat_Rec getCatRec(int player) {
+		return new Cat_Rec(getHand(player), communityCards);
+	}
 
-		// List<Optional<Card>> list = new ArrayList<>();
-		// list.add(Optional.of(hand.getFirst()));
-		// list.add(Optional.of(hand.getSecond()));
-		// list.add(communityCards.getFlop1());
-		// list.add(communityCards.getFlop2());
-		// list.add(communityCards.getFlop3());
-		// list.add(communityCards.getTurn());
-		// list.add(communityCards.getRiver());
-		//
-		// List<Card> present = StreamTools.unpack(list);
-		//
-		players.forEach(player ->
-				outcome.computeResult(
-						player,
-						communityCards)
-				);
-		return outcome;
+	public List<IResult> getResults() {
+		List<IResult> res = new ArrayList<>();
+		for (int i = 0; i < hands.size(); i++) {
+			res.add(getCatRec(i).check());
+		}
+		return res;
 	}
 
 }
