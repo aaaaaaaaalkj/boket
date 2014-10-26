@@ -52,7 +52,7 @@ public class BoketSituation implements ISituation {
 					"Unexpected number of community-cards: "
 							+ s.getCommunityCards().size());
 		}
-		int count = 1; // rawSituation doesnt count me as active
+		int count = 0;
 		for (boolean b : s.getActiveStatus()) {
 			if (b)
 				count++;
