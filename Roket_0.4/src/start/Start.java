@@ -3,6 +3,9 @@ package start;
 import input_output.MyOutput;
 import input_output.Raw_Situation;
 import input_output.ScreenScraper;
+
+import java.awt.AWTException;
+
 import old.Situation;
 import strategy.BoketSituation;
 import strategy.ISituation;
@@ -15,7 +18,8 @@ public class Start {
 		return new Pos(x, y);
 	}
 
-	public static void main(String[] _) throws InterruptedException {
+	public static void main(String[] _) throws InterruptedException,
+			AWTException {
 		while (true) {
 			ScreenScraper scraper = new ScreenScraper();
 

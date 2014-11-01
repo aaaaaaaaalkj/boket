@@ -1,9 +1,6 @@
 package input_output;
 
-import static input_output.MyRobot.getPixelColor;
-import static input_output.MyRobot.pixelCheckSum;
-import static input_output.MyRobot.pixelSearch;
-
+import java.awt.AWTException;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +12,10 @@ import tools.Pos;
 public class ScreenScraper {
 	public Pos logo;
 	Raw_Situation situation;
+	MyRobot robot;
 
-	public ScreenScraper() {
+	public ScreenScraper() throws AWTException {
+		robot = new MyRobot();
 		situation = new Raw_Situation();
 		run();
 	}
@@ -32,9 +31,9 @@ public class ScreenScraper {
 		postRecognition(situation);
 		stackRecognition(situation);
 
-		situation.hand = Card_Recognition.recognizeHand(logo);
+		situation.hand = Card_Recognition.recognizeHand(logo, robot);
 		situation.communityCards = Card_Recognition
-				.recognizeCommunityCards(logo);
+				.recognizeCommunityCards(logo, robot);
 
 		return situation;
 	}
@@ -90,7 +89,7 @@ public class ScreenScraper {
 		situation.activeStatus = new boolean[Situation.numSeats];
 
 		for (int i = 0; i < Situation.numSeats; i++) {
-			int dif = MyRobot.maxColor(positions[i].plus(logo), pos(25, 30));
+			int dif = robot.maxColor(positions[i].plus(logo), pos(25, 30));
 			if (dif == 146)
 				situation.activeStatus[i] = true;
 		}
@@ -98,7 +97,7 @@ public class ScreenScraper {
 	}
 
 	private void tableCheckSum(Raw_Situation situation) {
-		situation.checkSum = pixelCheckSum(logo.plus(new Pos(15, -5)),
+		situation.checkSum = robot.pixelCheckSum(logo.plus(new Pos(15, -5)),
 				logo.plus(new Pos(50, 5)));
 		// lobby = 1439337809
 	}
@@ -106,7 +105,7 @@ public class ScreenScraper {
 	private boolean recognizeLogo() {
 		// Farbe im Logo von Pokerstars
 		Color c = new Color(0x00FFCAC5);
-		logo = pixelSearch(0, 0, 100, 250, c);
+		logo = robot.pixelSearch(0, 0, 100, 250, c);
 		if (logo == null)
 			return false;
 		// TODO: checken sind die zwei Pixel für win7 ?
@@ -117,7 +116,7 @@ public class ScreenScraper {
 	void searchButton(Raw_Situation situation) {
 		Pos[] centersOfPlayerCirles = Constants.centersOfPlayerCirles;
 		Color c = new Color(12010269);
-		Pos button = pixelSearch(logo.x, logo.y, 1000, 550, c);
+		Pos button = robot.pixelSearch(logo.x, logo.y, 1000, 550, c);
 		if (null == button) {
 			System.out.println("cant find button");
 			return;
@@ -193,7 +192,7 @@ public class ScreenScraper {
 			int start_offset,
 			int digit_offset, int dot_offset, List<Pos> indicators) {
 
-		Pos dollar = pixelSearch(pos, pos.plus(160, 60),
+		Pos dollar = robot.pixelSearch(pos, pos.plus(160, 60),
 				ref);
 
 		String letter;
@@ -230,7 +229,7 @@ public class ScreenScraper {
 
 		for (int i = 0; i > -4; i--) {
 			start = start.minus(1, 0);
-			x = pixelSearch(start, start.plus(1, 10), ref);
+			x = robot.pixelSearch(start, start.plus(1, 10), ref);
 			if (x == null)
 				return i;
 		}
@@ -241,7 +240,8 @@ public class ScreenScraper {
 		// r=255,g=246,b=207
 		Color ref = new Color(16774863);
 
-		Pos first = pixelSearch(logo.plus(pos), logo.plus(pos).plus(160, 60),
+		Pos first = robot.pixelSearch(logo.plus(pos),
+				logo.plus(pos).plus(160, 60),
 				ref);
 		String letter;
 
@@ -290,24 +290,24 @@ public class ScreenScraper {
 
 	private String recognizeLetter(Pos start, Color ref_color,
 			List<Pos> indicators) {
-		Color color = getPixelColor(start.plus(indicators.get(0)));
+		Color color = robot.getPixelColor(start.plus(indicators.get(0)));
 
 		if (ref_color.equals(color)) {
 			// 0,2,3,6,8,9
-			color = getPixelColor(start.plus(indicators.get(1)));
+			color = robot.getPixelColor(start.plus(indicators.get(1)));
 			if (ref_color.equals(color)) {
 				// 0,6,8,9
-				color = getPixelColor(start.plus(indicators.get(5)));
+				color = robot.getPixelColor(start.plus(indicators.get(5)));
 				if (ref_color.equals(color)) {
 					// 6,8
-					color = getPixelColor(start.plus(indicators.get(2)));
+					color = robot.getPixelColor(start.plus(indicators.get(2)));
 					if (ref_color.equals(color))
 						return "6";
 					else
 						return "8";
 				} else {
 					// 0,9
-					color = getPixelColor(start.plus(indicators.get(3)));
+					color = robot.getPixelColor(start.plus(indicators.get(3)));
 					if (ref_color.equals(color))
 						return "0";
 					else
@@ -315,7 +315,7 @@ public class ScreenScraper {
 				}
 			} else {
 				// 2,3
-				color = getPixelColor(start.plus(indicators.get(5)));
+				color = robot.getPixelColor(start.plus(indicators.get(5)));
 				if (ref_color.equals(color))
 					return "3";
 				else
@@ -324,21 +324,22 @@ public class ScreenScraper {
 		} else {
 			// 1,4,5,7,., (6)
 			if (indicators.size() > 6) {
-				color = getPixelColor(start.plus(indicators.get(6)));
+				color = robot.getPixelColor(start.plus(indicators.get(6)));
 				if (ref_color.equals(color)) {
 					return "6";
 				}
 			}
-			color = getPixelColor(start.plus(indicators.get(1)));
+			color = robot.getPixelColor(start.plus(indicators.get(1)));
 			if (ref_color.equals(color)) {
 				// 1,5
-				color = getPixelColor(start.plus(indicators.get(3)));
+				color = robot.getPixelColor(start.plus(indicators.get(3)));
 				if (ref_color.equals(color)) {
 					return "5";
 				}
 				else {
 					if (indicators.size() > 7) { // exception
-						color = getPixelColor(start.plus(indicators.get(7)));
+						color = robot.getPixelColor(start.plus(indicators
+								.get(7)));
 						if (ref_color.equals(color)) {
 							return "5";
 						}
@@ -347,16 +348,17 @@ public class ScreenScraper {
 				}
 			} else {
 				// 4,7,.
-				color = getPixelColor(start.plus(indicators.get(3)));
+				color = robot.getPixelColor(start.plus(indicators.get(3)));
 				if (ref_color.equals(color))
 					return "4";
 				else {
-					color = getPixelColor(start.plus(indicators.get(5)));
+					color = robot.getPixelColor(start.plus(indicators.get(5)));
 					if (ref_color.equals(color))
 						return "7";
 					else {
 						// .," "
-						color = getPixelColor(start.plus(indicators.get(4)));
+						color = robot.getPixelColor(start.plus(indicators
+								.get(4)));
 						if (ref_color.equals(color))
 							return ".";
 						else
@@ -369,7 +371,7 @@ public class ScreenScraper {
 
 	private void recognizeBrownButtons(Raw_Situation situation) {
 		Pos brownButton1 = new Pos(550, 525).plus(logo);
-		Color brown1 = getPixelColor(brownButton1);
+		Color brown1 = robot.getPixelColor(brownButton1);
 
 		int difference = Math.abs(brown1.getRed() - 148)
 				+ Math.abs(brown1.getGreen() - 66)

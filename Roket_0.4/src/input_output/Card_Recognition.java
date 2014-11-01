@@ -1,7 +1,5 @@
 package input_output;
 
-import static input_output.MyRobot.getPixelColor;
-import static input_output.MyRobot.pixelSearch;
 import static tools.Input_Tool.pat;
 import static tools.Input_Tool.pos;
 import static tools.Input_Tool.toRGB;
@@ -21,8 +19,8 @@ public class Card_Recognition {
 	private static final Pos handPos = Constants.centersOfPlayerCirles[0];
 	private static final int radius = Constants.radiusOfPlayerCircles;
 
-	private static Pos searchCard(Pos pos) {
-		Pos hit = pixelSearch(pos.x, pos.y, 25, 25, cardEdge);
+	private static Pos searchCard(Pos pos, MyRobot robot) {
+		Pos hit = robot.pixelSearch(pos.x, pos.y, 25, 25, cardEdge);
 		if (null == hit) {
 			return null;
 		}
@@ -30,47 +28,47 @@ public class Card_Recognition {
 		return hit;
 	}
 
-	public static List<Card> recognizeCommunityCards(Pos logo) {
+	public static List<Card> recognizeCommunityCards(Pos logo, MyRobot robot) {
 
 		Pos pos = Constants.flop.plus(logo);
 		List<Card> list = new ArrayList<>();
 
 		for (int i = 0; i < 5; i++) {
-			Pos hit = searchCard(pos);
+			Pos hit = searchCard(pos, robot);
 			if (null == hit)
 				break;
-			list.add(recognizeCard(hit));
+			list.add(recognizeCard(hit, robot));
 			pos = hit.plus(Constants.cardOffset, 0);
 		}
 		// TODO: maybe its possible that list.get(0) == null
 		return list;
 	}
 
-	public static Hand recognizeHand(Pos logo) {
+	public static Hand recognizeHand(Pos logo, MyRobot robot) {
 		Pos pos = logo.plus(handPos).minus(radius, radius);
 
-		Pos hit = searchCard(pos);
+		Pos hit = searchCard(pos, robot);
 		if (null == hit) {
 			System.out.println("no hit found");
 			return null;
 		}
-		Card first = recognizeCard(hit);
+		Card first = recognizeCard(hit, robot);
 
 		pos = hit.plus(4, 1);
-		hit = searchCard(pos);
+		hit = searchCard(pos, robot);
 		if (null == hit)
 			return null;
-		Card second = recognizeCard(hit);
+		Card second = recognizeCard(hit, robot);
 		return Hand.newInstance(first, second);
 	}
 
-	public static Card recognizeCard(Pos pos) {
-		Suit resColor = recognizeCardColor(pos);
+	public static Card recognizeCard(Pos pos, MyRobot robot) {
+		Suit resColor = recognizeCardColor(pos, robot);
 		if (null == resColor) {
 			System.out.println("no card color found");
 			return null;
 		}
-		Rank resNum = recognizeCardNum(pos);
+		Rank resNum = recognizeCardNum(pos, robot);
 		if (resNum == null) {
 			System.out.println("no card num found");
 			return null;
@@ -78,14 +76,14 @@ public class Card_Recognition {
 		return Card.newInstance(resNum, resColor);
 	}
 
-	private static Rank recognizeCardNum(Pos pos) {
+	private static Rank recognizeCardNum(Pos pos, MyRobot robot) {
 		final int num = 6;
 		Pos[] positions = { pos(7, 11), pos(9, 14), pos(4, 11), pos(7, 5),
 				pos(6, 12), pos(11, 8) };
 		Pattern myPattern = new Pattern(num);
 
 		for (int i = 0; i < num; i++) {
-			Color c = getPixelColor(positions[i].plus(pos));
+			Color c = robot.getPixelColor(positions[i].plus(pos));
 			Color ref = new Color(16777215);
 			if (c.equals(ref))
 				myPattern.set(i);
@@ -109,9 +107,9 @@ public class Card_Recognition {
 		return resNum;
 	}
 
-	private static Suit recognizeCardColor(Pos pos) {
+	private static Suit recognizeCardColor(Pos pos, MyRobot robot) {
 		Suit resColor;
-		Color cardColor = getPixelColor(pos.plus(9, 25));
+		Color cardColor = robot.getPixelColor(pos.plus(9, 25));
 
 		switch (toRGB(cardColor)) {
 		case 13109256:

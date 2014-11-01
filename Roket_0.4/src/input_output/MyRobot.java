@@ -10,21 +10,21 @@ import java.awt.image.BufferedImage;
 import tools.Pos;
 
 public class MyRobot {
-	private static Robot rb;
+	private final Robot rb;
+	private final BufferedImage capture;
 
-	static {
-		try {
-			rb = new Robot();
-		} catch (AWTException e) {
-			throw new RuntimeException(e);
-		}
+	public MyRobot() throws AWTException {
+		this.rb = new Robot();
+		Rectangle rect = new Rectangle(0, 0, 1000, 1000);
+		this.capture = rb.createScreenCapture(rect);
 	}
 
-	public static Color getPixelColor(Pos p) {
-		return rb.getPixelColor(p.x, p.y);
+	public Color getPixelColor(Pos p) {
+		return new Color(capture.getRGB(p.x, p.y));
+		// return rb.getPixelColor(p.x, p.y);
 	}
 
-	public static void mouseMove(Pos p) {
+	public void mouseMove(Pos p) {
 		rb.mouseMove(p.x, p.y);
 		rb.mousePress(InputEvent.BUTTON1_MASK);
 		rb.mouseRelease(InputEvent.BUTTON1_MASK);
@@ -35,11 +35,11 @@ public class MyRobot {
 	 * 
 	 * @return coords of the color c
 	 */
-	public static Pos pixelSearch(Pos p, Pos p2, Color c) {
+	public Pos pixelSearch(Pos p, Pos p2, Color c) {
 		return pixelSearch(p.x, p.y, (p2.x - p.x), (p2.y - p.y), c);
 	}
 
-	public static Pos pixelSearch(int x, int y, int w, int h, Color c) {
+	public Pos pixelSearch(int x, int y, int w, int h, Color c) {
 		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
 		Rectangle screenRect = new Rectangle(x, y, w, h);
@@ -57,7 +57,7 @@ public class MyRobot {
 		return null;
 	}
 
-	public static int maxColor(Pos pos, Pos delta) {
+	public int maxColor(Pos pos, Pos delta) {
 		int w = delta.x;
 		int h = delta.y;
 		int[] rgbs = new int[w * h];
@@ -81,7 +81,7 @@ public class MyRobot {
 		return maxDiff;
 	}
 
-	public static int pixelCheckSum(Pos pos, Pos pos2) {
+	public int pixelCheckSum(Pos pos, Pos pos2) {
 		int w = pos2.minus(pos).x;
 		int h = pos2.minus(pos).y;
 		int[] rgbs = new int[w * h];

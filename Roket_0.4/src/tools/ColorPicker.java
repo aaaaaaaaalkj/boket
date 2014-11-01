@@ -1,6 +1,5 @@
 package tools;
 
-import static input_output.MyRobot.pixelSearch;
 import input_output.MyRobot;
 import input_output.ScreenScraper;
 
@@ -63,10 +62,10 @@ public class ColorPicker {
 
 	}
 
-	private static Pos recognizeLogo() {
+	private static Pos recognizeLogo(MyRobot robot) {
 		// Farbe im Logo von Pokerstars
 		Color c = new Color(0x00FFCAC5);
-		logo = pixelSearch(0, 0, 100, 250, c);
+		logo = robot.pixelSearch(0, 0, 100, 250, c);
 		return logo;
 	}
 
@@ -74,16 +73,16 @@ public class ColorPicker {
 		// Color cardColor = getPixelColor(new Pos().plus(9, 25));
 	}
 
-	public static void start() {
-		recognizeLogo();
+	public static void start(MyRobot robot) {
+		recognizeLogo(robot);
 		// Color refColor = new Color(12010269);
 		// System.out.println(refColor);
 
 		Pos p = new Pos(31, 300).plus(logo);
-		Color c = MyRobot.getPixelColor(p);
+		Color c = robot.getPixelColor(p);
 		System.out.println(c);
 
-		MyRobot.mouseMove(p);
+		robot.mouseMove(p);
 		// 38,231
 	}
 
