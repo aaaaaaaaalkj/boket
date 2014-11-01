@@ -2,6 +2,7 @@ package tools;
 
 import static input_output.MyRobot.pixelSearch;
 import input_output.MyRobot;
+import input_output.ScreenScraper;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -14,13 +15,18 @@ public class ColorPicker {
 
 	public static void main(String[] args) throws Exception {
 		// findColorAtMousePosition();
+		ScreenScraper scraper = new ScreenScraper();
 
+		scraper.getSituation().print();
+
+		// start();
+		System.exit(1);
 		while (true) {
 
-//			Point p = MouseInfo.getPointerInfo().getLocation();
+			// Point p = MouseInfo.getPointerInfo().getLocation();
 
-//			Pos p2 = pos(p.x, p.y);
-			//=255,g=246,b=207]
+			// Pos p2 = pos(p.x, p.y);
+			// =255,g=246,b=207]
 			findColorAtMousePosition();
 			try {
 				Thread.sleep(400);
@@ -70,10 +76,10 @@ public class ColorPicker {
 
 	public static void start() {
 		recognizeLogo();
-		Color refColor = new Color(12010269);
-		System.out.println(refColor);
+		// Color refColor = new Color(12010269);
+		// System.out.println(refColor);
 
-		Pos p = new Pos(656, 172).plus(logo);
+		Pos p = new Pos(31, 300).plus(logo);
 		Color c = MyRobot.getPixelColor(p);
 		System.out.println(c);
 

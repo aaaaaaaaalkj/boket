@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 
 import tools.Pos;
@@ -25,6 +26,8 @@ public class MyRobot {
 
 	public static void mouseMove(Pos p) {
 		rb.mouseMove(p.x, p.y);
+		rb.mousePress(InputEvent.BUTTON1_MASK);
+		rb.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 
 	/**

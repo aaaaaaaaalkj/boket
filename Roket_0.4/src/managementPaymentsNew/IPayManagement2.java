@@ -25,7 +25,7 @@ public interface IPayManagement2 {
 
 	int getLastRaise();
 
-	PotType getPotType();
+	PotType getPotType(int currentPlayer);
 
 	int getStack(int player);
 

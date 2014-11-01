@@ -4,8 +4,14 @@ import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum PotType implements ICondition {
-	LOW, MIDDLE, HIGH;
+	LOW(.33), MIDDLE(.66), HIGH(1.);
 	public static final PotType[] VALUES = values();
+
+	private final double value;
+
+	private PotType(double value) {
+		this.value = value;
+	}
 
 	public static int getCount() {
 		return VALUES.length;
@@ -21,9 +27,9 @@ public enum PotType implements ICondition {
 	}
 
 	public static PotType of(double d) {
-		if (d < .1) {
+		if (d < LOW.value) {
 			return LOW;
-		} else if (d < .3) {
+		} else if (d < MIDDLE.value) {
 			return MIDDLE;
 		} else {
 			return HIGH;

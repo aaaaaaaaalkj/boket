@@ -148,18 +148,12 @@ public final class PayManagementNew implements IPayManagement2 {
 	}
 
 	@Override
-	public PotType getPotType() {
+	public PotType getPotType(int currentPlayer) {
 		return PotType.of(
 				((double) getPotSize())
 						/
-						getStackSizes()
+						getStack(currentPlayer)
 				);
-	}
-
-	private int getStackSizes() {
-		return stacks.stream()
-				.map(Wallet::getAmount)
-				.collect(summingInt(x -> x));
 	}
 
 	@Override

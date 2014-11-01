@@ -18,11 +18,10 @@ public class Start {
 	public static void main(String[] _) throws InterruptedException {
 		while (true) {
 			ScreenScraper scraper = new ScreenScraper();
-			scraper.run();
 
 			Raw_Situation raw = scraper.getSituation();
 
-			if (raw.isItsMyTurn()) {
+			if (raw.isItsMyTurn() && raw.getHand() != null) {
 				ISituation sit = new BoketSituation(raw);
 				IStrategy shitStrategy = StrategyDefinitions.s;
 

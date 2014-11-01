@@ -59,15 +59,12 @@ public class BoketSituation implements ISituation {
 		}
 		this.numActive = NumActiveType.fromInt(count);
 
-		double d = Arrays.stream(s.getPosts()).max().getAsDouble()
+		double pot = Arrays.stream(s.getPosts()).sum();
+		double toPay = Arrays.stream(s.getPosts()).max().getAsDouble()
 				- s.getPosts()[0];
 
-		this.contribution = d < 10 ? ContributionType.LOW
-				: d < 30 ? ContributionType.MIDDLE
-						: ContributionType.HIGH;
-		this.pot = s.getPot() < 30 ? PotType.LOW
-				: s.getPot() < 100 ? PotType.MIDDLE
-						: PotType.HIGH;
+		this.contribution = ContributionType.fromDouble(toPay / pot);
+		this.pot = PotType.of(pot / s.getStack());
 
 		assert s.getHand() != null : "hand is null";
 

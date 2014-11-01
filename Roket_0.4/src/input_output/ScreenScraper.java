@@ -5,31 +5,70 @@ import static input_output.MyRobot.pixelCheckSum;
 import static input_output.MyRobot.pixelSearch;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import old.Situation;
 import tools.Pos;
 
-public class ScreenScraper extends Thread {
+public class ScreenScraper {
 	public Pos logo;
 	Raw_Situation situation;
 
 	public ScreenScraper() {
 		situation = new Raw_Situation();
+		run();
 	}
 
-	public void run() {
+	public Raw_Situation run() {
 		if (!recognizeLogo())
-			return;
+			return null;
 
 		recognizeBrownButtons(situation);
 		searchButton(situation);
 		tableCheckSum(situation);
 		activePlayers(situation);
 		postRecognition(situation);
+		stackRecognition(situation);
 
 		situation.hand = Card_Recognition.recognizeHand(logo);
 		situation.communityCards = Card_Recognition
 				.recognizeCommunityCards(logo);
+
+		return situation;
+	}
+
+	private void stackRecognition(Raw_Situation situation2) {
+		Pos[] positions = { pos(20, 306), pos(10, 122), pos(155, 64),
+				pos(565, 65), pos(700, 121), pos(700, 306), pos(480, 370),
+				pos(350, 446), pos(225, 370) };
+		System.out.println("-");
+		situation.stacks = new double[Situation.numSeats];
+		for (int i = 0; i < Situation.numSeats; i++) {//
+			Color ref = new Color(32, 32, 32); // black
+			List<Pos> indicators = new ArrayList<>();
+			indicators.add(pos(0, 2));
+			indicators.add(pos(1, 3));
+			indicators.add(pos(0, 5));
+			indicators.add(pos(0, 8));
+			indicators.add(pos(1, 9));
+			indicators.add(pos(2, 5));
+			indicators.add(pos(0, 6));
+			indicators.add(pos(0, 9));
+
+			Optional<Double> opt = ocr_real_money(logo.plus(positions[i]), ref,
+					4, 7, 4, indicators);
+
+			if (opt.isPresent()) {
+				situation.stacks[i] = opt.get();
+			} else {
+				ref = new Color(192, 192, 192); // grey
+				opt = ocr_real_money(logo.plus(positions[i]), ref,
+						4, 7, 4, indicators);
+				situation.stacks[i] = opt.orElse(0.);
+			}
+		}
 	}
 
 	private static Pos pos(int x, int y) {
@@ -115,10 +154,11 @@ public class ScreenScraper extends Thread {
 		situation.pot = 0;
 		situation.posts = new double[Situation.numSeats];
 		for (int i = 0; i < Situation.numSeats; i++) {
-			situation.posts[i] = ocr(logo, positions[i]);
+			situation.posts[i] = ocr(logo, positions[i]).orElse(0.);
 			situation.pot += situation.posts[i];
 		}
-		situation.pot += ocr(logo, (pos(308 - 14, 260 - 14)));
+		situation.pot += ocr(logo, (pos(308 - 14, 260 - 14))).orElse(0.);
+		situation.pot = ((double) Math.round(situation.pot * 100)) / 100;
 	}
 
 	public static boolean isNumber(String s) {
@@ -130,44 +170,58 @@ public class ScreenScraper extends Thread {
 		return true;
 	}
 
-	private double ocr(Pos logo, Pos pos) {
+	private Optional<Double> ocr(Pos logo, Pos pos) {
 		final boolean REAL_MONEY = true;
 
-		if (REAL_MONEY)
-			return ocr_real_money(logo, pos);
+		if (REAL_MONEY) {
+			List<Pos> indicators = new ArrayList<>();
+			indicators.add(pos(0, 2)); // dollar-offset
+			indicators.add(pos(0, 3));
+			indicators.add(pos(0, 4));
+			indicators.add(pos(0, 5));
+			indicators.add(pos(0, 7));
+			indicators.add(pos(2, 4));
+			Color ref = new Color(16774863);
+			return ocr_real_money(logo.plus(pos), ref, 4, 6, 3, indicators);
+		}
 		else
-			return ocr_play_money(logo, pos);
+			return Optional.of(ocr_play_money(logo, pos));
 
 	}
 
-	private double ocr_real_money(Pos logo, Pos pos) {
-		Color ref = new Color(16774863);
+	private Optional<Double> ocr_real_money(Pos pos, Color ref,
+			int start_offset,
+			int digit_offset, int dot_offset, List<Pos> indicators) {
 
-		Pos dollar = pixelSearch(logo.plus(pos), logo.plus(pos).plus(160, 60),
+		Pos dollar = pixelSearch(pos, pos.plus(160, 60),
 				ref);
 
 		String letter;
 
 		if (dollar != null) {
 			String text = "";
-			int position = 4;
+			int position = start_offset; // 4
+
 			do {
+				// MyRobot.mouseMove(pos.plus(dollar.plus(position, 0)));
 				letter = recognizeLetter(
-						logo.plus(pos).plus(dollar.plus(position, 0)), ref);
+						pos.plus(dollar.plus(position, 0))
+						, ref,
+						indicators);
 
 				if (letter.equals("."))
-					position += 3;
+					position += dot_offset;// 3
 				else
-					position += 6;
+					position += digit_offset; // 6
 				text += letter;
 			} while (isNumber(letter) || ".".equals(letter));
 			try {
-				return Double.parseDouble(text);
+				return Optional.of(Double.parseDouble(text));
 			} catch (NumberFormatException e) {
-				return 0;
+				return Optional.empty();
 			}
 		}
-		return 0;
+		return Optional.empty();
 	}
 
 	private Integer recognizeFirstLetter(Pos logo, Pos pos, Pos first, Color ref) {
@@ -200,9 +254,19 @@ public class ScreenScraper extends Thread {
 			Pos start_delta = pos(x, -1);
 
 			String text = "";
+
+			List<Pos> indicators = new ArrayList<>();
+			indicators.add(pos(0, 2)); // dollar-offset
+			indicators.add(pos(0, 3));
+			indicators.add(pos(0, 4));
+			indicators.add(pos(0, 5));
+			indicators.add(pos(0, 7));
+			indicators.add(pos(2, 4));
+
 			do {
 				letter = recognizeLetter(
-						logo.plus(pos).plus(first.plus(start_delta)), ref);
+						logo.plus(pos).plus(first.plus(start_delta)), ref,
+						indicators);
 
 				if (letter.equals(".")) {
 					// do not add "." to text
@@ -224,62 +288,76 @@ public class ScreenScraper extends Thread {
 		return 0;
 	}
 
-	private String recognizeLetter(Pos p, Color c) {
+	private String recognizeLetter(Pos start, Color ref_color,
+			List<Pos> indicators) {
+		Color color = getPixelColor(start.plus(indicators.get(0)));
 
-		Color c2 = getPixelColor(p.plus(0, 2));
-
-		if (c.equals(c2)) {
+		if (ref_color.equals(color)) {
 			// 0,2,3,6,8,9
-			c2 = getPixelColor(p.plus(0, 3));
-			if (c.equals(c2)) {
+			color = getPixelColor(start.plus(indicators.get(1)));
+			if (ref_color.equals(color)) {
 				// 0,6,8,9
-				c2 = getPixelColor(p.plus(2, 4));
-				if (c.equals(c2)) {
+				color = getPixelColor(start.plus(indicators.get(5)));
+				if (ref_color.equals(color)) {
 					// 6,8
-					c2 = getPixelColor(p.plus(0, 4));
-					if (c.equals(c2))
+					color = getPixelColor(start.plus(indicators.get(2)));
+					if (ref_color.equals(color))
 						return "6";
 					else
 						return "8";
 				} else {
 					// 0,9
-					c2 = getPixelColor(p.plus(0, 5));
-					if (c.equals(c2))
+					color = getPixelColor(start.plus(indicators.get(3)));
+					if (ref_color.equals(color))
 						return "0";
 					else
 						return "9";
 				}
 			} else {
 				// 2,3
-				c2 = getPixelColor(p.plus(2, 4));
-				if (c.equals(c2))
+				color = getPixelColor(start.plus(indicators.get(5)));
+				if (ref_color.equals(color))
 					return "3";
 				else
 					return "2";
 			}
 		} else {
-			// 1,4,5,7,.
-			c2 = getPixelColor(p.plus(0, 3));
-			if (c.equals(c2)) {
+			// 1,4,5,7,., (6)
+			if (indicators.size() > 6) {
+				color = getPixelColor(start.plus(indicators.get(6)));
+				if (ref_color.equals(color)) {
+					return "6";
+				}
+			}
+			color = getPixelColor(start.plus(indicators.get(1)));
+			if (ref_color.equals(color)) {
 				// 1,5
-				c2 = getPixelColor(p.plus(0, 5));
-				if (c.equals(c2))
+				color = getPixelColor(start.plus(indicators.get(3)));
+				if (ref_color.equals(color)) {
 					return "5";
-				else
+				}
+				else {
+					if (indicators.size() > 7) { // exception
+						color = getPixelColor(start.plus(indicators.get(7)));
+						if (ref_color.equals(color)) {
+							return "5";
+						}
+					}
 					return "1";
+				}
 			} else {
 				// 4,7,.
-				c2 = getPixelColor(p.plus(0, 5));
-				if (c.equals(c2))
+				color = getPixelColor(start.plus(indicators.get(3)));
+				if (ref_color.equals(color))
 					return "4";
 				else {
-					c2 = getPixelColor(p.plus(2, 4));
-					if (c.equals(c2))
+					color = getPixelColor(start.plus(indicators.get(5)));
+					if (ref_color.equals(color))
 						return "7";
 					else {
 						// .," "
-						c2 = getPixelColor(p.plus(0, 7));
-						if (c.equals(c2))
+						color = getPixelColor(start.plus(indicators.get(4)));
+						if (ref_color.equals(color))
 							return ".";
 						else
 							return "";
@@ -300,7 +378,7 @@ public class ScreenScraper extends Thread {
 		// boolean b = brown1.equals(new Color(147, 65, 15));
 		// b |= brown1.equals(new Color(137, 57, 11));
 
-		if (difference < 30) {
+		if (difference < 50) {
 			situation.itsMyTurn = true;
 			// situation.emptySeat[0] = false;
 			situation.activeStatus[0] = true;

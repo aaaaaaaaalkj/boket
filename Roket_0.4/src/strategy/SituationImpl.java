@@ -90,7 +90,7 @@ public final class SituationImpl implements ISituation {
 
 		numActive = NumActiveType.fromInt(state.numActivePlayers());
 
-		pot = payManagement.getPotType();
+		pot = payManagement.getPotType(currentPlayer);
 
 		// pot = pot2.greaterOrEqual(stack2) ?
 		// PotType.HIGH : pot2.greaterOrEqual(stack2.divideToEven(3)) ?
