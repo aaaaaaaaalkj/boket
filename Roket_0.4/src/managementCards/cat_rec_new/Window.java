@@ -45,6 +45,10 @@ public enum Window {
 		return list.contains(rank);
 	}
 
+	public boolean contains(Rank rank, Rank rank2) {
+		return list.contains(rank) && list.contains(rank2);
+	}
+
 	static {
 		List<Window> desc = Arrays.asList(values());
 		Collections.reverse(desc);

@@ -4,7 +4,7 @@ import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum ContributionType implements ICondition {
-	LOW(.1), MIDDLE(.25), HIGH(.5);
+	LOW(.2), MIDDLE(.5), HIGH(1);
 
 	private final double value;
 

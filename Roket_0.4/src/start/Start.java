@@ -23,10 +23,11 @@ public class Start {
 
 			if (raw.isItsMyTurn() && raw.getHand() != null) {
 				ISituation sit = new BoketSituation(raw);
+				System.out.println(sit);
 				IStrategy shitStrategy = StrategyDefinitions.s;
 
-				System.out.println("situation:");
-				System.out.println(raw);
+				// System.out.println("situation:");
+				// System.out.println(raw);
 
 				TypeOfDecision d = shitStrategy.decide(sit);
 

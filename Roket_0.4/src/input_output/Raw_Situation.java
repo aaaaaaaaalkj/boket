@@ -7,8 +7,6 @@ import java.util.List;
 import managementCards.cards.Card;
 import old.Hand;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 public class Raw_Situation {
 	public static final int NUM_SEATS = 9;
 	public static final double BIG_BLIND = 0.02;
@@ -76,7 +74,7 @@ public class Raw_Situation {
 	}
 
 	public double getStack() {
-		throw new NotImplementedException("todo");
+		return stacks[0];
 	}
 
 	public void print() {

@@ -68,7 +68,9 @@ public class BoketSituation implements ISituation {
 
 		assert s.getHand() != null : "hand is null";
 
-		this.connector = ConnectorType.fromInt(s.getHand().getDifference());
+		this.connector = ConnectorType.fromRanks(s.getHand().first.getRank(),
+				s.getHand().second.getRank()
+				);
 		this.suited = s.getHand().isSuited()
 				? SuitedType.SUITED
 				: SuitedType.OFF_SUIT;
@@ -139,6 +141,17 @@ public class BoketSituation implements ISituation {
 	@Override
 	public DrawType getDraw() {
 		return draw;
+	}
+
+	@Override
+	public String toString() {
+		return "BoketSituation [round=" + round + ", numActive=" + numActive
+				+ ", contribution=" + contribution + ", pot=" + pot
+				+ ", connector=" + connector + ",\n suited=" + suited
+				+ ", cathegory=" + cathegory + ", pairBasedDanger="
+				+ pairBasedDanger + ", flushDanger=" + flushDanger
+				+ ",\n straightDanger=" + straightDanger + ", draw=" + draw
+				+ "]";
 	}
 
 }
