@@ -24,10 +24,19 @@ public class Start {
 
 	private static int counter = 0;
 
+	private static String fillZeros(int counter) {
+		String res = String.valueOf(counter);
+		while (res.length() < 3) {
+			res = "0" + res;
+		}
+		return res;
+	}
+
 	private static void saveImage(BufferedImage capture) {
 		try {
 			String type = "png";
-			File outputfile = new File("screenshots\\" + (counter++) + "."
+			File outputfile = new File("screenshots\\" + fillZeros(counter++)
+					+ "."
 					+ type);
 			ImageIO.write(capture, type, outputfile);
 		} catch (IOException e) {

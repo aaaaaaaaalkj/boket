@@ -6,11 +6,13 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 import static managementCards.cards.Rank.Ace;
 import static managementCards.cards.Rank.Eight;
 import static managementCards.cards.Rank.Jack;
 import static managementCards.cards.Rank.Seven;
 import static managementCards.cards.Rank.Six;
+import static managementCards.cards.Rank.Ten;
 import static managementCards.cards.Rank.Two;
 import static managementCards.cat_rec_new.Cathegory.FOUR_OF_A_KIND;
 import static managementCards.cat_rec_new.Cathegory.FULL_HOUSE;
@@ -216,12 +218,12 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	private boolean checkGutshot() {
-		Set<Rank> ranks = new HashSet<>();
-		for (Card c : all) {
-			ranks.add(c.getRank());
-		}
+		Set<Rank> ranks = all.stream()
+				.map(Card::getRank)
+				.collect(toSet());
+
 		boolean res = false;
-		EnumSet<Rank> r2 = EnumSet.range(Two, Jack);
+		EnumSet<Rank> r2 = EnumSet.range(Two, Ten);
 		r2.add(Ace);
 		for (Rank r : r2) {
 			boolean gutshot = true;
@@ -231,7 +233,7 @@ public final class Cat_Rec implements ICatRec {
 			n += ranks.contains(r.next(3)) ? 1 : 0;
 
 			gutshot &= ranks.contains(r);
-			gutshot &= ranks.contains(r.next(3));
+			gutshot &= ranks.contains(r.next(4));
 			gutshot &= n == 2;
 
 			res |= gutshot;

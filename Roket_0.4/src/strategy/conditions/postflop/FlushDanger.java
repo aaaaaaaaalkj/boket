@@ -30,4 +30,13 @@ public enum FlushDanger implements ICondition {
 		return (sit -> sit.getFlushDanger().ordinal() >= ordinal());
 	}
 
+	@Override
+	public String toString() {
+		if (this == NONE) {
+			return "NO";
+		} else {
+			return super.toString();
+		}
+	}
+
 }

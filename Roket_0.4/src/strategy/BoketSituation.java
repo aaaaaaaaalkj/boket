@@ -156,12 +156,14 @@ public class BoketSituation implements ISituation {
 					+ numActive.getValue()
 					+ " active players, " + contribution
 					+ " contribution, " + pot + " pot"
-					+ "\n" + cathegory + " + " + draw + "\n"
+					+ "\n" + cathegory
+					+ (draw != DrawType.NONE ? " + " + draw : "")
+					+ "\n"
 					+ pairBasedDanger.toString()
-					+ " pairBasedDanger\n"
-					+ flushDanger.toString() + " flushDanger\n"
+					+ " Pair-based danger\n"
+					+ flushDanger.toString() + " Flush danger\n"
 					+ straightDanger.toString()
-					+ " straightDanger" + "]";
+					+ " Straight danger" + "]";
 		}
 
 	}
