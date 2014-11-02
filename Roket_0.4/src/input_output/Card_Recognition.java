@@ -50,7 +50,7 @@ public class Card_Recognition {
 
 		Pos hit = searchCard(pos, robot);
 		if (null == hit) {
-			System.out.println("no hit found");
+			// System.out.println("no hit found");
 			return null;
 		}
 		Card first = recognizeCard(hit, robot);

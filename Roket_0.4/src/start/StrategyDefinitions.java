@@ -21,7 +21,6 @@ import static strategy.conditions.postflop.DrawType.OESD;
 import static strategy.conditions.preflop.ConnectorType.CONNECTOR;
 import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
 import static strategy.conditions.preflop.SuitedType.SUITED;
-import strategy.IStrategy;
 import strategy.conditions.ICondition;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.PotType;
@@ -32,7 +31,6 @@ import strategy.manualStrategy.Strategy2;
 
 public class StrategyDefinitions {
 	public static Strategy2 s = new Strategy2();
-	public final static IStrategy shitStrategy = new Strategy2();
 
 	static {
 		s.preflop(
