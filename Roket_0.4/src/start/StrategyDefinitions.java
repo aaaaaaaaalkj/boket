@@ -9,7 +9,6 @@ import static managementCards.cat_rec_new.Cathegory.THREE_OF_A_KIND;
 import static managementCards.cat_rec_new.Cathegory.TWO_PAIR;
 import static strategy.TypeOfDecision.ALL_IN;
 import static strategy.TypeOfDecision.CALL;
-import static strategy.TypeOfDecision.FOLD;
 import static strategy.TypeOfDecision.RAISE_DOUBLE_POT;
 import static strategy.TypeOfDecision.RAISE_HALF_POT;
 import static strategy.TypeOfDecision.RAISE_POT_SIZE;
@@ -40,7 +39,7 @@ public class StrategyDefinitions {
 
 		s.flop(MONSTER_DRAW // 15 outs
 				.and(PairBasedDanger.NONE) // no pair in flop
-				.and(ContributionType.HIGH.orLower()), CALL);
+				, CALL);
 
 		s.flop(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.NONE) // rainbow
 				.and(PairBasedDanger.NONE) // no pair in flop
@@ -64,20 +63,20 @@ public class StrategyDefinitions {
 				.and(ContributionType.LOW), CALL);
 
 		ICondition set = THREE_OF_A_KIND.and(POCKET_PAIR);
-		s.flop(
-				set.and(StraightDanger.HIGH.orHigher()
-						.or(FlushDanger.SIGNIFICANT.orHigher())
-						)
-				, FOLD
-				);
 
 		s.flop(
 				set.and(ContributionType.LOW)
+						.and(StraightDanger.SIGNIFICANT.orLower()
+								.or(FlushDanger.MODERATE.orLower())
+						)
 				, RAISE_QUARTER_POT
 				);
 
 		s.flop(
-				set.and(ContributionType.HIGH.orLower())
+				set.and(ContributionType.MIDDLE.orHigher())
+						.and(StraightDanger.SIGNIFICANT.orLower()
+								.or(FlushDanger.MODERATE.orLower())
+						)
 				, RAISE_DOUBLE_POT
 				);
 
@@ -95,36 +94,42 @@ public class StrategyDefinitions {
 
 		s.turn(MONSTER_DRAW // 15 outs
 				.and(PairBasedDanger.NONE) // no pair in flop
-				.and(ContributionType.MIDDLE), CALL);
+				.and(ContributionType.MIDDLE.orLower()), CALL);
 
 		s.turn(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.NONE) // rainbow
 				.and(PairBasedDanger.NONE) // no pair in flop
-				.and(ContributionType.MIDDLE), CALL); // pay more here?
-
+				.and(ContributionType.MIDDLE.orLower()), CALL); // pay more
+																// here?
 		s.turn(FLUSH_DRAW // 9 outs
 				.and(PairBasedDanger.NONE) // no pair in flop
-				.and(ContributionType.MIDDLE), CALL);
+				.and(ContributionType.MIDDLE.orLower()), CALL);
 
 		s.turn(TWO_PAIR // 4 outs
 				.and(ContributionType.LOW), CALL);
 
 		s.turn(set.and(
-				StraightDanger.HIGH.orHigher().or(
-						FlushDanger.SIGNIFICANT.orHigher())
-				)
-				, FOLD);
-		s.turn(set.and(
 				ContributionType.LOW
-				), RAISE_HALF_POT);
+				)
+				.and(
+						StraightDanger.SIGNIFICANT.orLower().or(
+								FlushDanger.MODERATE.orLower())
+				)
+				, RAISE_HALF_POT);
 		s.turn(set.and(
 				ContributionType.HIGH.orLower())
+				.and(
+						StraightDanger.SIGNIFICANT.orLower().or(
+								FlushDanger.MODERATE.orLower())
+				)
 				, RAISE_DOUBLE_POT
 				);
 
-		s.river(STRAIGHT.and(FlushDanger.NONE).and(PairBasedDanger.NONE),
+		s.river(STRAIGHT.and(FlushDanger.MODERATE.orLower()).and(
+				PairBasedDanger.NONE),
 				ALL_IN);
 		s.river(
-				STRAIGHT.and(FlushDanger.SIGNIFICANT.or(PairBasedDanger.HIGH)),
+				STRAIGHT.and(FlushDanger.SIGNIFICANT.orLower().or(
+						PairBasedDanger.MODERATE.orLower())),
 				CALL);
 		s.river(FLUSH, ALL_IN);
 		s.river(FULL_HOUSE, ALL_IN);
@@ -134,16 +139,19 @@ public class StrategyDefinitions {
 		s.river(TWO_PAIR.and(ContributionType.LOW), CALL);
 
 		s.river(set.and(
-				StraightDanger.HIGH.orHigher().or(
-						FlushDanger.SIGNIFICANT.orHigher())
-				)
-				, FOLD);
-		s.river(set.and(
-				ContributionType.LOW), RAISE_QUARTER_POT
+				ContributionType.MIDDLE.orLower()
+						.and(
+								StraightDanger.SIGNIFICANT.orLower().or(
+										FlushDanger.MODERATE.orLower())
+						)
+				), RAISE_QUARTER_POT
 				);
 		s.river(set.and(
-				ContributionType.HIGH.orHigher().or(
-						ContributionType.MIDDLE.orHigher()))
+				ContributionType.MIDDLE.orHigher()
+				).and(
+						StraightDanger.SIGNIFICANT.orLower().or(
+								FlushDanger.MODERATE.orLower())
+				)
 				, RAISE_HALF_POT);
 
 	}

@@ -155,7 +155,7 @@ public class ScreenScraper {
 				pos(169 - 14, 176 - 14), pos(259 - 14, 147 - 14),
 				pos(463, 100), pos(500, 175), pos(538 - 14, 241 - 14),
 				pos(455 - 14, 304 - 14), pos(313 - 14, 300 - 14),
-				pos(219 - 14, 300 - 14) };
+				pos(205, 291) };
 		situation.pot = 0;
 		situation.posts = new double[Situation.numSeats];
 		for (int i = 0; i < Situation.numSeats; i++) {
@@ -194,7 +194,7 @@ public class ScreenScraper {
 
 	}
 
-	private Optional<Double> ocr_real_money(Pos pos, Color ref,
+	public Optional<Double> ocr_real_money(Pos pos, Color ref,
 			int start_offset,
 			int digit_offset, int dot_offset, List<Pos> indicators) {
 
@@ -208,11 +208,15 @@ public class ScreenScraper {
 			int position = start_offset; // 4
 
 			do {
-				// MyRobot.mouseMove(pos.plus(dollar.plus(position, 0)));
+				// System.out.println("-");
+				// robot.mouseMove(pos.plus(dollar.plus(position, 0)));
+
 				letter = recognizeLetter(
 						pos.plus(dollar.plus(position, 0))
 						, ref,
 						indicators);
+
+				// System.out.println(letter);
 
 				if (letter.equals("."))
 					position += dot_offset;// 3

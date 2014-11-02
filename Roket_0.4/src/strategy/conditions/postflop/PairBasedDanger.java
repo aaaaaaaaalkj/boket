@@ -35,4 +35,8 @@ public enum PairBasedDanger implements ICondition {
 			return super.toString();
 		}
 	}
+
+	public ICondition orLower() {
+		return (sit -> sit.getPairBasedDanger().ordinal() <= ordinal());
+	}
 }

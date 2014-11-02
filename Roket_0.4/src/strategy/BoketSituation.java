@@ -63,6 +63,9 @@ public class BoketSituation implements ISituation {
 		double toPay = Arrays.stream(s.getPosts()).max().getAsDouble()
 				- s.getPosts()[0];
 
+		// System.out.println(pot);
+		// System.out.println(toPay);
+
 		this.contribution = ContributionType.fromDouble(toPay / pot);
 		this.pot = PotType.of(pot / s.getStack());
 
@@ -149,8 +152,9 @@ public class BoketSituation implements ISituation {
 			return "BoketSituation [round=" + round + ", numActive="
 					+ numActive
 					+ ", contribution=" + contribution + ", pot=" + pot
-					+ ", connector=" + connector + ",\n suited=" + suited
-					+ ", cathegory=" + cathegory + "]";
+					+ "\n" + (suited == SuitedType.SUITED ? suited : "") + " "
+					+ (connector != ConnectorType.NONE ? connector : "")
+					+ "]";
 		} else {
 			return "BoketSituation [ " + round + ", "
 					+ numActive.getValue()
