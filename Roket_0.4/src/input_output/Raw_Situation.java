@@ -21,6 +21,7 @@ public class Raw_Situation {
 	public int button;
 	public double pot;
 	public boolean itsMyTurn = false;
+	public boolean[] brownButtons = new boolean[3];
 
 	@Override
 	public String toString() {

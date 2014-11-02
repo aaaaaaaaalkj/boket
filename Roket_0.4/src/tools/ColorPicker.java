@@ -14,11 +14,11 @@ public class ColorPicker {
 
 	public static void main(String[] args) throws Exception {
 		// findColorAtMousePosition();
-		ScreenScraper scraper = new ScreenScraper();
 
+		ScreenScraper scraper = new ScreenScraper();
 		scraper.getSituation().print();
 
-		// start();
+		// start(new MyRobot());
 		System.exit(1);
 		while (true) {
 
@@ -78,7 +78,7 @@ public class ColorPicker {
 		// Color refColor = new Color(12010269);
 		// System.out.println(refColor);
 
-		Pos p = new Pos(31, 300).plus(logo);
+		Pos p = new Pos(40, 314).plus(logo);
 		Color c = robot.getPixelColor(p);
 		System.out.println(c);
 

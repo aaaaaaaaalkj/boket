@@ -10,24 +10,31 @@ import java.awt.image.BufferedImage;
 import tools.Pos;
 
 public class MyRobot {
-	private final Robot rb;
 	private final BufferedImage capture;
 
 	public MyRobot() throws AWTException {
-		this.rb = new Robot();
-		Rectangle rect = new Rectangle(0, 0, 1000, 1000);
-		this.capture = rb.createScreenCapture(rect);
+		this.capture = new Robot().createScreenCapture(
+				new Rectangle(0, 0, 1000, 1000)
+				);
+	}
+
+	public BufferedImage getScreenshot() {
+		return capture;
 	}
 
 	public Color getPixelColor(Pos p) {
 		return new Color(capture.getRGB(p.x, p.y));
-		// return rb.getPixelColor(p.x, p.y);
 	}
 
 	public void mouseMove(Pos p) {
-		rb.mouseMove(p.x, p.y);
-		rb.mousePress(InputEvent.BUTTON1_MASK);
-		rb.mouseRelease(InputEvent.BUTTON1_MASK);
+		try {
+			Robot rb = new Robot();
+			rb.mouseMove(p.x, p.y);
+			rb.mousePress(InputEvent.BUTTON1_MASK);
+			rb.mouseRelease(InputEvent.BUTTON1_MASK);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -42,10 +49,8 @@ public class MyRobot {
 	public Pos pixelSearch(int x, int y, int w, int h, Color c) {
 		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
-		Rectangle screenRect = new Rectangle(x, y, w, h);
-		BufferedImage bimage = rb.createScreenCapture(screenRect);
 		int[] rgbs = new int[w * h];
-		int[] a = bimage.getRGB(0, 0, w, h, rgbs, 0, w);
+		int[] a = capture.getRGB(x, y, w, h, rgbs, 0, w);
 		// Ab hier Wird das Array durchsucht
 		for (int i = 0; i < a.length; i++) {
 			if (new Color(a[i]).equals(c)) {
@@ -61,9 +66,7 @@ public class MyRobot {
 		int w = delta.x;
 		int h = delta.y;
 		int[] rgbs = new int[w * h];
-		Rectangle screenRect = new Rectangle(pos.x, pos.y, w, h);
-		BufferedImage bimage = rb.createScreenCapture(screenRect);
-		int[] a = bimage.getRGB(0, 0, w, h, rgbs, 0, w);
+		int[] a = capture.getRGB(pos.x, pos.y, w, h, rgbs, 0, w);
 
 		int b = (2 << 7) - 1;
 		int g = (2 << 15) - 1 - b;
@@ -85,9 +88,7 @@ public class MyRobot {
 		int w = pos2.minus(pos).x;
 		int h = pos2.minus(pos).y;
 		int[] rgbs = new int[w * h];
-		Rectangle screenRect = new Rectangle(pos.x, pos.y, w, h);
-		BufferedImage bimage = rb.createScreenCapture(screenRect);
-		int[] a = bimage.getRGB(0, 0, w, h, rgbs, 0, w);
+		int[] a = capture.getRGB(pos.x, pos.y, w, h, rgbs, 0, w);
 		int res = 0;
 		for (int i = 0; i < a.length; i++) {
 			res += i * a[i];

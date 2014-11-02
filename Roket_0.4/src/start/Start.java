@@ -5,6 +5,11 @@ import input_output.Raw_Situation;
 import input_output.ScreenScraper;
 
 import java.awt.AWTException;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import old.Situation;
 import strategy.BoketSituation;
@@ -18,6 +23,43 @@ public class Start {
 		return new Pos(x, y);
 	}
 
+	private static int counter = 0;
+
+	private static void saveImage(BufferedImage capture) {
+		try {
+			String type = "png";
+			File outputfile = new File("screenshots\\" + (counter++) + "."
+					+ type);
+			ImageIO.write(capture, type, outputfile);
+		} catch (IOException e) {
+			e.printStackTrace();
+			// ignore
+		}
+	}
+
+	private static void handleSituation(ScreenScraper scraper,
+			boolean myTurn) {
+		Raw_Situation raw = scraper.getSituation();
+
+		ISituation sit = new BoketSituation(raw);
+		System.out.println(sit);
+		System.out.println(raw);
+		IStrategy shitStrategy = StrategyDefinitions.s;
+
+		// System.out.println("situation:");
+		// System.out.println(raw);
+
+		TypeOfDecision d = shitStrategy.decide(sit);
+
+		if (d == TypeOfDecision.FOLD || myTurn) {
+			System.out.println(d);
+			saveImage(scraper.getScreenshot());
+			decision2ouput(d, scraper.getLogo(), raw);
+		} else {
+			// wait for my turn
+		}
+	}
+
 	public static void main(String[] _) throws InterruptedException,
 			AWTException {
 		while (true) {
@@ -25,18 +67,14 @@ public class Start {
 
 			Raw_Situation raw = scraper.getSituation();
 
+			if (raw.brownButtons[0] && !raw.brownButtons[1]
+					&& !raw.brownButtons[2]) {
+				// fast fold possible
+				handleSituation(scraper, false);
+			}
+
 			if (raw.isItsMyTurn() && raw.getHand() != null) {
-				ISituation sit = new BoketSituation(raw);
-				System.out.println(sit);
-				IStrategy shitStrategy = StrategyDefinitions.s;
-
-				// System.out.println("situation:");
-				// System.out.println(raw);
-
-				TypeOfDecision d = shitStrategy.decide(sit);
-
-				System.out.println(d);
-				decision2ouput(d, scraper.logo, raw);
+				handleSituation(scraper, true);
 			} else {
 				System.out.println("not my turn");
 			}

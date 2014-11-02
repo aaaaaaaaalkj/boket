@@ -7,6 +7,7 @@ import static tools.Input_Tool.toRGB;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import managementCards.cards.Card;
 import managementCards.cards.Rank;
@@ -56,9 +57,13 @@ public class Card_Recognition {
 
 		pos = hit.plus(4, 1);
 		hit = searchCard(pos, robot);
-		if (null == hit)
+		if (null == hit) {
 			return null;
+		}
 		Card second = recognizeCard(hit, robot);
+		if (Objects.isNull(first) || Objects.isNull(second)) {
+			return null; // animation may interfere here
+		}
 		return Hand.newInstance(first, second);
 	}
 
