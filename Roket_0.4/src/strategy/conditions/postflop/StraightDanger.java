@@ -41,4 +41,10 @@ public enum StraightDanger implements ICondition {
 		}
 	}
 
+	public static ICondition isHigh() {
+		return sit -> sit.getStraightDanger() == HIGH ||
+				sit.getStraightDanger() == VERY_HIGH ||
+				sit.getStraightDanger() == CERTAIN_STRAIGHT;
+	}
+
 }

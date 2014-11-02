@@ -10,8 +10,10 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
 
+import start.StrategyDefinitions;
 import strategy.BoketSituation;
 import strategy.ISituation;
+import strategy.TypeOfDecision;
 
 public class ColorPicker {
 	private static Pos logo;
@@ -25,6 +27,10 @@ public class ColorPicker {
 
 		ISituation sit = new BoketSituation(raw);
 		System.out.println(sit);
+
+		TypeOfDecision d = StrategyDefinitions.s.decide(sit);
+
+		System.out.println(d);
 
 		// start(new MyRobot());
 		System.exit(1);

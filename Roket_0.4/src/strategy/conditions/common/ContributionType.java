@@ -36,6 +36,9 @@ public enum ContributionType implements ICondition {
 	}
 
 	public static ContributionType fromDouble(double d) {
+		if (Double.isNaN(d)) {
+			return ContributionType.LOW;
+		}
 		if (d < LOW.value) {
 			return LOW;
 		} else if (d < MIDDLE.value) {

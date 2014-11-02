@@ -22,6 +22,7 @@ import static strategy.conditions.preflop.ConnectorType.CONNECTOR;
 import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
 import static strategy.conditions.preflop.SuitedType.SUITED;
 import strategy.IStrategy;
+import strategy.conditions.ICondition;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.PotType;
 import strategy.conditions.postflop.FlushDanger;
@@ -30,20 +31,20 @@ import strategy.conditions.postflop.StraightDanger;
 import strategy.manualStrategy.Strategy2;
 
 public class StrategyDefinitions {
-	public static IStrategy s = (sit -> FOLD);
+	public static Strategy2 s = new Strategy2();
 	public final static IStrategy shitStrategy = new Strategy2();
 
 	static {
-		s = s.preflop(
+		s.preflop(
 				SUITED.or(CONNECTOR).or(POCKET_PAIR)
 						.and(ContributionType.LOW.or(PotType.SMALL))
 				, CALL);
 
-		s = s.flop(MONSTER_DRAW // 15 outs
+		s.flop(MONSTER_DRAW // 15 outs
 				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.HIGH.orLower()), CALL);
 
-		s = s.flop(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.NONE) // rainbow
+		s.flop(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.NONE) // rainbow
 				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE.orLower()), CALL); // pay more
 																// here?
@@ -51,7 +52,7 @@ public class StrategyDefinitions {
 		// strategy.flop(OESD.or(DOUBLE_GUTSHOT) // dangerous
 		// .and(CONTRIBUTION_LESS_THAN(0.1)), CALL); // cheap chance
 
-		s = s.flop(FLUSH_DRAW // 9 outs
+		s.flop(FLUSH_DRAW // 9 outs
 				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE.orLower()), CALL);
 
@@ -61,66 +62,91 @@ public class StrategyDefinitions {
 		// .and(NO_FLUSH_DANGER).and(NO_STRAIGHT_DANGER)
 		// .and(CONTRIBUTION_LESS_THAN(0.1)), RAISE(15));
 
-		s = s.flop(TWO_PAIR // 4 outs
+		s.flop(TWO_PAIR // 4 outs
 				.and(ContributionType.LOW), CALL);
 
-		s = s.flop(THREE_OF_A_KIND.and(POCKET_PAIR))
-				.if_(StraightDanger.HIGH.or(FlushDanger.SIGNIFICANT))
-				.then(FOLD)
-				.if_(ContributionType.LOW).then(RAISE_QUARTER_POT)
-				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT);
+		ICondition set = THREE_OF_A_KIND.and(POCKET_PAIR);
+		s.flop(
+				set.and(StraightDanger.HIGH.orHigher()
+						.or(FlushDanger.SIGNIFICANT.orHigher())
+						)
+				, FOLD
+				);
 
-		s = s.flop(STRAIGHT, RAISE_HALF_POT);
-		s = s.flop(FLUSH, RAISE_POT_SIZE);
-		s = s.flop(FULL_HOUSE, RAISE_POT_SIZE);
-		s = s.flop(FOUR_OF_A_KIND, RAISE_POT_SIZE);
-		s = s.flop(STRAIGHT_FLUSH, RAISE_POT_SIZE);
+		s.flop(
+				set.and(ContributionType.LOW)
+				, RAISE_QUARTER_POT
+				);
 
-		s = s.turn(STRAIGHT, RAISE_DOUBLE_POT);
-		s = s.turn(FLUSH, RAISE_DOUBLE_POT);
-		s = s.turn(FULL_HOUSE, RAISE_DOUBLE_POT);
-		s = s.turn(FOUR_OF_A_KIND, RAISE_DOUBLE_POT);
-		s = s.turn(STRAIGHT_FLUSH, RAISE_DOUBLE_POT);
+		s.flop(
+				set.and(ContributionType.HIGH.orLower())
+				, RAISE_DOUBLE_POT
+				);
 
-		s = s.turn(MONSTER_DRAW // 15 outs
+		s.flop(STRAIGHT, RAISE_HALF_POT);
+		s.flop(FLUSH, RAISE_POT_SIZE);
+		s.flop(FULL_HOUSE, RAISE_POT_SIZE);
+		s.flop(FOUR_OF_A_KIND, RAISE_POT_SIZE);
+		s.flop(STRAIGHT_FLUSH, RAISE_POT_SIZE);
+
+		s.turn(STRAIGHT, RAISE_DOUBLE_POT);
+		s.turn(FLUSH, RAISE_DOUBLE_POT);
+		s.turn(FULL_HOUSE, RAISE_DOUBLE_POT);
+		s.turn(FOUR_OF_A_KIND, RAISE_DOUBLE_POT);
+		s.turn(STRAIGHT_FLUSH, RAISE_DOUBLE_POT);
+
+		s.turn(MONSTER_DRAW // 15 outs
 				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL);
 
-		s = s.turn(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.NONE) // rainbow
+		s.turn(OESD.or(DOUBLE_GUTSHOT).and(FlushDanger.NONE) // rainbow
 				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL); // pay more here?
 
-		s = s.turn(FLUSH_DRAW // 9 outs
+		s.turn(FLUSH_DRAW // 9 outs
 				.and(PairBasedDanger.NONE) // no pair in flop
 				.and(ContributionType.MIDDLE), CALL);
 
-		s = s.turn(TWO_PAIR // 4 outs
+		s.turn(TWO_PAIR // 4 outs
 				.and(ContributionType.LOW), CALL);
 
-		s = s.turn(THREE_OF_A_KIND.and(POCKET_PAIR))
-				.if_(StraightDanger.HIGH.or(FlushDanger.SIGNIFICANT))
-				.then(FOLD)
-				.if_(ContributionType.LOW).then(RAISE_HALF_POT)
-				.if_(ContributionType.HIGH.orLower()).then(RAISE_DOUBLE_POT);
+		s.turn(set.and(
+				StraightDanger.HIGH.orHigher().or(
+						FlushDanger.SIGNIFICANT.orHigher())
+				)
+				, FOLD);
+		s.turn(set.and(
+				ContributionType.LOW
+				), RAISE_HALF_POT);
+		s.turn(set.and(
+				ContributionType.HIGH.orLower())
+				, RAISE_DOUBLE_POT
+				);
 
-		s = s.river(STRAIGHT.and(FlushDanger.NONE).and(PairBasedDanger.NONE),
+		s.river(STRAIGHT.and(FlushDanger.NONE).and(PairBasedDanger.NONE),
 				ALL_IN);
-		s = s.river(
+		s.river(
 				STRAIGHT.and(FlushDanger.SIGNIFICANT.or(PairBasedDanger.HIGH)),
 				CALL);
-		s = s.river(FLUSH, ALL_IN);
-		s = s.river(FULL_HOUSE, ALL_IN);
-		s = s.river(FOUR_OF_A_KIND, ALL_IN);
-		s = s.river(STRAIGHT_FLUSH, ALL_IN);
+		s.river(FLUSH, ALL_IN);
+		s.river(FULL_HOUSE, ALL_IN);
+		s.river(FOUR_OF_A_KIND, ALL_IN);
+		s.river(STRAIGHT_FLUSH, ALL_IN);
 
-		s = s.river(TWO_PAIR.and(ContributionType.LOW), CALL);
+		s.river(TWO_PAIR.and(ContributionType.LOW), CALL);
 
-		s = s.river(THREE_OF_A_KIND.and(POCKET_PAIR))
-				.if_(StraightDanger.HIGH.or(FlushDanger.SIGNIFICANT))
-				.then(FOLD)
-				.if_(ContributionType.LOW).then(RAISE_QUARTER_POT)
-				.if_(ContributionType.HIGH.or(ContributionType.MIDDLE))
-				.then(RAISE_HALF_POT);
+		s.river(set.and(
+				StraightDanger.HIGH.orHigher().or(
+						FlushDanger.SIGNIFICANT.orHigher())
+				)
+				, FOLD);
+		s.river(set.and(
+				ContributionType.LOW), RAISE_QUARTER_POT
+				);
+		s.river(set.and(
+				ContributionType.HIGH.orHigher().or(
+						ContributionType.MIDDLE.orHigher()))
+				, RAISE_HALF_POT);
 
 	}
 

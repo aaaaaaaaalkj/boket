@@ -332,8 +332,6 @@ public final class Cat_Rec implements ICatRec {
 				)
 				.collect(groupingBy(x -> x));
 
-		System.out.println(map2);
-
 		Map<Long, Integer> map = map2
 				.entrySet()
 				.stream()

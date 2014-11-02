@@ -1,5 +1,7 @@
 package strategy.manualStrategy;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import strategy.ISituation;
 import strategy.IStrategy;
 import strategy.TypeOfDecision;
@@ -18,10 +20,10 @@ public class StrategyWaiting implements IStrategy {
 		return new StrategyWaiting2(this, if_);
 	}
 
-	@Override
 	public StrategyWaiting extend(ICondition if_, TypeOfDecision dec) {
-		str.extend(cond.and(if_), dec);
-		return this;
+		// str.extend(cond.and(if_), dec);
+		throw new NotImplementedException("todo");
+		// return this;
 	}
 
 	@Override
