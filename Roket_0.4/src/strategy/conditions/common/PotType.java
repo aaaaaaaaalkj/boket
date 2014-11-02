@@ -4,7 +4,7 @@ import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum PotType implements ICondition {
-	LOW(.33), MIDDLE(.66), HIGH(1.);
+	SMALL(.33), MEDIUM(.66), BIG(1.);
 	public static final PotType[] VALUES = values();
 
 	private final double value;
@@ -27,12 +27,12 @@ public enum PotType implements ICondition {
 	}
 
 	public static PotType of(double d) {
-		if (d < LOW.value) {
-			return LOW;
-		} else if (d < MIDDLE.value) {
-			return MIDDLE;
+		if (d < SMALL.value) {
+			return SMALL;
+		} else if (d < MEDIUM.value) {
+			return MEDIUM;
 		} else {
-			return HIGH;
+			return BIG;
 		}
 	}
 

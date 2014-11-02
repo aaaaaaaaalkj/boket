@@ -22,7 +22,7 @@ public enum FlushDanger implements ICondition {
 	}
 
 	public static FlushDanger fromLong(long count_max_cards_of_same_suit) {
-		return values()[Math.min((int) count_max_cards_of_same_suit,
+		return values()[Math.min((int) count_max_cards_of_same_suit - 1,
 				VALUES.length - 1)];
 	}
 

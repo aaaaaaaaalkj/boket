@@ -145,13 +145,24 @@ public class BoketSituation implements ISituation {
 
 	@Override
 	public String toString() {
-		return "BoketSituation [round=" + round + ", numActive=" + numActive
-				+ ", contribution=" + contribution + ", pot=" + pot
-				+ ", connector=" + connector + ",\n suited=" + suited
-				+ ", cathegory=" + cathegory + ", pairBasedDanger="
-				+ pairBasedDanger + ", flushDanger=" + flushDanger
-				+ ",\n straightDanger=" + straightDanger + ", draw=" + draw
-				+ "]";
-	}
+		if (round == Round.PREFLOP) {
+			return "BoketSituation [round=" + round + ", numActive="
+					+ numActive
+					+ ", contribution=" + contribution + ", pot=" + pot
+					+ ", connector=" + connector + ",\n suited=" + suited
+					+ ", cathegory=" + cathegory + "]";
+		} else {
+			return "BoketSituation [ " + round + ", "
+					+ numActive.getValue()
+					+ " active players, " + contribution
+					+ " contribution, " + pot + " pot"
+					+ "\n" + cathegory + " + " + draw + "\n"
+					+ pairBasedDanger.toString()
+					+ " pairBasedDanger\n"
+					+ flushDanger.toString() + " flushDanger\n"
+					+ straightDanger.toString()
+					+ " straightDanger" + "]";
+		}
 
+	}
 }

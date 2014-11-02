@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static managementCards.cards.Rank.Ace;
 import static managementCards.cards.Rank.Eight;
 import static managementCards.cards.Rank.Jack;
@@ -46,8 +47,6 @@ public final class Cat_Rec implements ICatRec {
 	List<Card> all;
 	List<Card> community;
 
-	final List<Rank> ranks; // Pair-Based
-
 	public Cat_Rec(List<Card> hand, List<Card> community_cards) {
 		all = new ArrayList<>();
 		all.addAll(hand);
@@ -57,48 +56,51 @@ public final class Cat_Rec implements ICatRec {
 
 		community = new ArrayList<>(community_cards);
 
-		ranks = all.stream()
-				.map(Card::getRank)
-				.collect(toList());
 	}
 
 	public ResultImpl check() {
-		ResultImpl pairB = getPairBasedResult();
+		List<Rank> ranks = all.stream()
+				.map(Card::getRank)
+				.collect(toList());
+		ResultImpl pairB = getPairBasedResult(ranks);
 		ResultImpl flushB = getFlushOrStraightResult();
 
 		return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
 	}
 
-	private ResultImpl getPairBasedResult() {
+	private ResultImpl getPairBasedResult(List<Rank> ranks) {
 		List<List<Rank>> choosenCards;
-		if (has(FOUR)) {
-			choosenCards = Arrays.asList(extract(FOUR), getTop(1));
+		if (has(ranks, FOUR)) {
+			choosenCards = Arrays
+					.asList(extract(ranks, FOUR), getTop(ranks, 1));
 			return result(FOUR_OF_A_KIND, choosenCards);
 		}
-		if (num(THREE) > 1) {
-			choosenCards = Arrays.asList(extract(THREE),
-					extract(THREE));
+		if (num(ranks, THREE) > 1) {
+			choosenCards = Arrays.asList(extract(ranks, THREE),
+					extract(ranks, THREE));
 			return result(FULL_HOUSE, choosenCards);
 		}
-		if ((has(THREE) && has(TWO))) {
-			choosenCards = Arrays.asList(extract(THREE),
-					extract(TWO));
+		if ((has(ranks, THREE) && has(ranks, TWO))) {
+			choosenCards = Arrays.asList(extract(ranks, THREE),
+					extract(ranks, TWO));
 			return result(FULL_HOUSE, choosenCards);
 		}
-		if (has(THREE)) {
-			choosenCards = Arrays.asList(extract(THREE), getTop(2));
+		if (has(ranks, THREE)) {
+			choosenCards = Arrays.asList(extract(ranks, THREE),
+					getTop(ranks, 2));
 			return result(THREE_OF_A_KIND, choosenCards);
 		}
-		if (num(TWO) > 1) {
-			choosenCards = Arrays.asList(extract(TWO), extract(TWO), getTop(1));
+		if (num(ranks, TWO) > 1) {
+			choosenCards = Arrays.asList(extract(ranks, TWO),
+					extract(ranks, TWO), getTop(ranks, 1));
 			return result(TWO_PAIR, choosenCards);
 		}
-		if (has(TWO)) {
-			choosenCards = Arrays.asList(extract(TWO), getTop(3));
+		if (has(ranks, TWO)) {
+			choosenCards = Arrays.asList(extract(ranks, TWO), getTop(ranks, 3));
 			return result(PAIR, choosenCards);
 		}
-		if (has(ONE)) {
-			choosenCards = Arrays.asList(getTop(5));
+		if (has(ranks, ONE)) {
+			choosenCards = Arrays.asList(getTop(ranks, 5));
 			return result(HIGH_CARD, choosenCards);
 		}
 		return result(HIGH_CARD, Collections.emptyList());
@@ -106,7 +108,7 @@ public final class Cat_Rec implements ICatRec {
 
 	// +++++++++++++++++++++++++
 
-	private List<Rank> getTop(int num) {
+	private List<Rank> getTop(List<Rank> ranks, int num) {
 		Collections.sort(ranks); // ascending
 		Collections.reverse(ranks); // desc
 
@@ -117,7 +119,7 @@ public final class Cat_Rec implements ICatRec {
 		return res;
 	}
 
-	private List<Rank> extract(Freq f) {
+	private List<Rank> extract(List<Rank> ranks, Freq f) {
 		List<Rank> list = Rank.VALUES.stream()
 				.filter(c -> Collections.frequency(ranks, c) == f.value)
 				.collect(Collectors.toList());
@@ -128,14 +130,14 @@ public final class Cat_Rec implements ICatRec {
 		return res;
 	}
 
-	private long num(Freq f) {
+	private long num(List<Rank> ranks, Freq f) {
 		return Rank.VALUES.stream()
 				.filter(c -> Collections.frequency(ranks, c) == f.value)
 				.count();
 	}
 
-	private boolean has(Freq f) {
-		return num(f) > 0;
+	private boolean has(List<Rank> ranks, Freq f) {
+		return num(ranks, f) > 0;
 	}
 
 	// +++++++++++++++++++++++++
@@ -301,20 +303,26 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	public PairBasedDanger checkPairBasedDanger() {
-		return Rank.VALUES.stream()
-				.map(
-						rank -> community.stream()
-								.map(Card::getRank)
-								.filter(rank::equals)
-								.count()
-				)
-				.max(Comparator.naturalOrder())
-				.map(PairBasedDanger::fromLong)
-				.orElse(PairBasedDanger.NONE);
+		List<Rank> ranks = community.stream()
+				.map(Card::getRank)
+				.collect(toList());
+		ResultImpl pairB = getPairBasedResult(ranks);
+		Cathegory c = pairB.getCathegory();
+		if (c == PAIR) {
+			return PairBasedDanger.MODERATE;
+		} else if (c == TWO_PAIR || c == THREE_OF_A_KIND) {
+			return PairBasedDanger.HIGH;
+		} else if (c == FULL_HOUSE || c == FOUR_OF_A_KIND) {
+			return PairBasedDanger.CERTAIN_COMBO;
+		} else {
+			return PairBasedDanger.NONE;
+		}
 	}
 
 	public StraightDanger checkStraightDanger() {
-		return Window.getDescValues().stream()
+		Map<Long, List<Long>> map2 = Window
+				.getDescValues()
+				.stream()
 				.map(
 						window -> community.stream()
 								.map(Card::getRank)
@@ -322,12 +330,52 @@ public final class Cat_Rec implements ICatRec {
 								.distinct()
 								.count()
 				)
-				.max(Comparator.naturalOrder())
-				.map(StraightDanger::fromLong)
-				.orElse(StraightDanger.NONE);
+				.collect(groupingBy(x -> x));
+
+		System.out.println(map2);
+
+		Map<Long, Integer> map = map2
+				.entrySet()
+				.stream()
+				.collect(
+						toMap(entry -> entry.getKey(), entry -> entry
+								.getValue().size()));
+
+		int num5 = map.get(5l) != null ? map.get(5l) : 0;
+		int num4 = map.get(4l) != null ? map.get(4l) : 0;
+		int num3 = map.get(3l) != null ? map.get(3l) : 0;
+		int num2 = map.get(2l) != null ? map.get(2l) : 0;
+
+		if (num5 > 0) {
+			return StraightDanger.CERTAIN_STRAIGHT;
+		} else if (num4 > 0) {
+			return StraightDanger.VERY_HIGH;
+		} else if (num3 > 0) {
+			switch (num3) {
+			case 4:
+				return StraightDanger.VERY_HIGH;
+			case 3:
+				return StraightDanger.HIGH;
+			case 2:
+				return StraightDanger.SIGNIFICANT;
+			case 1:
+				return StraightDanger.MODERATE;
+			default:
+				throw new IllegalStateException("should never happen");
+			}
+		} else if (num2 > 2 && num2 < 5) {
+			return StraightDanger.POSSIBLE_DRAW;
+		} else if (num2 > 4) {
+			return StraightDanger.PROBABLE_DRAW;
+		} else {
+			return StraightDanger.NONE;
+		}
 	}
 
 	public FlushDanger checkFlushDanger() {
+		if (community.isEmpty()) {
+			return FlushDanger.NONE;
+		}
 		return Suit.VALUES.stream()
 				.map(
 						suit -> community.stream()

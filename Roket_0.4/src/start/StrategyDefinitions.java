@@ -36,7 +36,7 @@ public class StrategyDefinitions {
 	static {
 		s = s.preflop(
 				SUITED.or(CONNECTOR).or(POCKET_PAIR)
-						.and(ContributionType.LOW.or(PotType.LOW))
+						.and(ContributionType.LOW.or(PotType.SMALL))
 				, CALL);
 
 		s = s.flop(MONSTER_DRAW // 15 outs

@@ -48,7 +48,7 @@ public class Start {
 		if (d == TypeOfDecision.FOLD || myTurn) {
 			System.out.println();
 			System.out.println(sit);
-			System.out.println(raw);
+			// System.out.println(raw);
 			System.out.println(d);
 			decision2ouput(d, scraper.getLogo(), raw);
 		} else {

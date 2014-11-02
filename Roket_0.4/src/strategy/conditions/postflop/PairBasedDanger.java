@@ -27,4 +27,12 @@ public enum PairBasedDanger implements ICondition {
 	public static PairBasedDanger fromLong(long l) {
 		return VALUES[Math.min((int) l, VALUES.length - 1)];
 	}
+
+	public String toString() {
+		if (this == NONE) {
+			return "NO";
+		} else {
+			return super.toString();
+		}
+	}
 }
