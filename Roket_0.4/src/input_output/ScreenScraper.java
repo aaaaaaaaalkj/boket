@@ -153,7 +153,7 @@ public class ScreenScraper {
 
 		positions = new Pos[] { pos(139 - 14, 248 - 14),
 				pos(169 - 14, 176 - 14), pos(259 - 14, 147 - 14),
-				pos(463, 100), pos(417, 136), pos(538 - 14, 241 - 14),
+				pos(463, 100), pos(500, 175), pos(538 - 14, 241 - 14),
 				pos(455 - 14, 304 - 14), pos(313 - 14, 300 - 14),
 				pos(219 - 14, 300 - 14) };
 		situation.pot = 0;
@@ -300,7 +300,7 @@ public class ScreenScraper {
 		return 0;
 	}
 
-	private String recognizeLetter(Pos start, Color ref_color,
+	public String recognizeLetter(Pos start, Color ref_color,
 			List<Pos> indicators) {
 		Color color = robot.getPixelColor(start.plus(indicators.get(0)));
 

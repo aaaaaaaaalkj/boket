@@ -9,9 +9,8 @@ import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
-
-import strategy.BoketSituation;
-import strategy.ISituation;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ColorPicker {
 	private static Pos logo;
@@ -22,7 +21,19 @@ public class ColorPicker {
 		ScreenScraper scraper = new ScreenScraper();
 		Raw_Situation raw = scraper.getSituation();
 		raw.print();
-		ISituation sit = new BoketSituation(raw);
+
+		Color ref = new Color(16774863);
+		List<Pos> indicators = new ArrayList<>();
+		indicators.add(pos(0, 2)); // dollar-offset
+		indicators.add(pos(0, 3));
+		indicators.add(pos(0, 4));
+		indicators.add(pos(0, 5));
+		indicators.add(pos(0, 7));
+		indicators.add(pos(2, 4));
+		String s = scraper.recognizeLetter(new Pos(617, 365), ref, indicators);
+		System.out.println(s);
+
+		// ISituation sit = new BoketSituation(raw);
 		// start(new MyRobot());
 		System.exit(1);
 		while (true) {
