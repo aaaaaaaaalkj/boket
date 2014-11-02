@@ -1,6 +1,7 @@
 package tools;
 
 import input_output.MyRobot;
+import input_output.Raw_Situation;
 import input_output.ScreenScraper;
 
 import java.awt.AWTException;
@@ -9,6 +10,9 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
 
+import strategy.BoketSituation;
+import strategy.ISituation;
+
 public class ColorPicker {
 	private static Pos logo;
 
@@ -16,8 +20,9 @@ public class ColorPicker {
 		// findColorAtMousePosition();
 
 		ScreenScraper scraper = new ScreenScraper();
-		scraper.getSituation().print();
-
+		Raw_Situation raw = scraper.getSituation();
+		raw.print();
+		ISituation sit = new BoketSituation(raw);
 		// start(new MyRobot());
 		System.exit(1);
 		while (true) {

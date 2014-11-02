@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 import old.Situation;
 import strategy.BoketSituation;
 import strategy.ISituation;
-import strategy.IStrategy;
 import strategy.TypeOfDecision;
 import tools.Pos;
 
@@ -40,23 +39,20 @@ public class Start {
 	private static void handleSituation(ScreenScraper scraper,
 			boolean myTurn) {
 		Raw_Situation raw = scraper.getSituation();
+		saveImage(scraper.getScreenshot());
 
 		ISituation sit = new BoketSituation(raw);
-		System.out.println(sit);
-		System.out.println(raw);
-		IStrategy shitStrategy = StrategyDefinitions.s;
 
-		// System.out.println("situation:");
-		// System.out.println(raw);
-
-		TypeOfDecision d = shitStrategy.decide(sit);
+		TypeOfDecision d = StrategyDefinitions.s.decide(sit);
 
 		if (d == TypeOfDecision.FOLD || myTurn) {
+			System.out.println();
+			System.out.println(sit);
+			System.out.println(raw);
 			System.out.println(d);
-			saveImage(scraper.getScreenshot());
 			decision2ouput(d, scraper.getLogo(), raw);
 		} else {
-			// wait for my turn
+			System.out.println("wait for my turn (" + d + ")");
 		}
 	}
 
@@ -76,7 +72,7 @@ public class Start {
 			if (raw.isItsMyTurn() && raw.getHand() != null) {
 				handleSituation(scraper, true);
 			} else {
-				System.out.println("not my turn");
+				System.out.print(".");
 			}
 			try {
 				Thread.sleep(1000);

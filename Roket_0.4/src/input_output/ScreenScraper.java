@@ -67,9 +67,7 @@ public class ScreenScraper {
 			if (opt.isPresent()) {
 				situation.stacks[i] = opt.get();
 			} else {
-				Pos p = new Pos(40, 314).plus(logo);
-				System.out
-						.println("------------>" + robot.getPixelColor(p));
+				// Pos p = new Pos(40, 314).plus(logo);
 				ref = new Color(32, 32, 32); // black
 				opt = ocr_real_money(logo.plus(positions[i]), ref,
 						4, 7, 4, indicators);
@@ -222,11 +220,16 @@ public class ScreenScraper {
 					position += digit_offset; // 6
 				text += letter;
 			} while (isNumber(letter) || ".".equals(letter));
-			try {
-				return Optional.of(Double.parseDouble(text));
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
+
+			if (text.equals("")) {
 				return Optional.empty();
+			} else {
+				try {
+					return Optional.of(Double.parseDouble(text));
+
+				} catch (NumberFormatException e) {
+					return Optional.empty();
+				}
 			}
 		}
 		return Optional.empty();

@@ -59,7 +59,7 @@ public class BoketSituation implements ISituation {
 		}
 		this.numActive = NumActiveType.fromInt(count);
 
-		double pot = Arrays.stream(s.getPosts()).sum();
+		double pot = s.getPot();
 		double toPay = Arrays.stream(s.getPosts()).max().getAsDouble()
 				- s.getPosts()[0];
 
