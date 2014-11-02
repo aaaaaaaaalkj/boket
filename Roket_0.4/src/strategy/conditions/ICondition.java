@@ -21,7 +21,7 @@ public interface ICondition {
 
 		@Override
 		public String toString() {
-			return first + " AND " + second;
+			return "(" + first + ") AND (" + second + ")";
 		}
 	}
 
@@ -41,7 +41,7 @@ public interface ICondition {
 
 		@Override
 		public String toString() {
-			return first + " OR " + second;
+			return "(" + first + ") OR (" + second + ")";
 		}
 	}
 

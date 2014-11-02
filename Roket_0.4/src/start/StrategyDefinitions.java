@@ -20,17 +20,22 @@ import static strategy.conditions.postflop.DrawType.OESD;
 import static strategy.conditions.preflop.ConnectorType.CONNECTOR;
 import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
 import static strategy.conditions.preflop.SuitedType.SUITED;
+import strategy.AndreasHaufenStrategy;
 import strategy.conditions.ICondition;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.PotType;
 import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
-import strategy.manualStrategy.Strategy2;
+import strategy.manualStrategy.StrategyImpl;
 
 public class StrategyDefinitions {
-	public static Strategy2 s = new Strategy2();
+	public static StrategyImpl s = new StrategyImpl();
+	public static AndreasHaufenStrategy andreasStr = new AndreasHaufenStrategy();
 
+	// poket pair (TT), am Flop Luschen. Ich bette pot-sized, er called. Am turn
+	// kommt eine Dame, ich gehe all-in, er called. Er hatte AK und hat nichts
+	// getroffen.
 	static {
 		s.preflop(
 				SUITED.or(CONNECTOR).or(POCKET_PAIR)

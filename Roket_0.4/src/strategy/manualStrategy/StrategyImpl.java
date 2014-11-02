@@ -10,10 +10,10 @@ import strategy.conditions.ICondition;
 
 import common.Round;
 
-public class Strategy2 implements IStrategy {
+public class StrategyImpl implements IStrategy {
 	private final List<StrategyItem> list;
 
-	public Strategy2() {
+	public StrategyImpl() {
 		list = new ArrayList<>();
 	}
 

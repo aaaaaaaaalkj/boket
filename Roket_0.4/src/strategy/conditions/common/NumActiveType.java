@@ -37,6 +37,10 @@ public enum NumActiveType implements ICondition {
 	}
 
 	public static NumActiveType fromInt(int size) {
+		if (size == 1) {
+			// this can happen shortly aufter last fold
+			return null;
+		}
 		assert size >= 2 && size <= 9 : "Too many or too few active players: "
 				+ size;
 		return Arrays.stream(VALUES)
