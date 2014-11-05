@@ -11,13 +11,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import managementPaymentsNew.decisions.DecisionType;
 import old.Situation;
-import strategy.BoketSituation;
-import strategy.ISituation;
-import strategy.TypeOfDecision;
+import pot_odds_strategy.PotOddsDecision;
+import pot_odds_strategy.PotOddsStrategy;
 import tools.Pos;
 
-public class Start {
+public class PotOddsStart {
 	public Pos pos(int x, int y) {
 		return new Pos(x, y);
 	}
@@ -50,14 +50,14 @@ public class Start {
 		Raw_Situation raw = scraper.getSituation();
 		saveImage(scraper.getScreenshot());
 
-		ISituation sit = new BoketSituation(raw);
+		PotOddsStrategy strategy = new PotOddsStrategy(raw);
+		PotOddsDecision d = strategy.decide();
 
-		TypeOfDecision d = StrategyDefinitions.utilityStr.decide(sit);
+		if (d.getDec() == DecisionType.FOLD || myTurn) {
 
-		if (d == TypeOfDecision.FOLD || myTurn) {
-			System.out.println();
-			System.out.println(sit);
-			// System.out.println(raw);
+			System.out.println("---------------------");
+			System.out.println(strategy);
+			System.out.println(raw);
 			System.out.println(d);
 			decision2ouput(d, scraper.getLogo(), raw);
 		} else {
@@ -103,48 +103,23 @@ public class Start {
 
 	}
 
-	public static void decision2ouput(TypeOfDecision d, Pos logo,
+	public static void decision2ouput(PotOddsDecision d, Pos logo,
 			Raw_Situation raw) {
 		MyOutput out = new MyOutput();
 
 		double pot = raw.getPot();
 		double stack = 2;
 
-		switch (d) {
-		case ALL_IN:
-			break;
+		switch (d.getDec()) {
+		case ALL_IN: // should not happen
 		case CALL:
 			out.clickCallButton(logo);
 			break;
 		case FOLD:
 			out.clickFoldButton(logo);
 			break;
-		case RAISE_DOUBLE_POT:
-			out.type2(pot * 2, logo);
-			out.clickRaiseButton(logo);
-			break;
-		case RAISE_FIFTH_STACK:
-			out.type2(stack / 5, logo);
-			out.clickRaiseButton(logo);
-			break;
-		case RAISE_HALF_POT:
-			out.type2(pot / 2, logo);
-			out.clickRaiseButton(logo);
-			break;
-		case RAISE_HALF_STACK:
-			out.type2(stack / 2, logo);
-			out.clickRaiseButton(logo);
-			break;
-		case RAISE_POT_SIZE:
-			out.type2(pot, logo);
-			out.clickRaiseButton(logo);
-			break;
-		case RAISE_QUARTER_POT:
-			out.type2(pot / 4, logo);
-			out.clickRaiseButton(logo);
-			break;
-		case RAISE_TENTH_STACK:
-			out.type2(stack / 10, logo);
+		case RAISE:
+			out.type2(d.getValue(), logo);
 			out.clickRaiseButton(logo);
 			break;
 		default:

@@ -4,7 +4,7 @@ import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum ContributionType implements ICondition {
-	LOW(.2), MIDDLE(.5), HIGH(1);
+	LOW(.1), MIDDLE(.25), HIGH(.5);
 
 	private final double value;
 
@@ -41,9 +41,9 @@ public enum ContributionType implements ICondition {
 		}
 		if (d < LOW.value) {
 			return LOW;
-		} else if (d < MIDDLE.value) {
+		} else if (d <= MIDDLE.value) {
 			return MIDDLE;
-		} else if (d < HIGH.value) {
+		} else if (d <= HIGH.value) {
 			return HIGH;
 		} else {
 			throw new IllegalArgumentException(d + " is too big");

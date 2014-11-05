@@ -40,6 +40,10 @@ public class ScreenScraper {
 		situation.communityCards = Card_Recognition
 				.recognizeCommunityCards(logo, robot);
 
+		if (situation.hand != null) {
+			situation.activeStatus[0] = true;
+		}
+
 		return situation;
 	}
 
@@ -153,8 +157,8 @@ public class ScreenScraper {
 
 		positions = new Pos[] { pos(139 - 14, 248 - 14),
 				pos(169 - 14, 176 - 14), pos(259 - 14, 147 - 14),
-				pos(463, 100), pos(500, 175), pos(538 - 14, 241 - 14),
-				pos(455 - 14, 304 - 14), pos(313 - 14, 300 - 14),
+				pos(423, 124), pos(500, 175), pos(538 - 14, 241 - 14),
+				pos(455 - 14, 304 - 14), pos(320, 300),
 				pos(205, 291) };
 		situation.pot = 0;
 		situation.posts = new double[Situation.numSeats];

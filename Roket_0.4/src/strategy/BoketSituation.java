@@ -4,8 +4,10 @@ import input_output.Raw_Situation;
 
 import java.util.Arrays;
 
+import card_simulation.CardSimulation;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.Cathegory;
+import strategy.conditions.Utility;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -15,7 +17,6 @@ import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
 import strategy.conditions.preflop.ConnectorType;
 import strategy.conditions.preflop.SuitedType;
-
 import common.Round;
 
 public class BoketSituation implements ISituation {
@@ -32,6 +33,7 @@ public class BoketSituation implements ISituation {
 	private final FlushDanger flushDanger;
 	private final StraightDanger straightDanger;
 	private final DrawType draw;
+	private final Utility utility;
 
 	public BoketSituation(Raw_Situation s) {
 		switch (s.getCommunityCards().size()) {
@@ -60,13 +62,24 @@ public class BoketSituation implements ISituation {
 		this.numActive = NumActiveType.fromInt(count);
 
 		double pot = s.getPot();
-		double toPay = Arrays.stream(s.getPosts()).max().getAsDouble()
-				- s.getPosts()[0];
+		double toPay = ((double) Math.round((Arrays.stream(s.getPosts()).max()
+				.getAsDouble()
+				- s.getPosts()[0]) * 100) / 100);
 
-		// System.out.println(pot);
-		// System.out.println(toPay);
+		double contribution = ((double) Math.round(toPay / (pot + toPay) * 100)) / 100;
 
-		this.contribution = ContributionType.fromDouble(toPay / pot);
+		this.contribution = ContributionType.fromDouble(contribution);
+
+		double potOdds = new CardSimulation(count, s.hand, s.communityCards)
+				.run();
+
+		this.utility = new Utility(contribution, potOdds);
+
+		System.out.println("pot: " + pot);
+		System.out.println("toPay: " + toPay);
+		System.out.println("contribution : " + contribution);
+		System.out.println("potOdds: " + potOdds);
+
 		this.pot = PotType.of(pot / s.getStack());
 
 		assert s.getHand() != null : "hand is null";
@@ -170,5 +183,10 @@ public class BoketSituation implements ISituation {
 					+ " Straight danger" + "]";
 		}
 
+	}
+
+	@Override
+	public Utility getUtility() {
+		return utility;
 	}
 }

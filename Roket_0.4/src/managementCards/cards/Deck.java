@@ -43,4 +43,13 @@ public class Deck {
 		return cards.contains(card);
 	}
 
+	public boolean remove(Card card) {
+		return cards.remove(card);
+	}
+
+	@Override
+	public String toString() {
+		return cards.toString();
+	}
+
 }

@@ -10,6 +10,10 @@ import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.Cathegory;
 import managementPaymentsNew.IPayManagement2;
 import managementState.IGameState;
+
+import org.apache.commons.lang3.NotImplementedException;
+
+import strategy.conditions.Utility;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -176,6 +180,11 @@ public final class SituationImpl implements ISituation {
 	@Override
 	public Cathegory getCathegory() {
 		return cathegory;
+	}
+
+	@Override
+	public Utility getUtility() {
+		throw new NotImplementedException("need to implement Utility");
 	}
 
 }

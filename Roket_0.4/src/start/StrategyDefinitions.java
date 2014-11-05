@@ -22,6 +22,7 @@ import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
 import static strategy.conditions.preflop.SuitedType.SUITED;
 import strategy.AndreasHaufenStrategy;
 import strategy.conditions.ICondition;
+import strategy.conditions.UtilityCond;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.PotType;
 import strategy.conditions.postflop.FlushDanger;
@@ -33,10 +34,19 @@ public class StrategyDefinitions {
 	public static StrategyImpl s = new StrategyImpl();
 	public static AndreasHaufenStrategy andreasStr = new AndreasHaufenStrategy();
 
+	public static StrategyImpl utilityStr = new StrategyImpl();
+
 	// poket pair (TT), am Flop Luschen. Ich bette pot-sized, er called. Am turn
 	// kommt eine Dame, ich gehe all-in, er called. Er hatte AK und hat nichts
 	// getroffen.
 	static {
+		utilityStr.addCondition(UtilityCond.call(), CALL);
+
+		utilityStr.addCondition(UtilityCond.raiseLittle(), RAISE_QUARTER_POT);
+		utilityStr.addCondition(UtilityCond.raiseLMore(), RAISE_HALF_POT);
+		utilityStr.addCondition(UtilityCond.raiseBig(), RAISE_POT_SIZE);
+		utilityStr.addCondition(UtilityCond.raiseAllIn(), ALL_IN);
+
 		s.preflop(
 				SUITED.or(CONNECTOR).or(POCKET_PAIR)
 						.and(ContributionType.LOW.or(PotType.SMALL))

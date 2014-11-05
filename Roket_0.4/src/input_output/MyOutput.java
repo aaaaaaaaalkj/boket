@@ -76,6 +76,10 @@ public class MyOutput {
 
 		List<Integer> digits = digits(i);
 
+		while (digits.size() < 2) {
+			digits.add(0, 0);
+		}
+
 		for (int index = 0; index < digits.size(); index++) {
 
 			if (index == digits.size() - 2) {
