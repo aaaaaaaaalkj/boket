@@ -136,8 +136,9 @@ public class PreflopProbabilities {
 
 	private void readFromFile() {
 		File source = new File(
-				"D:\\boket\\Kathegorien\\preflop_probabilities.csv");
-		int i = 0;
+				"preflop_probabilities.csv");
+
+
 		try (Scanner scanner = new Scanner(source)) {
 			scanner.useDelimiter("\n");
 
@@ -165,7 +166,6 @@ public class PreflopProbabilities {
 						first,
 						firstSuit),
 						new Card(second, secondSuit), probabilities);
-				i++;
 				add(hand);
 
 			}

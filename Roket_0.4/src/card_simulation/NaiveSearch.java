@@ -25,7 +25,7 @@ public class NaiveSearch {
 
 		try {
 			this.allRes = AllResults
-					.getInstance("D:\\boket\\Kathegorien\\cathegories.txt");
+					.getInstance("cathegories.txt");
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
