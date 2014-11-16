@@ -49,7 +49,15 @@ public final class Cat_Rec implements ICatRec {
 	List<Card> all;
 	List<Card> community;
 
+	public Cat_Rec(Card first, Card second, List<Card> community_cards) {
+		this(Arrays.asList(first, second), community_cards);
+	}
+
+	static long clock = 0;
+	static long count = 0;
+
 	public Cat_Rec(List<Card> hand, List<Card> community_cards) {
+
 		all = new ArrayList<>();
 		all.addAll(hand);
 		all.addAll(community_cards);
@@ -61,11 +69,19 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	public ResultImpl check() {
+		long l = System.currentTimeMillis();
 		List<Rank> ranks = all.stream()
 				.map(Card::getRank)
 				.collect(toList());
 		ResultImpl pairB = getPairBasedResult(ranks);
 		ResultImpl flushB = getFlushOrStraightResult();
+
+		l = System.currentTimeMillis() - l;
+		clock += l;
+		count++;
+		if (count % 100000 == 0) {
+			System.out.println("----------" + (clock));
+		}
 
 		return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
 	}
@@ -175,8 +191,21 @@ public final class Cat_Rec implements ICatRec {
 		// Flush
 		for (Suit c : Suit.values()) {
 			if (map.get(c) != null && map.get(c).size() >= 5) {
-				return new ResultImpl(Cathegory.FLUSH, map.get(c)
+				List<Rank> tieBreakers = new ArrayList<>(map.get(c)
 						.subList(0, 5));
+				// Collections.sort(tieBreakers);
+				// Collections.reverse(tieBreakers);
+				ResultImpl res = new ResultImpl(Cathegory.FLUSH, tieBreakers);
+
+				// ResultImpl x = new ResultImpl(Cathegory.FLUSH, Arrays.asList(
+				// Rank.Ace, Rank.Four, Rank.Four, Rank.Three, Rank.Two));
+				//
+				// if (x.equals(res)) {
+				// System.out.println(all);
+				// System.out.println("------- c: " + c + "  " + map.get(c));
+				// }
+
+				return res;
 			}
 		}
 		// Straight

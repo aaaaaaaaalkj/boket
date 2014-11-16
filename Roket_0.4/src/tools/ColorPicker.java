@@ -12,10 +12,8 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import start.StrategyDefinitions;
-import strategy.BoketSituation;
-import strategy.ISituation;
-import strategy.TypeOfDecision;
+import pot_odds_strategy.PotOddsDecision;
+import pot_odds_strategy.PotOddsStrategy;
 
 public class ColorPicker {
 	private static Pos logo;
@@ -45,14 +43,25 @@ public class ColorPicker {
 	}
 
 	public static void test2() throws AWTException {
+
+		// for (double d2 = -2; d2 <= 2; d2 += .1) {
+		//
+		// double v = Math.abs(d2) % 1;
+		//
+		// v = Math.floor(v * 100) / 100;
+		// d2 = Math.floor(d2 * 100) / 100;
+		//
+		// System.out.println(d2 + " : " + (v));
+		// }
+
 		ScreenScraper scraper = new ScreenScraper();
 		Raw_Situation raw = scraper.getSituation();
 		raw.print();
-
-		ISituation sit = new BoketSituation(raw);
-		System.out.println(sit);
-
-		TypeOfDecision d = StrategyDefinitions.s.decide(sit);
+		PotOddsStrategy strategy = new PotOddsStrategy(raw);
+		System.out.println(strategy);
+		PotOddsDecision d = strategy.decide();
+		// ISituation sit = new BoketSituation(raw);
+		// System.out.println(sit);
 
 		System.out.println(d);
 
@@ -60,7 +69,6 @@ public class ColorPicker {
 
 	public static void main(String[] args) throws Exception {
 		// findColorAtMousePosition();
-
 		test2();
 
 		// start(new MyRobot());

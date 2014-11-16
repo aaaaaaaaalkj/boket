@@ -50,6 +50,16 @@ public class PotOddsStart {
 		Raw_Situation raw = scraper.getSituation();
 		saveImage(scraper.getScreenshot());
 
+		for (double d : raw.getPosts()) {
+			if (d > 5) { // too big post. bug?
+				try {
+					Thread.sleep(600);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		PotOddsStrategy strategy = new PotOddsStrategy(raw);
 		PotOddsDecision d = strategy.decide();
 
@@ -81,16 +91,13 @@ public class PotOddsStart {
 			if (raw.isItsMyTurn() && raw.getHand() != null) {
 				handleSituation(scraper, true);
 			} else {
-				System.out.print(".");
-			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				return;
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-
 	}
 
 	public static void start2(Situation s) {
@@ -106,9 +113,6 @@ public class PotOddsStart {
 	public static void decision2ouput(PotOddsDecision d, Pos logo,
 			Raw_Situation raw) {
 		MyOutput out = new MyOutput();
-
-		double pot = raw.getPot();
-		double stack = 2;
 
 		switch (d.getDec()) {
 		case ALL_IN: // should not happen

@@ -1,7 +1,6 @@
 package input_output;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import managementCards.cards.Card;
@@ -23,15 +22,25 @@ public class Raw_Situation {
 	public boolean itsMyTurn = false;
 	public boolean[] brownButtons = new boolean[3];
 
+	private int countActive() {
+		int count = 0;
+		for (boolean active : activeStatus) {
+			if (active)
+				count++;
+		}
+		return count;
+	}
+
 	@Override
 	public String toString() {
-		return "Raw_Situation [itsMyTurn=" + itsMyTurn + "\n hand = " + hand
-				+ "\n communityCards = " + communityCards + "\n button = "
-				+ button
-				+ "\n activePlayer = " + Arrays.toString(activeStatus)
-				+ "\n pot = " + pot + "\n posts = " + Arrays.toString(posts)
-				+ "\n stacks = " + Arrays.toString(stacks)
-				+ "\n checkSum = " + checkSum + "]";
+		return "[" + (itsMyTurn ? "its my turn," : "")
+				+ " cards = " + hand + " __ " + communityCards
+				+ ", " + countActive() + " active players "
+				+ " pot = " + pot
+				// "\n posts = " + Arrays.toString(posts)
+				// + "\n stacks = " + Arrays.toString(stacks)
+				// +"\n button = " + button
+				+ "]";
 	}
 
 	public static int getNumSeats() {

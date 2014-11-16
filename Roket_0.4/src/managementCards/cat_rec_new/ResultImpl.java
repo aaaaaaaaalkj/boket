@@ -83,4 +83,14 @@ public final class ResultImpl implements IResult {
 	public Cathegory getCathegory() {
 		return cathegory;
 	}
+
+	/**
+	 * returns an impossible bad hand
+	 * 
+	 * @return
+	 */
+	public static ResultImpl bottom() {
+		return new ResultImpl(Cathegory.HIGH_CARD,
+				Arrays.asList(Rank.Two, Rank.Two, Rank.Two, Rank.Two, Rank.Two));
+	}
 }

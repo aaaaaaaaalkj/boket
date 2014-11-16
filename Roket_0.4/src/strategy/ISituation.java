@@ -1,7 +1,6 @@
 package strategy;
 
 import managementCards.cat_rec_new.Cathegory;
-import strategy.conditions.Utility;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -36,7 +35,4 @@ public interface ISituation {
 	SuitedType getSuit();
 
 	Round getRound();
-
-	Utility getUtility();
-
 }

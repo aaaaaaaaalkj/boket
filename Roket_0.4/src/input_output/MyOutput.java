@@ -49,7 +49,7 @@ public class MyOutput {
 	public void moveAndClick(Pos p) {
 		robot.mouseMove(p.x, p.y);
 		try {
-			Thread.sleep(500);
+			Thread.sleep(900);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

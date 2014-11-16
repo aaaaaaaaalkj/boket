@@ -34,10 +34,7 @@ public class UtilityCond implements ICondition {
 
 	@Override
 	public boolean eval(ISituation sit) {
-
-		double diff = sit.getUtility().getDiff();
-
-		return diff > min && diff <= max;
+		throw new IllegalStateException("not implemented yet");
 	}
 
 }

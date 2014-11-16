@@ -20,6 +20,13 @@ public enum Round implements ICondition {
 			return VALUES.get(this.ordinal() + 1);
 	}
 
+	public Round last() {
+		if (this == PREFLOP)
+			return null;
+		else
+			return VALUES.get(this.ordinal() - 1);
+	}
+
 	@Override
 	public boolean eval(ISituation sit) {
 		return sit.getRound() == this;

@@ -1,6 +1,7 @@
 package pot_odds_strategy;
 
 import static java.util.Comparator.naturalOrder;
+import static java.util.stream.Collectors.joining;
 import input_output.Raw_Situation;
 
 import java.util.ArrayList;
@@ -10,72 +11,171 @@ import java.util.List;
 import card_simulation.CardSimulation;
 
 public class PotOddsStrategy {
-	private final static double PREFLOP_RISK_AFFINITY = 1;
-	private final static double RISK_AFFINITY = 1;
-	private final double valueOfSituation;
-	private final double toPay;
-	private final double[] posts;
+	private static double BB = .02;
+	private double valueOfSituation;
+	private double toPay;
+	private double[] posts;
 	private double odds;
-	private final double pot;
+	private double pot;
 	private int round;
+	private double lastPost;
+	double prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner = 1;
+	double gegenwahrscheinlichkeit_von_zufaelligen_gegnern_mit_zufaelligen_haenden;
+	private double naked_pod;
+
+	// private static Memory memory = new Memory();
 
 	@Override
 	public String toString() {
-		return "PotOddsStrategy [valueOfSituation=" + valueOfSituation
-				+ ", toPay=" + toPay + ", posts=" + Arrays.toString(posts)
-				+ ", odds=" + odds + ", pot=" + pot + "]";
+		return "[value Of Situation = " + valueOfSituation
+				+ ", toPay=" + toPay
+				+ ", pot=" + pot
+				+ ", odds=" + odds
+				// "\nprod der gegen-wahrscheinlichkeit: "
+				// + prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner
+				// +
+				// "\ngegenwahrscheinlichkeit_von_zufälligen_gegnern: "
+				// +
+				// gegenwahrscheinlichkeit_von_zufaelligen_gegnern_mit_zufaelligen_haenden
+				+ "]";
+	}
+
+	private double computePot(Raw_Situation s) {
+		double pot2 = s.getPot();
+		for (int i = 1; i < posts.length; i++) {
+			if (posts[i] < BB && s.getActiveStatus()[i]) {
+				pot2 += toPay + posts[0] - posts[i];
+			}
+		}
+		pot2 = ((double) Math.round(pot2 * 100)) / 100;
+		return pot2;
 	}
 
 	public PotOddsStrategy(Raw_Situation s) {
-		int count = 0;
-		for (boolean b : s.getActiveStatus()) {
-			if (b)
-				count++;
-		}
 
 		this.posts = s.getPosts().clone();
-		toPay = ((double) Math.round((Arrays.stream(s.getPosts()).max()
-				.getAsDouble()
-				- s.getPosts()[0]) * 100) / 100);
 
-		double pot2 = s.getPot();
-		for (int i = 0; i < posts.length; i++) {
-			if (posts[i] == 0 && s.getActiveStatus()[i]) {
-				pot2 += toPay;
-			}
-		}
+		double maxPost = Arrays.stream(s.getPosts()).max().getAsDouble();
+		toPay = ((double) Math.round((maxPost - s.getPosts()[0]) * 100) / 100);
+
 		round = s.getCommunityCards().size();
 		if (round > 2) {
 			round -= 2;
 		}
 
-		pot = pot2;
+		pot = computePot(s);
 
-		List<Double> activeContributors = new ArrayList<>();
+		naked_pod = pot;
+		for (double d : posts) {
+			naked_pod -= d;
+		}
+
+		// memory.setHighestBid(round, maxPost);
+		// memory.setPot(round, pot);
+
+		// lastPost = memory.getighestBid(round - 1);
+		// lastPot = memory.getPot(round - 1);
+
+		int count = 0;
 		for (int i = 0; i < posts.length; i++) {
 			if (s.activeStatus[i]) {
-				activeContributors.add(posts[i] / s.getPot());
+				count++;
 			}
 		}
 
-		odds = new CardSimulation(activeContributors, s.hand,
+		List<Double> activeContributors = new ArrayList<>();
+		for (int i = 1; i < posts.length; i++) {
+			if (s.activeStatus[i]) {
+				if (i <= s.button && posts[i] == 0) {
+					activeContributors.add(naked_pod / count
+							/ pot);
+				} else {
+					activeContributors.add(posts[i] / pot);
+				}
+			}
+		}
+
+		for (int i = 0; i < activeContributors.size(); i++) {
+			activeContributors
+					.set(i,
+							((double) Math.round(activeContributors.get(i) * 100)) / 100);
+		}
+
+		if (s.hand == null || s.communityCards == null
+				|| s.communityCards.contains(null)) {
+			return;
+		}
+
+		System.out.println("contributions: "
+				+ activeContributors.stream().map(String::valueOf)
+						.collect(joining(", ")));
+		odds = new CardSimulation(count, activeContributors, s.hand,
 				s.communityCards)
 				.run();
 
-		odds = Math.pow(odds, (round / 3 + 1));
+		// Andreas möchte hier eine 2 statt 1 haben
+		double value = Math.min(Integer.MAX_VALUE, pot * odds / (1 - odds));
 
-		// double odds2 = 0.75 * odds * odds;
+		// * computeAndreasFaktor(countActivePlayers, s.button,
+		// s.activeStatus)
 
-		double v = pot * odds / (1 - odds);
+		valueOfSituation = ((double) Math.round(value * 100)) / 100;
+	}
 
-		double aversion = RISK_AFFINITY;
+	public double computeAndreasFaktor(int countActivePlayers, int button,
+			boolean[] active) {
+		for (int i = 1; i < posts.length; i++) {
+			System.out
+					.println(i
+							+ " "
+							+ prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner);
 
-		if (this.round == 0) {
-			aversion = PREFLOP_RISK_AFFINITY;
+			if (active[i]) {
+
+				if (posts[i] == 0) {
+					if (round == 0) {
+						prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner *=
+								(1. - (1. / (countActivePlayers - 1)));
+					} else {
+						prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner *=
+								(1. - lastPost / pot);
+					}
+				} else {
+					double post = posts[i];
+
+					if (round == 0) {
+						if (i == (button + 1) % 9) {
+							post -= .01;
+						}
+						if (i == (button + 2) % 9) {
+							post -= .02;
+						}
+					}
+
+					if (post == 0) {
+						prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner *=
+								(1. - (1. / (countActivePlayers - 1)));
+					} else {
+						prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner *=
+								(1. - post / pot);
+					}
+
+				}
+			}
 		}
-		v = v * aversion;
 
-		valueOfSituation = ((double) Math.round(v * 1000)) / 1000;
+		gegenwahrscheinlichkeit_von_zufaelligen_gegnern_mit_zufaelligen_haenden =
+				Math.pow(1. - (1. / countActivePlayers), countActivePlayers);
+
+		double faktor = prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner
+				/ gegenwahrscheinlichkeit_von_zufaelligen_gegnern_mit_zufaelligen_haenden;
+
+		if (faktor > 1.0) {
+			faktor = 1.0;
+		}
+		// faktor *= faktor;
+
+		return faktor;
 	}
 
 	private double computeMinRaise() {
@@ -108,6 +208,8 @@ public class PotOddsStrategy {
 		} else {
 
 			double res = ((double) Math.round((valueOfSituation - toPay) * 100)) / 100;
+
+			res = Math.min(100000, res);
 
 			return PotOddsDecision.raise(res);
 		}

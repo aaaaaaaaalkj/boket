@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 public enum Suit {
-	Diamonds, Hearts, Spades, Clubs;
+	DIAMONDS, HEARTS, SPADES, CLUBS;
 
 	// values() creates a new array each call. better to cache
 	public static final List<Suit> VALUES = Collections.unmodifiableList(Arrays
@@ -18,13 +18,13 @@ public enum Suit {
 
 	public String shortString() {
 		switch (this) {
-		case Diamonds:
+		case DIAMONDS:
 			return "d";
-		case Hearts:
+		case HEARTS:
 			return "h";
-		case Spades:
+		case SPADES:
 			return "s";
-		case Clubs:
+		case CLUBS:
 			return "c";
 		default:
 			throw new RuntimeException("Unexpected suit: " + this);
@@ -33,13 +33,13 @@ public enum Suit {
 
 	public static Suit fromShortString(String s) {
 		if (s.equals("d"))
-			return Diamonds;
+			return DIAMONDS;
 		if (s.equals("h"))
-			return Hearts;
+			return HEARTS;
 		if (s.equals("s"))
-			return Spades;
+			return SPADES;
 		if (s.equals("c"))
-			return Clubs;
+			return CLUBS;
 		throw new RuntimeException(s + " is not a short String for a color!");
 	}
 };

@@ -33,7 +33,8 @@ public class PotOddsDecision {
 
 	@Override
 	public String toString() {
-		return "PotOddsDecision [dec=" + dec + ", value=" + value + "]";
+		return "decision = " + dec
+				+ (value != null ? " " + value : "") + "";
 	}
 
 }

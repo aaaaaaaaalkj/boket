@@ -13,10 +13,10 @@ import static managementCards.cards.Rank.Six;
 import static managementCards.cards.Rank.Ten;
 import static managementCards.cards.Rank.Three;
 import static managementCards.cards.Rank.Two;
-import static managementCards.cards.Suit.Clubs;
-import static managementCards.cards.Suit.Diamonds;
-import static managementCards.cards.Suit.Hearts;
-import static managementCards.cards.Suit.Spades;
+import static managementCards.cards.Suit.CLUBS;
+import static managementCards.cards.Suit.DIAMONDS;
+import static managementCards.cards.Suit.HEARTS;
+import static managementCards.cards.Suit.SPADES;
 import static managementCards.cat_rec_new.Cathegory.FLUSH;
 import static managementCards.cat_rec_new.Cathegory.FOUR_OF_A_KIND;
 import static managementCards.cat_rec_new.Cathegory.FULL_HOUSE;
@@ -37,72 +37,72 @@ import org.junit.Test;
 
 public class TestCarRec {
 
-	Card Ac = Card.newInstance(Ace, Clubs);
-	Card Ad = Card.newInstance(Ace, Diamonds);
-	Card Ah = Card.newInstance(Ace, Hearts);
-	Card As = Card.newInstance(Ace, Spades);
+	Card Ac = Card.newInstance(Ace, CLUBS);
+	Card Ad = Card.newInstance(Ace, DIAMONDS);
+	Card Ah = Card.newInstance(Ace, HEARTS);
+	Card As = Card.newInstance(Ace, SPADES);
 
-	Card Kc = Card.newInstance(King, Clubs);
-	Card Kd = Card.newInstance(King, Diamonds);
-	Card Kh = Card.newInstance(King, Hearts);
-	Card Ks = Card.newInstance(King, Spades);
+	Card Kc = Card.newInstance(King, CLUBS);
+	Card Kd = Card.newInstance(King, DIAMONDS);
+	Card Kh = Card.newInstance(King, HEARTS);
+	Card Ks = Card.newInstance(King, SPADES);
 
-	Card Qc = Card.newInstance(Queen, Clubs);
-	Card Qd = Card.newInstance(Queen, Diamonds);
-	Card Qh = Card.newInstance(Queen, Hearts);
-	Card Qs = Card.newInstance(Queen, Spades);
+	Card Qc = Card.newInstance(Queen, CLUBS);
+	Card Qd = Card.newInstance(Queen, DIAMONDS);
+	Card Qh = Card.newInstance(Queen, HEARTS);
+	Card Qs = Card.newInstance(Queen, SPADES);
 
-	Card Jc = Card.newInstance(Jack, Clubs);
-	Card Jd = Card.newInstance(Jack, Diamonds);
-	Card Jh = Card.newInstance(Jack, Hearts);
-	Card Js = Card.newInstance(Jack, Spades);
+	Card Jc = Card.newInstance(Jack, CLUBS);
+	Card Jd = Card.newInstance(Jack, DIAMONDS);
+	Card Jh = Card.newInstance(Jack, HEARTS);
+	Card Js = Card.newInstance(Jack, SPADES);
 
-	Card Tc = Card.newInstance(Ten, Clubs);
-	Card Td = Card.newInstance(Ten, Diamonds);
-	Card Th = Card.newInstance(Ten, Hearts);
-	Card Ts = Card.newInstance(Ten, Spades);
+	Card Tc = Card.newInstance(Ten, CLUBS);
+	Card Td = Card.newInstance(Ten, DIAMONDS);
+	Card Th = Card.newInstance(Ten, HEARTS);
+	Card Ts = Card.newInstance(Ten, SPADES);
 
-	Card c9 = Card.newInstance(Nine, Clubs);
-	Card d9 = Card.newInstance(Nine, Diamonds);
-	Card h9 = Card.newInstance(Nine, Hearts);
-	Card s9 = Card.newInstance(Nine, Spades);
+	Card c9 = Card.newInstance(Nine, CLUBS);
+	Card d9 = Card.newInstance(Nine, DIAMONDS);
+	Card h9 = Card.newInstance(Nine, HEARTS);
+	Card s9 = Card.newInstance(Nine, SPADES);
 
-	Card c8 = Card.newInstance(Eight, Clubs);
-	Card d8 = Card.newInstance(Eight, Diamonds);
-	Card h8 = Card.newInstance(Eight, Hearts);
-	Card s8 = Card.newInstance(Eight, Spades);
+	Card c8 = Card.newInstance(Eight, CLUBS);
+	Card d8 = Card.newInstance(Eight, DIAMONDS);
+	Card h8 = Card.newInstance(Eight, HEARTS);
+	Card s8 = Card.newInstance(Eight, SPADES);
 
-	Card c7 = Card.newInstance(Seven, Clubs);
-	Card d7 = Card.newInstance(Seven, Diamonds);
-	Card h7 = Card.newInstance(Seven, Hearts);
-	Card s7 = Card.newInstance(Seven, Spades);
+	Card c7 = Card.newInstance(Seven, CLUBS);
+	Card d7 = Card.newInstance(Seven, DIAMONDS);
+	Card h7 = Card.newInstance(Seven, HEARTS);
+	Card s7 = Card.newInstance(Seven, SPADES);
 
-	Card c6 = Card.newInstance(Six, Clubs);
-	Card d6 = Card.newInstance(Six, Diamonds);
-	Card h6 = Card.newInstance(Six, Hearts);
-	Card s6 = Card.newInstance(Six, Spades);
+	Card c6 = Card.newInstance(Six, CLUBS);
+	Card d6 = Card.newInstance(Six, DIAMONDS);
+	Card h6 = Card.newInstance(Six, HEARTS);
+	Card s6 = Card.newInstance(Six, SPADES);
 
-	Card c5 = Card.newInstance(Five, Clubs);
-	Card d5 = Card.newInstance(Five, Diamonds);
-	Card h5 = Card.newInstance(Five, Hearts);
-	Card s5 = Card.newInstance(Five, Spades);
+	Card c5 = Card.newInstance(Five, CLUBS);
+	Card d5 = Card.newInstance(Five, DIAMONDS);
+	Card h5 = Card.newInstance(Five, HEARTS);
+	Card s5 = Card.newInstance(Five, SPADES);
 
-	Card c4 = Card.newInstance(Four, Clubs);
-	Card d4 = Card.newInstance(Four, Diamonds);
-	Card h4 = Card.newInstance(Four, Hearts);
-	Card s4 = Card.newInstance(Four, Spades);
+	Card c4 = Card.newInstance(Four, CLUBS);
+	Card d4 = Card.newInstance(Four, DIAMONDS);
+	Card h4 = Card.newInstance(Four, HEARTS);
+	Card s4 = Card.newInstance(Four, SPADES);
 
-	Card c3 = Card.newInstance(Three, Clubs);
-	Card d3 = Card.newInstance(Three, Diamonds);
-	Card h3 = Card.newInstance(Three, Hearts);
-	Card s3 = Card.newInstance(Three, Spades);
+	Card c3 = Card.newInstance(Three, CLUBS);
+	Card d3 = Card.newInstance(Three, DIAMONDS);
+	Card h3 = Card.newInstance(Three, HEARTS);
+	Card s3 = Card.newInstance(Three, SPADES);
 
-	Card c2 = Card.newInstance(Two, Clubs);
-	Card d2 = Card.newInstance(Two, Diamonds);
-	Card h2 = Card.newInstance(Two, Hearts);
-	Card s2 = Card.newInstance(Two, Spades);
+	Card c2 = Card.newInstance(Two, CLUBS);
+	Card d2 = Card.newInstance(Two, DIAMONDS);
+	Card h2 = Card.newInstance(Two, HEARTS);
+	Card s2 = Card.newInstance(Two, SPADES);
 
-	Card _2c = Card.newInstance(Ace, Diamonds);
+	Card _2c = Card.newInstance(Ace, DIAMONDS);
 
 	private ICatRec rec;
 	IResult res;

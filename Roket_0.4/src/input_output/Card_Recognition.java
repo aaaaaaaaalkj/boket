@@ -118,16 +118,16 @@ public class Card_Recognition {
 
 		switch (toRGB(cardColor)) {
 		case 13109256:
-			resColor = Suit.Diamonds;
+			resColor = Suit.DIAMONDS;
 			break;
 		case 13174792:
-			resColor = Suit.Hearts;
+			resColor = Suit.HEARTS;
 			break;
 		case 0:
-			resColor = Suit.Spades;
+			resColor = Suit.SPADES;
 			break;
 		case 16448250:
-			resColor = Suit.Clubs;
+			resColor = Suit.CLUBS;
 			break;
 		default:
 			// Logger.warning("unexpected Color in recognizeColor():"

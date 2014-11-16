@@ -157,8 +157,8 @@ public class ScreenScraper {
 
 		positions = new Pos[] { pos(139 - 14, 248 - 14),
 				pos(169 - 14, 176 - 14), pos(259 - 14, 147 - 14),
-				pos(423, 124), pos(500, 175), pos(538 - 14, 241 - 14),
-				pos(455 - 14, 304 - 14), pos(320, 300),
+				pos(400, 124), pos(500, 175), pos(538 - 14, 241 - 14),
+				pos(474, 290), pos(320, 308),
 				pos(205, 291) };
 		situation.pot = 0;
 		situation.posts = new double[Situation.numSeats];
@@ -206,37 +206,52 @@ public class ScreenScraper {
 				ref);
 
 		String letter;
-
+		// robot.mouseMove(pos);
 		if (dollar != null) {
-			String text = "";
-			int position = start_offset; // 4
+			Color color_left = robot
+					.getPixelColor(pos.plus(dollar).plus(-1, 0));
+			Color color_right = robot
+					.getPixelColor(pos.plus(dollar).plus(1, 0));
+			Color color_left2 = robot.getPixelColor(pos.plus(dollar)
+					.plus(-1, 1));
+			Color color_right2 = robot.getPixelColor(pos.plus(dollar)
+					.plus(1, 1));
 
-			do {
-				// System.out.println("-");
-				// robot.mouseMove(pos.plus(dollar.plus(position, 0)));
+			if (!ref.equals(color_left)
+					&& !ref.equals(color_right)
+					&& ref.equals(color_left2)
+					&& ref.equals(color_right2)) {
 
-				letter = recognizeLetter(
-						pos.plus(dollar.plus(position, 0))
-						, ref,
-						indicators);
+				String text = "";
+				int position = start_offset; // 4
 
-				// System.out.println(letter);
+				do {
+					// System.out.println("-");
+					// robot.mouseMove(pos.plus(dollar.plus(position, 0)));
 
-				if (letter.equals("."))
-					position += dot_offset;// 3
-				else
-					position += digit_offset; // 6
-				text += letter;
-			} while (isNumber(letter) || ".".equals(letter));
+					letter = recognizeLetter(
+							pos.plus(dollar.plus(position, 0))
+							, ref,
+							indicators);
 
-			if (text.equals("")) {
-				return Optional.empty();
-			} else {
-				try {
-					return Optional.of(Double.parseDouble(text));
+					// System.out.println(letter);
 
-				} catch (NumberFormatException e) {
+					if (letter.equals("."))
+						position += dot_offset;// 3
+					else
+						position += digit_offset; // 6
+					text += letter;
+				} while (isNumber(letter) || ".".equals(letter));
+
+				if (text.equals("")) {
 					return Optional.empty();
+				} else {
+					try {
+						return Optional.of(Double.parseDouble(text));
+
+					} catch (NumberFormatException e) {
+						return Optional.empty();
+					}
 				}
 			}
 		}

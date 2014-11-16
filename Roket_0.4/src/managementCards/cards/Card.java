@@ -113,4 +113,8 @@ public final class Card implements Comparable<Card> {
 	public String shortString() {
 		return rank.shortString() + suit.shortString();
 	}
+
+	public static final Card Ad = new Card(Rank.Ace, Suit.DIAMONDS);
+	public static final Card _3s = new Card(Rank.Three, Suit.SPADES);
+	public static final Card _7c = new Card(Rank.Seven, Suit.CLUBS);
 }
