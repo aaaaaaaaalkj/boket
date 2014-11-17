@@ -139,11 +139,10 @@ public class PreflopProbabilities {
 				"preflop_probabilities.csv");
 
 		try (Scanner scanner = new Scanner(source)) {
-			scanner.useDelimiter("\n");
+			scanner.useDelimiter("\r\n");
 
 			while (scanner.hasNext()) {
 				String[] s = scanner.next().split(";");
-
 				String[] hand_code = s[0].split("");
 
 				Rank first = Rank.fromShortString(hand_code[0]);
@@ -157,15 +156,9 @@ public class PreflopProbabilities {
 				Suit secondSuit = suited ? Suit.HEARTS : Suit.CLUBS;
 
 				List<Double> probabilities = Arrays.asList(s)
-						.subList(1, s.length - 1)
+						.subList(1, s.length)
 						.stream()
 						.map(str -> Double.parseDouble(str)).collect(toList());
-
-				if (probabilities.size() != 9) {
-					System.out.println("---------");
-					System.out.println(probabilities);
-					System.out.println("---------");
-				}
 
 				PossiblePreflopHand hand = new PossiblePreflopHand(new Card(
 						first, firstSuit),
