@@ -12,6 +12,7 @@ public class PossiblePreflopHand {
 	private List<Double> score;
 
 	public PossiblePreflopHand(Card first, Card second, List<Double> result) {
+		assert result.size() == 9;
 		this.first = first;
 		this.second = second;
 		this.score = result;

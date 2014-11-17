@@ -163,8 +163,7 @@ public class PreflopProbabilities {
 						.map(str -> Double.parseDouble(str)).collect(toList());
 
 				PossiblePreflopHand hand = new PossiblePreflopHand(new Card(
-						first,
-						firstSuit),
+						first, firstSuit),
 						new Card(second, secondSuit), probabilities);
 				add(hand);
 
