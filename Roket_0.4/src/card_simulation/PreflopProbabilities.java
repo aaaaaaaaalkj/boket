@@ -138,7 +138,6 @@ public class PreflopProbabilities {
 		File source = new File(
 				"preflop_probabilities.csv");
 
-
 		try (Scanner scanner = new Scanner(source)) {
 			scanner.useDelimiter("\n");
 
@@ -161,6 +160,12 @@ public class PreflopProbabilities {
 						.subList(1, s.length - 1)
 						.stream()
 						.map(str -> Double.parseDouble(str)).collect(toList());
+
+				if (probabilities.size() != 9) {
+					System.out.println("---------");
+					System.out.println(Arrays.toString(s));
+					System.out.println("---------");
+				}
 
 				PossiblePreflopHand hand = new PossiblePreflopHand(new Card(
 						first, firstSuit),
