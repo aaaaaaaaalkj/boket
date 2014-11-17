@@ -163,7 +163,7 @@ public class PreflopProbabilities {
 
 				if (probabilities.size() != 9) {
 					System.out.println("---------");
-					System.out.println(Arrays.toString(s));
+					System.out.println(probabilities);
 					System.out.println("---------");
 				}
 
