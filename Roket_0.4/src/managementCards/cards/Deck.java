@@ -52,4 +52,8 @@ public class Deck {
 		return cards.toString();
 	}
 
+	public List<Card> toList() {
+		return Collections.unmodifiableList(cards);
+	}
+
 }

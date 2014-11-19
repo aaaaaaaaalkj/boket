@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.Random;
 
 import managementCards.cards.Card;
+import card_simulation.HandGenerator;
 
-public class FlopHands {
+public class FlopHands implements HandGenerator {
 	private static final Random r = new Random();
 	private final Map<Integer, List<FlopHand>> map;
 
@@ -73,5 +74,10 @@ public class FlopHands {
 		int index = (int) Math.floor(Math.random() * list.size());
 
 		return list.get(index).getCards();
+	}
+
+	@Override
+	public List<Card> getHand(int numPlayers, double contribution) {
+		return getHand(contribution);
 	}
 }

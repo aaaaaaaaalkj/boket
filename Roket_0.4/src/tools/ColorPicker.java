@@ -14,7 +14,6 @@ import java.util.List;
 
 import pot_odds_strategy.PotOddsDecision;
 import pot_odds_strategy.PotOddsStrategy;
-import card_simulation.PreflopProbabilities;
 
 public class ColorPicker {
 	private static Pos logo;
@@ -54,10 +53,8 @@ public class ColorPicker {
 		//
 		// System.out.println(d2 + " : " + (v));
 		// }
-		System.out.println("start");
-		new PreflopProbabilities();
 
-		System.exit(1);
+
 
 		ScreenScraper scraper = new ScreenScraper();
 		Raw_Situation raw = scraper.getSituation();

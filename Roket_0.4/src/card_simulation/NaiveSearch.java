@@ -3,6 +3,7 @@ package card_simulation;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
 import managementCards.all_cathegories.AllResults;
@@ -12,7 +13,7 @@ import managementCards.cards.Suit;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.ResultImpl;
 
-public class NaiveSearch {
+public class NaiveSearch implements HandGenerator {
 	List<Card> myHand;
 	List<Card> community;
 	List<Card> deck;
@@ -181,5 +182,24 @@ public class NaiveSearch {
 
 	public int size() {
 		return hands.size();
+	}
+
+	@Override
+	public List<Card> getHand(int numPlayers, double contribution) {
+		Random r = new Random();
+
+		double randNumber = (r.nextGaussian() * .06)
+				+ contribution * 3;
+
+		if (randNumber > 1) {
+			randNumber = 1 - Math.abs(randNumber) % 1;
+		} else {
+			randNumber = Math.abs(randNumber) % 1;
+		}
+
+		int randIndex = (int) Math.floor(randNumber
+				* size());
+
+		return getPossibleHand(randIndex).getHand();
 	}
 }

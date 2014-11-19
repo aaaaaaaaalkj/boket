@@ -45,38 +45,9 @@ public class PotOddsStart {
 		}
 	}
 
-	private static void handleSituation(ScreenScraper scraper,
-			boolean myTurn) {
-		Raw_Situation raw = scraper.getSituation();
-		saveImage(scraper.getScreenshot());
-
-		for (double d : raw.getPosts()) {
-			if (d > 5) { // too big post. bug?
-				try {
-					Thread.sleep(600);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		PotOddsStrategy strategy = new PotOddsStrategy(raw);
-		PotOddsDecision d = strategy.decide();
-
-		if (d.getDec() == DecisionType.FOLD || myTurn) {
-
-			System.out.println("---------------------");
-			System.out.println(strategy);
-			System.out.println(raw);
-			System.out.println(d);
-			decision2ouput(d, scraper.getLogo(), raw);
-		} else {
-			System.out.println("wait for my turn (" + d + ")");
-		}
-	}
-
 	public static void main(String[] _) throws InterruptedException,
 			AWTException {
+		System.out.println("main start");
 		while (true) {
 			ScreenScraper scraper = new ScreenScraper();
 
@@ -91,8 +62,9 @@ public class PotOddsStart {
 			if (raw.isItsMyTurn() && raw.getHand() != null) {
 				handleSituation(scraper, true);
 			} else {
+				System.out.println(raw);
 				try {
-					Thread.sleep(100);
+					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -110,10 +82,30 @@ public class PotOddsStart {
 
 	}
 
+	private static void handleSituation(ScreenScraper scraper,
+			boolean myTurn) {
+		Raw_Situation raw = scraper.getSituation();
+		saveImage(scraper.getScreenshot());
+
+		PotOddsStrategy strategy = new PotOddsStrategy(raw);
+		PotOddsDecision d = strategy.decide();
+
+		if (d.getDec() == DecisionType.FOLD || myTurn) {
+
+			System.out.println("---------------------");
+			System.out.println(strategy);
+			System.out.println(raw);
+			System.out.println(d);
+			decision2ouput(d, scraper.getLogo(), raw);
+		} else {
+			System.out.println("wait for my turn (" + d + ")");
+		}
+	}
+
 	public static void decision2ouput(PotOddsDecision d, Pos logo,
 			Raw_Situation raw) {
 		MyOutput out = new MyOutput();
-
+		System.out.println("try click");
 		switch (d.getDec()) {
 		case ALL_IN: // should not happen
 		case CALL:

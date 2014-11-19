@@ -1,5 +1,7 @@
 package card_simulation;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,9 +22,9 @@ public class CardSimulation {
 	private final int numPlayers;
 	private final Random rand = new Random();
 	// private final List<List<PossibleHand>> hands;
-	private static final PreflopProbabilities p = new PreflopProbabilities();
+	private static final HandGenerator p = new PreflopProbabilities();
 	List<Double> activeContributors;
-	private NaiveSearch suche;
+	private HandGenerator suche;
 
 	public CardSimulation(int count, List<Double> activeContributors,
 			Hand hand,
@@ -62,12 +64,6 @@ public class CardSimulation {
 		}
 	}
 
-	private double preflopFaktor(int countPlayers) {
-		double res = 2. - (double) countPlayers / 10;
-
-		return res;
-	}
-
 	public double run() {
 		int numExperiments = 6000;
 		int won = 0;
@@ -103,17 +99,28 @@ public class CardSimulation {
 
 		if (community.size() == 0) {
 			for (int player = 1; player < numPlayers; player++) {
-				PossiblePreflopHand hand = p.get(numPlayers,
-						activeContributors.get(player - 1));
+				List<Card> hand = p.getHand(numPlayers,
+						activeContributors.get(player - 1).doubleValue());
 				System.out.println((player - 1) + ": " + hand);
 			}
 		}
+		double faktor = 1;
 
-		for (int i = 0; i < numExperiments; i++) {
-			won += experiment(flopHands);
+		HandGenerator handGen = null;
+		if (community.size() == 0) {
+			faktor = 1;
+			handGen = p;
+		} else if (community.size() == 3) {
+			faktor = 2;
+			handGen = flopHands;
+		} else if (community.size() >= 4) {
+			faktor = 3;
+			handGen = suche;
 		}
-		double res = ((double) Math
-				.round(((double) won) / numExperiments * 100)) / 100;
+		for (int i = 0; i < numExperiments; i++) {
+			won += experiment(handGen, faktor, prepairDeck());
+		}
+		double res = round(((double) won) / numExperiments);
 
 		l = System.currentTimeMillis() - l;
 		System.out.println("card simulations took " + l + " millis");
@@ -121,22 +128,45 @@ public class CardSimulation {
 		return res;
 	}
 
-	private Deck prepairDeck() {
+	private double round(double d) {
+		return ((double) Math.round(d * 100) / 100);
+	}
+
+	private List<Card> prepairDeck() {
 		Deck deck = Deck.freshDeck(rand);
 		deck.remove(hand.get(0));
 		deck.remove(hand.get(1));
 		community.forEach(card -> deck.remove(card));
-		return deck;
-
+		return deck.toList();
 	}
 
-	public int experiment(FlopHands flopHands) {
-		Deck deck = prepairDeck();
+	private List<Card> pop(List<Card> deck, int count) {
+		List<Integer> indexe = new ArrayList<>();
 
-		List<Card> community_cards = new ArrayList<>();
-		community_cards.addAll(community);
-		while (community_cards.size() < 5) {
-			community_cards.add(deck.pop());
+		while (indexe.size() < count) {
+			int i = (int) Math.floor(Math.random() * deck.size());
+			do {
+				i++;
+				if (i >= deck.size()) {
+					i = 0;
+				}
+			} while (indexe.contains(i));
+			indexe.add(i);
+		}
+		return indexe.stream().map(deck::get).collect(toList());
+	}
+
+	public int experiment(HandGenerator handGen, double faktor, List<Card> deck) {
+
+		List<Card> community_cards;
+
+		if (community.size() >= 5) {
+			community_cards = community;
+		} else {
+			community_cards = new ArrayList<>();
+			community_cards.addAll(community);
+
+			community_cards.addAll(pop(deck, 5 - community.size()));
 		}
 
 		ResultImpl myResult = new Cat_Rec(hand, community_cards).check();
@@ -145,41 +175,9 @@ public class CardSimulation {
 
 		for (int player = 1; player < numPlayers; player++) {
 			List<Card> hisHand;
-			if (community.size() == 0) {
-				hisHand = p.get(
-						numPlayers,
-						activeContributors.get(player - 1)
-						).getHand();
-				// System.out.println(hisHand);
-			} else if (community.size() == 3) {
 
-				hisHand = flopHands.getHand(
-						2 * activeContributors.get(player - 1)
-						);
-			} else {
-				Random r = new Random();
-
-				double randNumber = (r.nextGaussian() * .06)
-						+ activeContributors.get(player - 1) * 3;
-
-				if (randNumber > 1) {
-					randNumber = 1 - Math.abs(randNumber) % 1;
-				} else {
-					randNumber = Math.abs(randNumber) % 1;
-				}
-
-				int randIndex = (int) Math.floor(randNumber
-						* suche.size());
-
-				hisHand = suche.getPossibleHand(randIndex).getHand();
-
-				// if (player == 1)
-				// System.out.println(activeContributors.get(player - 1) * 3
-				// + " "
-				// + randNumber);
-
-				// hisHand = hands.get(player - 1).get(randIndex).getHand();
-			}
+			hisHand = handGen.getHand(numPlayers,
+					activeContributors.get(player - 1) * faktor);
 
 			ResultImpl result = new Cat_Rec(hisHand, community_cards).check();
 			if (result.compareTo(myResult) == 1) {

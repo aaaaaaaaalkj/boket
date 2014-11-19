@@ -16,7 +16,7 @@ import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 
-public class PreflopProbabilities {
+public class PreflopProbabilities implements HandGenerator {
 	// List<PossiblePreflopHand> hands;
 	Map<Integer, Map<Integer, List<PossiblePreflopHand>>> map;
 
@@ -169,6 +169,11 @@ public class PreflopProbabilities {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<Card> getHand(int numPlayers, double contribution) {
+		return get(numPlayers, contribution).getHand();
 	}
 
 }
