@@ -8,6 +8,8 @@ import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import tools.Tools;
+
 public enum Rank {
 	Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace;
 	private final static String ALL = "23456789TJQKA";
@@ -20,7 +22,7 @@ public enum Rank {
 	@SuppressWarnings("null")
 	public static final List<@NonNull Rank> VALUES = Collections
 			.unmodifiableList(Arrays
-			.asList(values()));
+					.asList(values()));
 
 	public static List<Rank> valuesReversed() {
 		List<Rank> res = new ArrayList<Rank>(VALUES);
@@ -62,7 +64,7 @@ public enum Rank {
 	}
 
 	public static Rank fromShortString(String str) {
-		if (str == null || str.length() != 1 || !ALL.contains(str)) {
+		if (str.length() != 1 || !ALL.contains(str)) {
 			throw new IllegalArgumentException(str
 					+ " is not a short String for a CardNum!");
 		}
@@ -70,7 +72,7 @@ public enum Rank {
 	}
 
 	public String shortString() {
-		return ALL.substring(this.ordinal(), this.ordinal() + 1);
+		return Tools.substring(ALL, this.ordinal(), this.ordinal() + 1);
 	}
 
 	public void print() {

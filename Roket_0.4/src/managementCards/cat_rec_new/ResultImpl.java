@@ -1,11 +1,13 @@
 package managementCards.cat_rec_new;
 
-import java.util.Arrays;
 import java.util.List;
 
 import managementCards.cards.Rank;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+
+import tools.Tools;
 
 public final class ResultImpl implements IResult {
 	private final Cathegory cathegory;
@@ -16,9 +18,9 @@ public final class ResultImpl implements IResult {
 		this.tieBreaker = tieBreaker;
 	}
 
-	public ResultImpl(Cathegory cat, Rank... cardNums) {
+	public ResultImpl(Cathegory cat, @NonNull Rank... cardNums) {
 		this.cathegory = cat;
-		this.tieBreaker = Arrays.asList(cardNums);
+		this.tieBreaker = Tools.asList(cardNums);
 	}
 
 	@Override
@@ -31,9 +33,9 @@ public final class ResultImpl implements IResult {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((cathegory == null) ? 0 : cathegory.hashCode());
+				+ (cathegory.hashCode());
 		result = prime * result
-				+ ((tieBreaker == null) ? 0 : tieBreaker.hashCode());
+				+ (tieBreaker.hashCode());
 		return result;
 	}
 
@@ -48,10 +50,7 @@ public final class ResultImpl implements IResult {
 		ResultImpl other = (ResultImpl) obj;
 		if (cathegory != other.cathegory)
 			return false;
-		if (tieBreaker == null) {
-			if (other.tieBreaker != null)
-				return false;
-		} else if (!tieBreaker.equals(other.tieBreaker))
+		if (!tieBreaker.equals(other.tieBreaker))
 			return false;
 		return true;
 	}
@@ -93,6 +92,6 @@ public final class ResultImpl implements IResult {
 	 */
 	public static ResultImpl bottom() {
 		return new ResultImpl(Cathegory.HIGH_CARD,
-				Arrays.asList(Rank.Two, Rank.Two, Rank.Two, Rank.Two, Rank.Two));
+				Tools.asList(Rank.Two, Rank.Two, Rank.Two, Rank.Two, Rank.Two));
 	}
 }

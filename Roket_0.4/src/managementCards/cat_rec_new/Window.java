@@ -14,12 +14,15 @@ import static managementCards.cards.Rank.Ten;
 import static managementCards.cards.Rank.Three;
 import static managementCards.cards.Rank.Two;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import managementCards.cards.Rank;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import tools.Tools;
 
 public enum Window {
 	Five_High(Five, Four, Three, Two, Ace),
@@ -36,6 +39,14 @@ public enum Window {
 	private final List<Rank> list;
 
 	private static final List<Window> VALUES_DESC;
+	static {
+		@SuppressWarnings("null")
+		@NonNull
+		Window[] values = values();
+		List<Window> desc = Tools.asList(values);
+		Collections.reverse(desc);
+		VALUES_DESC = Tools.unmodifiableList(desc);
+	}
 
 	public static List<Window> getDescValues() {
 		return VALUES_DESC;
@@ -49,14 +60,9 @@ public enum Window {
 		return list.contains(rank) && list.contains(rank2);
 	}
 
-	static {
-		List<Window> desc = Arrays.asList(values());
-		Collections.reverse(desc);
-		VALUES_DESC = Collections.unmodifiableList(desc);
-	}
-
+	@SuppressWarnings("null")
 	Window(Rank... ranks) {
-		list = Collections.unmodifiableList(Arrays.asList(ranks));
+		list = Tools.unmodifiableList(Tools.asList(ranks));
 	}
 
 	public List<Rank> getRanks() {

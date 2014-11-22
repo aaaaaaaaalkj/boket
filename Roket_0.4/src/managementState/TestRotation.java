@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 
 import common.Round;
@@ -324,17 +325,21 @@ public class TestRotation {
 		IGameState state;
 
 		while (!(state = m.step()).gameEnded()) {
+			@SuppressWarnings("null")
+			@NonNull
+			Integer current = state.getCurrentPlayer();
+
 			// its never the turn of a folded player
-			assertFalse(folded.contains(state.getCurrentPlayer()));
+			assertFalse(folded.contains(current));
 			// its never the turn of an allin player
-			assertFalse(allin.contains(state.getCurrentPlayer()));
+			assertFalse(allin.contains(current));
 
 			if (Math.random() < .2) {
 				m.fold();
-				folded.add(state.getCurrentPlayer());
+				folded.add(current);
 			} else if (Math.random() < .2) {
 				m.allin();
-				allin.add(state.getCurrentPlayer());
+				allin.add(current);
 
 				if (Math.random() < .2) {
 					m.raised();

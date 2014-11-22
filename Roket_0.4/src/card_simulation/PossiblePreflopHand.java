@@ -1,10 +1,10 @@
 package card_simulation;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 import managementCards.cards.Card;
+import tools.Tools;
 
 public class PossiblePreflopHand {
 	private final Card first;
@@ -23,7 +23,7 @@ public class PossiblePreflopHand {
 	}
 
 	public List<Card> getHand() {
-		return Arrays.asList(first, second);
+		return Tools.asList(first, second);
 	}
 
 	@Override

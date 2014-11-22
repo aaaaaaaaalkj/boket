@@ -2,6 +2,7 @@ package strategy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
 
 import managementCards.CardManagement;
 import managementCards.cards.Card;
@@ -10,6 +11,9 @@ import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.Cathegory;
 import managementPaymentsNew.IPayManagement2;
 import managementState.IGameState;
+
+import org.eclipse.jdt.annotation.NonNull;
+
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -59,14 +63,16 @@ public final class SituationImpl implements ISituation {
 
 		cathegory = catRec.check().getCathegory();
 
-		List<Card> hand = table.getHand(currentPlayer);
+		List<@NonNull Card> hand = table.getHand(currentPlayer);
 
-		connector = ConnectorType.fromInt(
-				hand.stream()
-						.map(Card::getRank)
-						.mapToInt(Rank::ordinal)
-						.reduce((x, y) -> Math.abs(x - y))
-				);
+		@SuppressWarnings("null")
+		@NonNull
+		OptionalInt optional = hand.stream()
+				.map(Card::getRank)
+				.mapToInt(Rank::ordinal)
+				.reduce((x, y) -> Math.abs(x - y));
+
+		connector = ConnectorType.fromInt(optional);
 		long count = hand.stream()
 				.map(Card::getSuit)
 				.distinct()

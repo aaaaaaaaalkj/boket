@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import managementCards.cards.Card;
@@ -52,6 +53,7 @@ public final class Cat_Rec implements ICatRec {
 	List<Card> all;
 	List<Card> community;
 
+	@SuppressWarnings("null")
 	public Cat_Rec(Card first, Card second, List<Card> community_cards) {
 		this(Arrays.asList(first, second), community_cards);
 	}
@@ -73,6 +75,7 @@ public final class Cat_Rec implements ICatRec {
 
 	public ResultImpl check() {
 		long l = System.currentTimeMillis();
+		@SuppressWarnings("null")
 		List<Rank> ranks = all.stream()
 				.map(Card::getRank)
 				.collect(toList());
@@ -89,8 +92,10 @@ public final class Cat_Rec implements ICatRec {
 		return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
 	}
 
+	@SuppressWarnings("null")
 	private ResultImpl getPairBasedResult(List<Rank> ranks) {
-		List<List<Rank>> choosenCards;
+		@NonNull
+		List<@NonNull List<@NonNull Rank>> choosenCards;
 		if (has(ranks, FOUR)) {
 			choosenCards = Arrays
 					.asList(extract(ranks, FOUR), getTop(ranks, 1));
@@ -141,11 +146,14 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	private List<Rank> extract(List<Rank> ranks, Freq f) {
+		@SuppressWarnings("null")
 		List<Rank> list = Rank.VALUES.stream()
 				.filter(c -> Collections.frequency(ranks, c) == f.value)
 				.collect(Collectors.toList());
 		Collections.sort(list); // ascending
 		Rank rank = list.get(list.size() - 1); // get last elem
+		@SuppressWarnings("null")
+		@NonNull
 		List<Rank> res = Collections.nCopies(f.value, rank);
 		ranks.removeAll(res);
 		return res;
@@ -163,6 +171,7 @@ public final class Cat_Rec implements ICatRec {
 
 	// +++++++++++++++++++++++++
 	private ResultImpl result(Cathegory cat, List<List<Rank>> tieBreakers) {
+		@SuppressWarnings("null")
 		List<Rank> tie = tieBreakers.stream()
 				.flatMap(Collection::stream)
 				.limit(5)
@@ -172,6 +181,7 @@ public final class Cat_Rec implements ICatRec {
 
 	private ResultImpl getFlushOrStraightResult() {
 
+		@SuppressWarnings("null")
 		Map<Suit, List<Rank>> map = all
 				.stream()
 				.collect(
@@ -184,7 +194,7 @@ public final class Cat_Rec implements ICatRec {
 		// StraightFlush
 		for (Suit c : Suit.VALUES) {
 			for (Window w : Window.getDescValues()) {
-				if (map.get(c) != null && w.applies(map.get(c))) {
+				if (map.containsKey(c) && w.applies(map.get(c))) {
 					return new ResultImpl(
 							Cathegory.STRAIGHT_FLUSH,
 							w.getRanks());
@@ -193,7 +203,7 @@ public final class Cat_Rec implements ICatRec {
 		}
 		// Flush
 		for (Suit c : Suit.values()) {
-			if (map.get(c) != null && map.get(c).size() >= 5) {
+			if (map.containsKey(c) && map.get(c).size() >= 5) {
 				List<Rank> tieBreakers = new ArrayList<>(map.get(c)
 						.subList(0, 5));
 				// Collections.sort(tieBreakers);
@@ -213,6 +223,8 @@ public final class Cat_Rec implements ICatRec {
 		}
 		// Straight
 
+		@SuppressWarnings("null")
+		@NonNull
 		List<Rank> ranks2 = all.stream()
 				.map(Card::getRank)
 				.collect(toList());
@@ -250,6 +262,7 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	private boolean checkGutshot() {
+		@SuppressWarnings("null")
 		Set<Rank> ranks = all.stream()
 				.map(Card::getRank)
 				.collect(toSet());
@@ -327,6 +340,7 @@ public final class Cat_Rec implements ICatRec {
 		return res;
 	}
 
+	@SuppressWarnings("null")
 	private boolean checkFlushDraw() {
 		return all.stream()
 				.collect(groupingBy(Card::getSuit, counting()))
@@ -337,6 +351,7 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	public PairBasedDanger checkPairBasedDanger() {
+		@SuppressWarnings("null")
 		List<Rank> ranks = community.stream()
 				.map(Card::getRank)
 				.collect(toList());
@@ -354,18 +369,23 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	public StraightDanger checkStraightDanger() {
+
+		@SuppressWarnings("null")
+		Function<Window, Long> countMatchesInWindow = window -> community
+				.stream()
+				.map(Card::getRank)
+				.filter(window::contains)
+				.distinct()
+				.count();
+
+		@SuppressWarnings("null")
 		Map<Long, List<Long>> map2 = Window
 				.getDescValues()
 				.stream()
-				.map(
-						window -> community.stream()
-								.map(Card::getRank)
-								.filter(window::contains)
-								.distinct()
-								.count()
-				)
+				.map(countMatchesInWindow)
 				.collect(groupingBy(x -> x));
 
+		@SuppressWarnings("null")
 		Map<Long, Integer> map = map2
 				.entrySet()
 				.stream()
@@ -373,10 +393,10 @@ public final class Cat_Rec implements ICatRec {
 						toMap(entry -> entry.getKey(), entry -> entry
 								.getValue().size()));
 
-		int num5 = map.get(5l) != null ? map.get(5l) : 0;
-		int num4 = map.get(4l) != null ? map.get(4l) : 0;
-		int num3 = map.get(3l) != null ? map.get(3l) : 0;
-		int num2 = map.get(2l) != null ? map.get(2l) : 0;
+		int num5 = map.containsKey(5l) ? map.get(5l) : 0;
+		int num4 = map.containsKey(4l) ? map.get(4l) : 0;
+		int num3 = map.containsKey(3l) ? map.get(3l) : 0;
+		int num2 = map.containsKey(2l) ? map.get(2l) : 0;
 
 		if (num5 > 0) {
 			return StraightDanger.CERTAIN_STRAIGHT;
@@ -404,17 +424,18 @@ public final class Cat_Rec implements ICatRec {
 		}
 	}
 
+	@SuppressWarnings("null")
 	public FlushDanger checkFlushDanger() {
 		if (community.isEmpty()) {
 			return FlushDanger.NONE;
 		}
+		Function<Suit, Long> countMatchesInSuit = suit -> community.stream()
+				.map(Card::getSuit)
+				.filter(suit::equals)
+				.count();
+
 		return Suit.VALUES.stream()
-				.map(
-						suit -> community.stream()
-								.map(Card::getSuit)
-								.filter(suit::equals)
-								.count()
-				)
+				.map(countMatchesInSuit)
 				.max(Comparator.naturalOrder())
 				.map(FlushDanger::fromLong)
 				.orElse(FlushDanger.NONE);

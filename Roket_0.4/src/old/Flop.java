@@ -7,6 +7,7 @@ import java.util.Set;
 import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
+import tools.Tools;
 
 public class Flop implements java.lang.Iterable<Card> {
 	public final Card first;
@@ -20,32 +21,29 @@ public class Flop implements java.lang.Iterable<Card> {
 	}
 
 	public static Flop newInstance(Card c1, Card c2, Card c3) {
-		if (null == c1 || null == c2 || null == c3)
-			throw new IllegalArgumentException(c1 + "_ " + c2 + "_ " + c3
-					+ "_ ");
 		return new Flop(c1, c2, c3);
 	}
 
 	public static Flop threeSuite(int f, int s, int t, Set<Card> deck) {
-		return threeSuite(Rank.values()[f - 2], Rank.values()[s - 2],
-				Rank.values()[t - 2], deck);
+		return threeSuite(Rank.VALUES.get(f - 2), Rank.VALUES.get(s - 2),
+				Rank.VALUES.get(t - 2), deck);
 	}
-
-
 
 	// for example: s == "[3c 9h 6c]"
 	public static Flop newInstance(String s) {
 		int mid1 = s.indexOf(" ");
 		int mid2 = s.lastIndexOf(" ");
-		Card c1 = Card.newInstance(s.substring(s.indexOf("[") + 1, mid1));
-		Card c2 = Card.newInstance(s.substring(mid1 + 1, mid2));
-		Card c3 = Card.newInstance(s.substring(mid2 + 1, s.indexOf("]")));
+		Card c1 = Card
+				.newInstance(Tools.substring(s, s.indexOf("[") + 1, mid1));
+		Card c2 = Card.newInstance(Tools.substring(s, mid1 + 1, mid2));
+		Card c3 = Card
+				.newInstance(Tools.substring(s, mid2 + 1, s.indexOf("]")));
 		return new Flop(c1, c2, c3);
 	}
 
 	public static Flop threeSuite(Rank f, Rank s, Rank t,
 			Set<Card> deck) {
-		for (Suit c : Suit.values()) {
+		for (Suit c : Suit.VALUES) {
 			Card c1, c2, c3;
 			c1 = Card.newInstance(f, c);
 			c2 = Card.newInstance(s, c);

@@ -15,10 +15,10 @@ import common.Round;
 
 public class CardManagement implements ICardManagement {
 	private final Deck deck;
-	private final @NonNull List<@NonNull Card> communityCards;
+	private final List<@NonNull Card> communityCards;
 	private final List<@NonNull List<@NonNull Card>> hands;
 
-	public CardManagement(int countPlayers, @NonNull Random rand) {
+	public CardManagement(int countPlayers, Random rand) {
 		this.deck = Deck.freshDeck(rand);
 		this.communityCards = new ArrayList<>();
 		this.hands = new ArrayList<>();
@@ -56,7 +56,7 @@ public class CardManagement implements ICardManagement {
 		return communityCards;
 	}
 
-	public @NonNull List<@NonNull Card> getHand(int player) {
+	public List<@NonNull Card> getHand(int player) {
 		return hands.get(player);
 	}
 

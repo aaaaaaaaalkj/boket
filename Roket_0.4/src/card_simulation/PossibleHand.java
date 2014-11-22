@@ -1,9 +1,9 @@
 package card_simulation;
 
-import java.util.Arrays;
 import java.util.List;
 
 import managementCards.cards.Card;
+import tools.Tools;
 
 public class PossibleHand {
 	private final Card first;
@@ -21,7 +21,7 @@ public class PossibleHand {
 	}
 
 	public List<Card> getHand() {
-		return Arrays.asList(first, second);
+		return Tools.asList(first, second);
 	}
 
 	@Override

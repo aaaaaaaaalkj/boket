@@ -12,6 +12,7 @@ import strategy.conditions.ICondition;
 public enum Round implements ICondition {
 	PREFLOP, FLOP, TURN, RIVER, SHOWDOWN, QUIET_END;
 
+	@SuppressWarnings("null")
 	public static final List<Round> VALUES = Collections
 			.unmodifiableList(Arrays.asList(values()));
 

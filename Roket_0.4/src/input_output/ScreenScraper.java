@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import tools.Pos;
+import tools.Tools;
 
 public class ScreenScraper {
 	private static final int NUM_SEATS = 9;
@@ -52,10 +54,10 @@ public class ScreenScraper {
 	}
 
 	private void stackRecognition(Pos logo) {
-		Pos[] positions = { pos(20, 306), pos(10, 122), pos(155, 64),
+		Pos @NonNull [] positions = { pos(20, 306), pos(10, 122), pos(155, 64),
 				pos(565, 65), pos(700, 121), pos(700, 306), pos(480, 370),
 				pos(350, 446), pos(225, 370) };
-		situation.stacks = new double[NUM_SEATS];
+		situation.stacks = new double @NonNull [NUM_SEATS];
 		for (int i = 0; i < NUM_SEATS; i++) {//
 
 			List<Pos> indicators = new ArrayList<>();
@@ -69,7 +71,11 @@ public class ScreenScraper {
 			indicators.add(pos(0, 9));
 
 			Color ref = new Color(192, 192, 192); // grey
-			Optional<Double> opt = ocr_real_money(logo.plus(positions[i]), ref,
+
+			@SuppressWarnings("null")
+			@NonNull
+			Pos p = positions[i];
+			Optional<Double> opt = ocr_real_money(logo.plus(p), ref,
 					4, 7, 4, indicators);
 
 			if (opt.isPresent()) {
@@ -77,7 +83,7 @@ public class ScreenScraper {
 			} else {
 				// Pos p = new Pos(40, 314).plus(logo);
 				ref = new Color(32, 32, 32); // black
-				opt = ocr_real_money(logo.plus(positions[i]), ref,
+				opt = ocr_real_money(logo.plus(p), ref,
 						4, 7, 4, indicators);
 				situation.stacks[i] = opt.orElse(0.);
 			}
@@ -100,7 +106,7 @@ public class ScreenScraper {
 				pos(528, 98), pos(590, 126), pos(664, 216), pos(580, 289),
 				pos(412, 324), pos(165, 288) };
 
-		situation.activeStatus = new boolean[NUM_SEATS];
+		situation.activeStatus = new boolean @NonNull [NUM_SEATS];
 
 		for (int i = 0; i < NUM_SEATS; i++) {
 			int dif = robot.maxColor(positions[i].plus(logo), pos(25, 30));
@@ -164,9 +170,12 @@ public class ScreenScraper {
 				pos(474, 290), pos(320, 308),
 				pos(205, 291) };
 		situation.pot = 0;
-		situation.posts = new double[NUM_SEATS];
+		situation.posts = new double @NonNull [NUM_SEATS];
 		for (int i = 0; i < NUM_SEATS; i++) {
-			situation.posts[i] = ocr(logo, positions[i]).orElse(0.);
+			@SuppressWarnings("null")
+			@NonNull
+			Pos p = positions[i];
+			situation.posts[i] = ocr(logo, p).orElse(0.);
 			situation.pot += situation.posts[i];
 		}
 		situation.pot += ocr(logo, (pos(308 - 14, 260 - 14))).orElse(0.);
@@ -247,18 +256,18 @@ public class ScreenScraper {
 				} while (isNumber(letter) || ".".equals(letter));
 
 				if (text.equals("")) {
-					return Optional.empty();
+					return Tools.empty();
 				} else {
 					try {
-						return Optional.of(Double.parseDouble(text));
+						return Tools.of(Tools.parseDouble2(text));
 
 					} catch (NumberFormatException e) {
-						return Optional.empty();
+						return Tools.empty();
 					}
 				}
 			}
 		}
-		return Optional.empty();
+		return Tools.empty();
 	}
 
 	private @Nullable Integer recognizeFirstLetter(Pos logo, Pos pos,
@@ -275,7 +284,7 @@ public class ScreenScraper {
 		return null;
 	}
 
-	private double ocr_play_money(Pos logo, Pos pos) {
+	private Double ocr_play_money(Pos logo, Pos pos) {
 		// r=255,g=246,b=207
 		Color ref = new Color(16774863);
 
@@ -319,12 +328,15 @@ public class ScreenScraper {
 
 			} while (isNumber(letter) || ".".equals(letter));
 			try {
-				return Double.parseDouble(text);
+				@SuppressWarnings("null")
+				@NonNull
+				Double d = Double.parseDouble(text);
+				return d;
 			} catch (NumberFormatException e) {
-				return 0;
+				return 0.;
 			}
 		}
-		return 0;
+		return 0.;
 	}
 
 	public String recognizeLetter(Pos start, Color ref_color,

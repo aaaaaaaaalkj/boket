@@ -1,9 +1,6 @@
 package card_simulation;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +13,7 @@ import old.Hand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import tools.Tools;
 import card_simulation.flopSimulation.Flop;
 import card_simulation.flopSimulation.FlopHand;
 import card_simulation.flopSimulation.FlopHands;
@@ -35,7 +33,7 @@ public class CardSimulation {
 			List<Card> community) {
 		this.activeContributors = activeContributors;
 		this.numPlayers = count;
-		this.hand = Arrays.asList(hand.first, hand.second);
+		this.hand = Tools.asList(hand.first, hand.second);
 		this.community = new ArrayList<>();
 		this.community.addAll(community);
 		// this.hands = new ArrayList<>();
@@ -50,21 +48,20 @@ public class CardSimulation {
 
 			System.out.println("NativeSearch took " + l + " millis");
 
-			for (double d : activeContributors) {
-
-				double min = Math.max(0, d - .05);
-				double max = Math.min(1, d + .8);
-
-				// List<PossibleHand> list = suche.getPossibleHands(min, max,
-				// count - 1);
-				// this.hands.add(list);
-
-				// System.out.println(((double) Math.round(d * 100) / 100)
-				// + " -> "
-				// + list.get(0) + " "
-				// + list.get(list.size() / 2)
-				// + " " + list.get(list.size() - 1));
-			}
+			// for (double d : activeContributors) {
+			// // double min = Math.max(0, d - .05);
+			// // double max = Math.min(1, d + .8);
+			//
+			// // List<PossibleHand> list = suche.getPossibleHands(min, max,
+			// // count - 1);
+			// // this.hands.add(list);
+			//
+			// // System.out.println(((double) Math.round(d * 100) / 100)
+			// // + " -> "
+			// // + list.get(0) + " "
+			// // + list.get(list.size() / 2)
+			// // + " " + list.get(list.size() - 1));
+			// }
 		}
 	}
 
@@ -174,7 +171,7 @@ public class CardSimulation {
 			} while (indexe.contains(i));
 			indexe.add(i);
 		}
-		return indexe.stream().map(deck::get).collect(toList());
+		return indexe.stream().map(deck::get).collect(Tools.toList());
 	}
 
 	public int experiment(HandGenerator handGen, double faktor, List<Card> deck) {

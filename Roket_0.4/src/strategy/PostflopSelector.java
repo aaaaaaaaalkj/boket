@@ -62,19 +62,19 @@ public class PostflopSelector implements ISelector {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((combo == null) ? 0 : combo.hashCode());
+		result = prime * result + (combo.hashCode());
 		result = prime * result
-				+ ((contribution == null) ? 0 : contribution.hashCode());
-		result = prime * result + ((draw == null) ? 0 : draw.hashCode());
+				+ (contribution.hashCode());
+		result = prime * result + (draw.hashCode());
 		result = prime * result
-				+ ((flushDanger == null) ? 0 : flushDanger.hashCode());
+				+ (flushDanger.hashCode());
 		result = prime * result
-				+ ((numActive == null) ? 0 : numActive.hashCode());
+				+ (numActive.hashCode());
 		result = prime * result
-				+ ((pairBasedDanger == null) ? 0 : pairBasedDanger.hashCode());
-		result = prime * result + ((pot == null) ? 0 : pot.hashCode());
+				+ (pairBasedDanger.hashCode());
+		result = prime * result + (pot.hashCode());
 		result = prime * result
-				+ ((straightDanger == null) ? 0 : straightDanger.hashCode());
+				+ (straightDanger.hashCode());
 		return result;
 	}
 

@@ -1,5 +1,11 @@
 package strategy.conditions.postflop;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
+
 import strategy.ISituation;
 import strategy.conditions.ICondition;
 
@@ -9,10 +15,12 @@ public enum PairBasedDanger implements ICondition {
 	HIGH, // two pairs or three of a kind in community-cards
 	CERTAIN_COMBO; // full-house of four-of-a-kind in communit-cards
 
-	public static final PairBasedDanger[] VALUES = values();
+	@SuppressWarnings("null")
+	public static final List<PairBasedDanger> VALUES = Collections
+			.unmodifiableList(Arrays.asList(values()));
 
 	public static int getCount() {
-		return VALUES.length;
+		return VALUES.size();
 	}
 
 	@Override
@@ -25,14 +33,17 @@ public enum PairBasedDanger implements ICondition {
 	}
 
 	public static PairBasedDanger fromLong(long l) {
-		return VALUES[Math.min((int) l, VALUES.length - 1)];
+		return VALUES.get(Math.min((int) l, getCount() - 1));
 	}
 
 	public String toString() {
+		@SuppressWarnings("null")
+		@NonNull
+		String res = super.toString();
 		if (this == NONE) {
 			return "NO";
 		} else {
-			return super.toString();
+			return res;
 		}
 	}
 

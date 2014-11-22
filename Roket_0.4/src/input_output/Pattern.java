@@ -2,6 +2,7 @@ package input_output;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 public class Pattern {
@@ -9,13 +10,13 @@ public class Pattern {
 	private boolean[] value;
 
 	public Pattern(int num) {
-		value = new boolean[num];
+		value = new boolean @NonNull [num];
 		for (int i = 0; i < value.length; i++)
 			value[i] = false;
 	}
 
 	public Pattern(int... k) {
-		value = new boolean[k.length];
+		value = new boolean @NonNull [k.length];
 		for (int i = 0; i < k.length; i++)
 			value[i] = k[i] == 1;
 	}
@@ -40,6 +41,7 @@ public class Pattern {
 		return true;
 	}
 
+	@SuppressWarnings("null")
 	public String toString() {
 		return Arrays.toString(value);
 	}

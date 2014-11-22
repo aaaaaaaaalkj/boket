@@ -54,26 +54,27 @@ public class FlopHands implements HandGenerator {
 
 		int procent = (int) Math.round(randNumber * 100);
 
-		List<FlopHand> list = map.get(procent);
-
-		if (null == list) {
+		if (!map.containsKey(procent)) {
 			throw new IllegalStateException("list is null: " + procent + " "
 					+ contribution);
-		}
-
-		if (procent < 50) {
-			while (list.isEmpty()) {
-				list = map.get(procent++);
-			}
 		} else {
-			while (list.isEmpty()) {
-				list = map.get(procent--);
+
+			List<FlopHand> list = map.get(procent);
+
+			if (procent < 50) {
+				while (list.isEmpty()) {
+					list = map.get(procent++);
+				}
+			} else {
+				while (list.isEmpty()) {
+					list = map.get(procent--);
+				}
 			}
+
+			int index = (int) Math.floor(Math.random() * list.size());
+
+			return list.get(index).getCards();
 		}
-
-		int index = (int) Math.floor(Math.random() * list.size());
-
-		return list.get(index).getCards();
 	}
 
 	@Override

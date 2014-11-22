@@ -1,5 +1,7 @@
 package strategy.conditions.postflop;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import strategy.ISituation;
 import strategy.conditions.ICondition;
 
@@ -37,7 +39,10 @@ public enum StraightDanger implements ICondition {
 		if (this == NONE) {
 			return "NO";
 		} else {
-			return super.toString();
+			@SuppressWarnings("null")
+			@NonNull
+			String res = super.toString();
+			return res;
 		}
 	}
 

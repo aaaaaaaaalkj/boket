@@ -20,7 +20,7 @@ public class SidePot {
 		return participants;
 	}
 
-	public void add(int player, int amount) {
+	public void add(Integer player, int amount) {
 		this.participants.add(player);
 		this.value += amount;
 	}

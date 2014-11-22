@@ -1,12 +1,9 @@
 package managementPaymentsNew;
 
 import static java.lang.Math.max;
-import static java.util.Comparator.naturalOrder;
 import static java.util.stream.Collectors.summingInt;
-import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -16,12 +13,14 @@ import managementPaymentsNew.decisions.AllowedDecision;
 import managementPaymentsNew.decisions.Decision;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.eclipse.jdt.annotation.NonNull;
 
 import strategy.conditions.common.PotType;
+import tools.Tools;
 
 public final class PayManagementNew implements IPayManagement2 {
-	private final List<Wallet> posts;
-	private final List<Wallet> stacks;
+	private final List<@NonNull Wallet> posts;
+	private final List<@NonNull Wallet> stacks;
 	private int highestBid; // in small blinds
 	private int lastRaise; // in small blinds
 	private List<SidePot> pots;
@@ -47,13 +46,15 @@ public final class PayManagementNew implements IPayManagement2 {
 			stacks.add(Wallet.newInstance(player, stackSizes));
 		}
 
+		List<SidePot> sidePots = Tools.emptyList();
+
 		PayManagementNew m = new PayManagementNew(
 				posts,
 				stacks,
 				2, // highest bid
 				2, // last raise
-				Collections.emptyList() // pots
-		);
+				sidePots
+				);
 		m.pay(1, 1); // Small Blind
 		m.pay(2, 2); // Big Blind
 
@@ -63,15 +64,14 @@ public final class PayManagementNew implements IPayManagement2 {
 	public void collectPostsToSidePots() {
 		Optional<Integer> min;
 
-		while ((min = posts.stream()
+		while ((min = Tools.min(posts.stream()
 				.map(Wallet::getAmount)
-				.filter(post -> post > 0)
-				.min(naturalOrder())).isPresent()) {
+				.filter(post -> post > 0))).isPresent()) {
 
 			List<Integer> players = posts.stream()
 					.filter(x -> x.getAmount() > 0)
 					.map(Wallet::getPlayer)
-					.collect(toList());
+					.collect(Tools.toList());
 
 			int value = min.get();
 

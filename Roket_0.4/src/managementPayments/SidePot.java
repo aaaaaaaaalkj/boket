@@ -3,11 +3,13 @@ package managementPayments;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import common.IPlayer;
 
 public class SidePot {
 	AmountOfJetons value;
-	List<IPlayer> participants;
+	List<@NonNull IPlayer> participants;
 
 	public SidePot() {
 		value = AmountOfJetons.ZERO;

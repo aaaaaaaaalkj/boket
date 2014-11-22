@@ -1,15 +1,15 @@
 package managementPaymentsNew;
 
 public class Wallet {
-	private final int player;
+	private final Integer player;
 	private int amount;
 
-	private Wallet(int player, int amount) {
+	private Wallet(Integer player, int amount) {
 		this.player = player;
 		this.amount = amount;
 	}
 
-	public static Wallet newInstance(int player, int amount) {
+	public static Wallet newInstance(Integer player, int amount) {
 		return new Wallet(player, amount);
 	}
 
@@ -28,7 +28,7 @@ public class Wallet {
 		s.add(player, amount);
 	}
 
-	public int getPlayer() {
+	public Integer getPlayer() {
 		return player;
 	}
 

@@ -7,7 +7,6 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -15,18 +14,22 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import managementCards.cards.Card;
 import managementCards.cards.Deck;
 import managementCards.cards.Rank;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.Cathegory;
 import managementCards.cat_rec_new.ResultImpl;
+import tools.Tools;
 
 public class Results {
 
+	@SuppressWarnings("null")
 	public static Rank toRank(int z) {
 		return Rank.values()[z - 2];
 	}
 
+	@SuppressWarnings("null")
 	public static Cathegory toCat(int z) {
 		return Cathegory.values()[z];
 	}
@@ -61,6 +64,7 @@ public class Results {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
+		@SuppressWarnings("null")
 		Map<ResultImpl, Integer> map = readfromFile(
 				"D:\\boket\\Kathegorien\\cathegories2.txt")
 				.stream()
@@ -69,10 +73,15 @@ public class Results {
 		for (int i = 0; i < 10000000; i++) {
 			Deck deck = Deck.freshDeck();
 
+			List<Card> hand = Tools.asList(deck.pop(), deck.pop());
+
+			List<Card> communityCards = Tools.asList(
+					deck.pop(), deck.pop(),
+					deck.pop(), deck.pop(), deck.pop());
+
 			ResultImpl res = new Cat_Rec(
-					Arrays.asList(deck.pop(), deck.pop()),
-					Arrays.asList(deck.pop(), deck.pop(), deck.pop(),
-							deck.pop(), deck.pop()))
+					hand,
+					communityCards)
 					.check();
 
 			if (map.keySet().contains(res)) {

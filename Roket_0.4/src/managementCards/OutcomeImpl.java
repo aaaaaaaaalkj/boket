@@ -8,6 +8,8 @@ import managementCards.cards.Card;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.IResult;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import common.IOutcome;
 import common.IPlayer;
 
@@ -18,7 +20,7 @@ public class OutcomeImpl implements IOutcome {
 		this.results = new HashMap<IPlayer, IResult>();
 	}
 
-	public void computeResult(IPlayer player, List<Card> communityCards) {
+	public void computeResult(IPlayer player, List<@NonNull Card> communityCards) {
 		results.put(player,
 				new Cat_Rec(player.getHand(), communityCards).check());
 	}

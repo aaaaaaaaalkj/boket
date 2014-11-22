@@ -11,6 +11,7 @@ import strategy.conditions.ICondition;
 
 public enum ConnectorType implements ICondition {
 	POCKET_PAIR, CONNECTOR, ONE_GAP, TWO_GAP, THREE_GAP, NONE;
+	@SuppressWarnings("null")
 	public static final EnumSet<ConnectorType> VALUES = EnumSet
 			.allOf(ConnectorType.class);
 
@@ -47,6 +48,7 @@ public enum ConnectorType implements ICondition {
 
 	}
 
+	@SuppressWarnings("null")
 	public static ConnectorType fromInt(OptionalInt optionalInt) {
 		if (optionalInt.isPresent()
 				&& optionalInt.getAsInt() <= 4

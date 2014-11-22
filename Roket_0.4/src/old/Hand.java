@@ -57,6 +57,8 @@ import old.strategy.PreflopBuket;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import tools.Tools;
+
 public final class Hand {
 
 	public final Card first;
@@ -105,8 +107,8 @@ public final class Hand {
 
 	public static Hand newInstance(String s) {
 		int mid = s.indexOf(" ");
-		Card c1 = Card.newInstance(s.substring(s.indexOf("[") + 1, mid));
-		Card c2 = Card.newInstance(s.substring(mid + 1, s.indexOf("]")));
+		Card c1 = Card.newInstance(Tools.substring(s, s.indexOf("[") + 1, mid));
+		Card c2 = Card.newInstance(Tools.substring(s, mid + 1, s.indexOf("]")));
 		return new Hand(c1, c2);
 	}
 
@@ -120,12 +122,14 @@ public final class Hand {
 	}
 
 	public PreflopBuket getPreflopBuket() {
-		StartingHand[] veryStrongHands = { oAA, oKK, oQQ, sAK, oAK };
-		StartingHand[] strongHands = { oJJ, oTT, o99, sAQ, oAQ, sAJ };
-		StartingHand[] middleStrongHands = { oAJ, sAT, oAT, oKQ };
-		StartingHand[] strongSpeculativeHands = { o88, o77, o66, o55, o44, o33,
+		StartingHand @NonNull [] veryStrongHands = { oAA, oKK, oQQ, sAK, oAK };
+		StartingHand @NonNull [] strongHands = { oJJ, oTT, o99, sAQ, oAQ, sAJ };
+		StartingHand @NonNull [] middleStrongHands = { oAJ, sAT, oAT, oKQ };
+		StartingHand @NonNull [] strongSpeculativeHands = { o88, o77, o66, o55,
+				o44, o33,
 				o22, sKJ, sKT, sQJ, sQT, sJT, sT9 };
-		StartingHand[] mixedHands = { oKJ, oKT, oQJ, oQT, oJT, sA9, sA8, sA7,
+		StartingHand @NonNull [] mixedHands = { oKJ, oKT, oQJ, oQT, oJT, sA9,
+				sA8, sA7,
 				sA6, sA5, sA4, sA3, sA2, sKJ, s87, s98 };
 
 		if (contains(veryStrongHands, h))

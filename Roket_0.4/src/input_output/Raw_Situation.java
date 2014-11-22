@@ -17,13 +17,13 @@ public class Raw_Situation {
 	public List<@NonNull Card> communityCards = new ArrayList<>();
 
 	public int checkSum;
-	public boolean[] activeStatus = new boolean[NUM_SEATS];
-	public double[] posts = new double[NUM_SEATS];
-	public double[] stacks = new double[NUM_SEATS];
+	public boolean[] activeStatus = new boolean @NonNull [NUM_SEATS];
+	public double[] posts = new double @NonNull [NUM_SEATS];
+	public double[] stacks = new double @NonNull [NUM_SEATS];
 	public int button;
 	public double pot;
 	public boolean itsMyTurn = false;
-	public boolean[] brownButtons = new boolean[3];
+	public boolean[] brownButtons = new boolean @NonNull [3];
 
 	private int countActive() {
 		int count = 0;

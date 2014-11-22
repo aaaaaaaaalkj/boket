@@ -11,7 +11,7 @@ import managementCards.cat_rec_new.ResultImpl;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-public class Result_old  {
+public class Result_old {
 	public Cathegory cathegory;
 	public int[] tieBreaker;
 
@@ -23,7 +23,7 @@ public class Result_old  {
 	public ResultImpl toNewResult() {
 		List<Rank> tie = new ArrayList<>();
 		for (int i = 0; i < tieBreaker.length; i++) {
-			tie.add(Rank.values()[tieBreaker[i]]);
+			tie.add(Rank.VALUES.get(tieBreaker[i]));
 		}
 		return new ResultImpl(cathegory, tie);
 	}
@@ -70,7 +70,6 @@ public class Result_old  {
 		return false;
 	}
 
-
 	public int compareTo(IResult res2) {
 		if (res2.getClass() == Result_old.class) {
 			Result_old res = (Result_old) res2;
@@ -97,7 +96,7 @@ public class Result_old  {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((cathegory == null) ? 0 : cathegory.hashCode());
+				+ (cathegory.hashCode());
 		result = prime * result + Arrays.hashCode(tieBreaker);
 		return result;
 	}

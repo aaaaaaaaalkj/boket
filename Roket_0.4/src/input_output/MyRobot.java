@@ -14,6 +14,7 @@ import tools.Pos;
 public class MyRobot {
 	private final BufferedImage capture;
 
+	@SuppressWarnings("null")
 	public MyRobot() throws AWTException {
 		long l = System.currentTimeMillis();
 		this.capture = new Robot().createScreenCapture(

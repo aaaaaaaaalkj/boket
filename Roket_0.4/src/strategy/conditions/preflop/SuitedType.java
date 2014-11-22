@@ -8,6 +8,7 @@ import strategy.conditions.ICondition;
 public enum SuitedType implements ICondition {
 	SUITED, OFF_SUIT, NONE;
 
+	@SuppressWarnings("null")
 	public static final EnumSet<SuitedType> VALUES = EnumSet
 			.allOf(SuitedType.class);
 

@@ -8,11 +8,11 @@ import strategy.TypeOfDecision;
 import strategy.conditions.ICondition;
 
 public class StrategyWaiting implements IStrategy {
-	private ICondition cond;
+	// private ICondition cond;
 	private IStrategy str;
 
 	public StrategyWaiting(ICondition cond, IStrategy str) {
-		this.cond = cond;
+		// this.cond = cond;
 		this.str = str;
 	}
 

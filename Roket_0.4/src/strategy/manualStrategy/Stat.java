@@ -3,8 +3,9 @@ package strategy.manualStrategy;
 import java.util.HashMap;
 import java.util.Map;
 
-import common.IPlayer;
 import managementPayments.AmountOfJetons;
+
+import common.IPlayer;
 
 public class Stat {
 	private int numPaid = 0;
@@ -35,8 +36,9 @@ public class Stat {
 	}
 
 	public void payed(IPlayer player, AmountOfJetons amount) {
-		if (payedInThisGame.get(player) == null)
+		if (!payedInThisGame.containsKey(player)) {
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
+		}
 		payedInThisGame.put(player, payedInThisGame.get(player).plus(amount));
 
 		numPaid++;
@@ -44,8 +46,9 @@ public class Stat {
 
 	public void won(IPlayer player, AmountOfJetons wonAmount,
 			AmountOfJetons sumPaid) {
-		if (payedInThisGame.get(player) == null)
+		if (payedInThisGame.containsKey(player)) {
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
+		}
 		AmountOfJetons wonThisTime = wonAmount.times(payedInThisGame
 				.get(player).divide(sumPaid));
 		payed = payed.plus(payedInThisGame.get(player));
@@ -54,8 +57,9 @@ public class Stat {
 	}
 
 	public void lost(IPlayer player) {
-		if (payedInThisGame.get(player) == null)
+		if (payedInThisGame.containsKey(player)) {
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
+		}
 		payed = payed.plus(payedInThisGame.get(player));
 		payedInThisGame.put(player, AmountOfJetons.ZERO);
 	}

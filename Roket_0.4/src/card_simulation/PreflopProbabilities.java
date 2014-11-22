@@ -1,7 +1,5 @@
 package card_simulation;
 
-import static java.util.stream.Collectors.toList;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -16,6 +14,10 @@ import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import tools.Tools;
+
 public class PreflopProbabilities implements HandGenerator {
 	// List<PossiblePreflopHand> hands;
 	Map<Integer, Map<Integer, List<PossiblePreflopHand>>> map;
@@ -24,7 +26,7 @@ public class PreflopProbabilities implements HandGenerator {
 		// hands = new ArrayList<>();
 
 		map = new HashMap<>();
-		for (int count_players = 2; count_players <= 10; count_players++) {
+		for (Integer count_players = 2; count_players <= 10; count_players++) {
 			map.put(count_players, new HashMap<>());
 			for (int procent = 0; procent <= 100; procent++) {
 				map.get(count_players).put(procent, new ArrayList<>());
@@ -70,7 +72,6 @@ public class PreflopProbabilities implements HandGenerator {
 
 		int procent = (int) Math.round(randNumber * 100);
 
-
 		List<PossiblePreflopHand> list = map.get(countPlayers).get(procent);
 
 		// for (int i = 0; i < 100; i++) {
@@ -79,38 +80,39 @@ public class PreflopProbabilities implements HandGenerator {
 		// + map.get(countPlayers).get(i).size());
 		// }
 
-		if (null == list) {
+		if (map.get(countPlayers).containsKey(procent)) {
+
+			int i = 0;
+			while (list.isEmpty()) {
+				i++;
+
+				Map<Integer, List<PossiblePreflopHand>> map2 = map
+						.get(countPlayers);
+				if (map2.containsKey(procent + i)) {
+					if (!map2.get(procent + i).isEmpty()) {
+						list = map2.get(procent + i);
+					}
+				} else if (map2.containsKey(procent - i)) {
+					if (!map2.get(procent - i).isEmpty()) {
+						list = map2.get(procent - i);
+					}
+				} else {
+					throw new IllegalStateException("no elements in preflop");
+				}
+			}
+
+			int index = (int) Math.floor(Math.random() * list.size());
+
+			return list.get(index);
+
+			// int index = (int) Math.floor(randNumber * hands.size());
+			// System.out.println(index + ": " + hands.get(index));
+			// return hands.get(index);
+
+		} else {
 			throw new IllegalStateException("list is null " + countPlayers
 					+ " " + procent);
 		}
-
-		int i = 0;
-		while (list.isEmpty()) {
-			i++;
-			List<PossiblePreflopHand> list1 = map.get(countPlayers).get(
-					procent + i);
-			List<PossiblePreflopHand> list2 = map.get(countPlayers).get(
-					procent - i);
-
-			if (list1 == null && list2 == null) {
-				throw new IllegalStateException("no elements in preflop");
-			}
-
-			if (list1 != null && !list1.isEmpty()) {
-				list = list1;
-			}
-			if (list2 != null && !list2.isEmpty()) {
-				list = list2;
-			}
-		}
-
-		int index = (int) Math.floor(Math.random() * list.size());
-
-		return list.get(index);
-
-		// int index = (int) Math.floor(randNumber * hands.size());
-		// System.out.println(index + ": " + hands.get(index));
-		// return hands.get(index);
 
 	}
 
@@ -143,8 +145,13 @@ public class PreflopProbabilities implements HandGenerator {
 			scanner.useDelimiter("\r\n");
 
 			while (scanner.hasNext()) {
-				String[] s = scanner.next().split(";");
-				String[] hand_code = s[0].split("");
+				@SuppressWarnings("null")
+				@NonNull
+				String next = scanner.next();
+				@NonNull
+				String[] s = Tools.split(next, ";");
+				@NonNull
+				String[] hand_code = Tools.split(s[0], "");
 
 				Rank first = Rank.fromShortString(hand_code[0]);
 				Rank second = Rank.fromShortString(hand_code[1]);
@@ -159,7 +166,8 @@ public class PreflopProbabilities implements HandGenerator {
 				List<Double> probabilities = Arrays.asList(s)
 						.subList(1, s.length)
 						.stream()
-						.map(str -> Double.parseDouble(str)).collect(toList());
+						.map(str -> Double.parseDouble(str))
+						.collect(Tools.toList());
 
 				PossiblePreflopHand hand = new PossiblePreflopHand(new Card(
 						first, firstSuit),

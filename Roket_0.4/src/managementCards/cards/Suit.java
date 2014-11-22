@@ -10,11 +10,15 @@ import org.eclipse.jdt.annotation.NonNull;
 public enum Suit {
 	DIAMONDS, HEARTS, SPADES, CLUBS;
 
+	public static Suit diamonds() {
+		return DIAMONDS;
+	}
+
 	// values() creates a new array each call. better to cache
 	@SuppressWarnings("null")
 	public static final List<@NonNull Suit> VALUES = Collections
 			.unmodifiableList(Arrays
-			.asList(values()));
+					.asList(values()));
 
 	public static Suit random(Random r) {
 		return VALUES.get(r.nextInt(VALUES.size()));

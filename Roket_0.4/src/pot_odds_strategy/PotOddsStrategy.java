@@ -15,7 +15,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import card_simulation.CardSimulation;
 
 public class PotOddsStrategy {
-	private static double BB = .02;
 	private double valueOfSituation;
 	private double toPay;
 	private double[] posts;

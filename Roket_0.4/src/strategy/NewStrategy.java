@@ -1,10 +1,12 @@
 package strategy;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import common.Round;
 
 public class NewStrategy implements IStrategy {
-	private TypeOfDecision[] preflop = new TypeOfDecision[PreflopSelector.size];
-	private TypeOfDecision[] postflop = new TypeOfDecision[PostflopSelector.size];
+	private TypeOfDecision @NonNull [] preflop = new TypeOfDecision @NonNull [PreflopSelector.size];
+	private TypeOfDecision @NonNull [] postflop = new TypeOfDecision @NonNull [PostflopSelector.size];
 
 	private NewStrategy() {
 
@@ -23,11 +25,17 @@ public class NewStrategy implements IStrategy {
 	}
 
 	public TypeOfDecision getPreflop(ISelector sel) {
-		return preflop[sel.getPosition()];
+		@SuppressWarnings("null")
+		@NonNull
+		TypeOfDecision x = preflop[sel.getPosition()];
+		return x;
 	}
 
 	public TypeOfDecision getPostflop(ISelector sel) {
-		return preflop[sel.getPosition()];
+		@SuppressWarnings("null")
+		@NonNull
+		TypeOfDecision x = preflop[sel.getPosition()];
+		return x;
 	}
 
 	public void setPreflop(ISelector sel, TypeOfDecision dec) {
@@ -39,11 +47,17 @@ public class NewStrategy implements IStrategy {
 	}
 
 	private TypeOfDecision get(PreflopSelector sel) {
-		return preflop[sel.getPosition()];
+		@SuppressWarnings("null")
+		@NonNull
+		TypeOfDecision x = preflop[sel.getPosition()];
+		return x;
 	}
 
 	private TypeOfDecision get(PostflopSelector sel) {
-		return postflop[sel.getPosition()];
+		@SuppressWarnings("null")
+		@NonNull
+		TypeOfDecision x = postflop[sel.getPosition()];
+		return x;
 	}
 
 	@Override

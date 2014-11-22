@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import managementCards.CardManagement;
 import managementCards.ICardManagement;
@@ -19,6 +18,7 @@ import managementState.Carousel;
 import managementState.IGameState;
 import managementState.IStateManagement;
 import start.StrategyDefinitions;
+import tools.Tools;
 
 import common.IOutcome;
 import common.IPlayer;
@@ -32,7 +32,8 @@ public class SimulationImpl implements ISimulation {
 	RewardsManagement rewards;
 	Random rand;
 	Round round;
-	Logger logger;
+	@SuppressWarnings("null")
+	Logger logger = Logger.getGlobal();
 	List<IPlayer> players = new ArrayList<>();
 
 	public SimulationImpl(long l) {
@@ -40,7 +41,6 @@ public class SimulationImpl implements ISimulation {
 		this.rand = new Random();
 		// -544270288983695018 -> SplitPot
 		// 7531026355273090958l -> several flush;
-		logger = Logger.getGlobal();
 		logger.info("seed: " + l);
 		rand.setSeed(l);
 
@@ -53,8 +53,10 @@ public class SimulationImpl implements ISimulation {
 
 	public void addDefaultPlayer() {
 		int i = 0;
-		for (String name : new String[] { "Alex", "Maria", "Natascha",
-				"Penelope", "Christine", "Lena", "Anna", "Karina" }) {
+
+		for (String name : Tools.asList("Alex", "Maria",
+				"Natascha",
+				"Penelope", "Christine", "Lena", "Anna", "Karina")) {
 			addPlayer(new PlayerImpl(name, i++, new Hand(Card._3s, Card._7c),
 					StrategyDefinitions.s, 100));
 		}
@@ -88,7 +90,7 @@ public class SimulationImpl implements ISimulation {
 						player.getStrategy(),
 						payOuts.get(player))
 				)
-				.collect(Collectors.toList());
+				.collect(Tools.toList());
 
 		// for (IPlayer player : payOuts.keySet()) {
 		// logger.info(player + " won " + payOuts.get(player));

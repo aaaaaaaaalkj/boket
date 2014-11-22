@@ -33,6 +33,7 @@ import java.util.Arrays;
 import managementCards.cards.Card;
 import managementCards.cards.Rank;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 
 public class TestCarRec {
@@ -115,39 +116,39 @@ public class TestCarRec {
 				Arrays.asList(community));
 	}
 
-	private IResult highCard(Rank... ranks) {
+	private IResult highCard(@NonNull Rank... ranks) {
 		return new ResultImpl(HIGH_CARD, ranks);
 	}
 
-	private IResult pair(Rank... ranks) {
+	private IResult pair(@NonNull Rank... ranks) {
 		return new ResultImpl(PAIR, ranks);
 	}
 
-	private IResult twoPair(Rank... ranks) {
+	private IResult twoPair(@NonNull Rank... ranks) {
 		return new ResultImpl(TWO_PAIR, ranks);
 	}
 
-	private IResult threeOfAKind(Rank... ranks) {
+	private IResult threeOfAKind(@NonNull Rank... ranks) {
 		return new ResultImpl(THREE_OF_A_KIND, ranks);
 	}
 
-	private IResult straight(Rank... ranks) {
+	private IResult straight(@NonNull Rank... ranks) {
 		return new ResultImpl(STRAIGHT, ranks);
 	}
 
-	private IResult flush(Rank... ranks) {
+	private IResult flush(@NonNull Rank... ranks) {
 		return new ResultImpl(FLUSH, ranks);
 	}
 
-	private IResult fullHouse(Rank... ranks) {
+	private IResult fullHouse(@NonNull Rank... ranks) {
 		return new ResultImpl(FULL_HOUSE, ranks);
 	}
 
-	private IResult fourOfAKind(Rank... ranks) {
+	private IResult fourOfAKind(@NonNull Rank... ranks) {
 		return new ResultImpl(FOUR_OF_A_KIND, ranks);
 	}
 
-	private IResult straightFlush(Rank... ranks) {
+	private IResult straightFlush(@NonNull Rank... ranks) {
 		return new ResultImpl(STRAIGHT_FLUSH, ranks);
 	}
 

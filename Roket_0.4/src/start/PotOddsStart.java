@@ -44,7 +44,7 @@ public class PotOddsStart {
 		}
 	}
 
-	public static void main(String[] _) throws InterruptedException,
+	public static void main(String[] ignored) throws InterruptedException,
 			AWTException {
 		System.out.println("main start");
 		while (true) {
@@ -70,7 +70,6 @@ public class PotOddsStart {
 			}
 		}
 	}
-
 
 	private static void handleSituation(ScreenScraper scraper,
 			boolean myTurn) {

@@ -1,5 +1,7 @@
 package strategy.conditions.postflop;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import strategy.ISituation;
 import strategy.conditions.ICondition;
 
@@ -10,10 +12,15 @@ public enum FlushDanger implements ICondition {
 	HIGH, // four cards of the same suit in community-cards
 	CERTAIN_FLUSH; // five of the same suit in community-cards
 
-	public static final FlushDanger[] VALUES = values();
+	public static final FlushDanger @NonNull [] VALUES = values();
 
 	public static int getCount() {
 		return VALUES.length;
+	}
+
+	@SuppressWarnings("null")
+	public static FlushDanger get(int index) {
+		return VALUES[index];
 	}
 
 	@Override
@@ -22,8 +29,9 @@ public enum FlushDanger implements ICondition {
 	}
 
 	public static FlushDanger fromLong(long count_max_cards_of_same_suit) {
-		return values()[Math.min((int) count_max_cards_of_same_suit - 1,
-				VALUES.length - 1)];
+		int index = Math.min((int) count_max_cards_of_same_suit - 1,
+				VALUES.length - 1);
+		return get(index);
 	}
 
 	public ICondition orHigher() {
@@ -36,11 +44,12 @@ public enum FlushDanger implements ICondition {
 
 	@Override
 	public String toString() {
+		@SuppressWarnings("null")
+		@NonNull
+		String res = super.toString();
 		if (this == NONE) {
-			return "NO";
-		} else {
-			return super.toString();
+			res = "NO";
 		}
+		return res;
 	}
-
 }

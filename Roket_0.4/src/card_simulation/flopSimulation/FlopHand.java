@@ -3,7 +3,6 @@ package card_simulation.flopSimulation;
 import static java.util.stream.Collectors.joining;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +16,8 @@ import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.ResultImpl;
 
 import org.eclipse.jdt.annotation.Nullable;
+
+import tools.Tools;
 
 public class FlopHand {
 	List<Card> cards;
@@ -34,7 +35,7 @@ public class FlopHand {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cards == null) ? 0 : cards.hashCode());
+		result = prime * result + (cards.hashCode());
 		return result;
 	}
 
@@ -47,10 +48,7 @@ public class FlopHand {
 		if (getClass() != obj.getClass())
 			return false;
 		FlopHand other = (FlopHand) obj;
-		if (cards == null) {
-			if (other.cards != null)
-				return false;
-		} else if (!cards.equals(other.cards))
+		if (!cards.equals(other.cards))
 			return false;
 		return true;
 	}
@@ -175,7 +173,7 @@ public class FlopHand {
 
 	public static void main(String[] args) {
 
-		Flop flop = new Flop(Arrays.asList(Card.Ad, Card._3s, Card._7c));
+		Flop flop = new Flop(Tools.asList(Card.Ad, Card._3s, Card._7c));
 
 		List<FlopHand> hands = createAll(flop);
 

@@ -1,7 +1,6 @@
 package card_simulation.flopSimulation;
 
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +13,8 @@ import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 
 import org.eclipse.jdt.annotation.Nullable;
+
+import tools.Tools;
 
 public class Flop implements Comparable<Flop> {
 	List<Card> cards;
@@ -67,10 +68,10 @@ public class Flop implements Comparable<Flop> {
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
 			if (card.getSuit() == suitOfFirst) {
-				cards.set(i, new Card(card.getRank(), Suit.DIAMONDS));
+				cards.set(i, new Card(card.getRank(), Suit.diamonds()));
 			}
 		}
-		if (cards.stream().map(Card::getSuit).collect(toSet()).size() == 1) {
+		if (cards.stream().map(Card::getSuit).collect(Tools.toSet()).size() == 1) {
 			return; // all diamonds now
 		}
 		if (cards.get(1).getSuit() == cards.get(2).getSuit()) {
@@ -94,7 +95,7 @@ public class Flop implements Comparable<Flop> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cards == null) ? 0 : cards.hashCode());
+		result = prime * result + (cards.hashCode());
 		return result;
 	}
 
@@ -107,10 +108,7 @@ public class Flop implements Comparable<Flop> {
 		if (getClass() != obj.getClass())
 			return false;
 		Flop other = (Flop) obj;
-		if (cards == null) {
-			if (other.cards != null)
-				return false;
-		} else if (!cards.equals(other.cards))
+		if (!cards.equals(other.cards))
 			return false;
 		return true;
 	}

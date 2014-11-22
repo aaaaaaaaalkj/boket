@@ -46,13 +46,13 @@ public final class PreflopSelector implements ISelector {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((connector == null) ? 0 : connector.hashCode());
+				+ (connector.hashCode());
 		result = prime * result
-				+ ((contribution == null) ? 0 : contribution.hashCode());
+				+ (contribution.hashCode());
 		result = prime * result
-				+ ((numActive == null) ? 0 : numActive.hashCode());
-		result = prime * result + ((pot == null) ? 0 : pot.hashCode());
-		result = prime * result + ((suited == null) ? 0 : suited.hashCode());
+				+ (numActive.hashCode());
+		result = prime * result + (pot.hashCode());
+		result = prime * result + (suited.hashCode());
 		return result;
 	}
 

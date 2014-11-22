@@ -64,10 +64,16 @@ public class Carousel implements IStateManagement {
 		}
 
 		if (todoPlayers.isEmpty()) {
-			round = round.next();
-			todoPlayers = new HashSet<>(activePlayers);
-			currentIndex = 0;
-			nobodyRaised = true;
+			Round next = round.next();
+			if (next == null) {
+				throw new IllegalStateException(
+						"cant proceed to next round after " + round);
+			} else {
+				round = next;
+				todoPlayers = new HashSet<>(activePlayers);
+				currentIndex = 0;
+				nobodyRaised = true;
+			}
 		}
 
 		do {
