@@ -104,13 +104,12 @@ public class TestCarRec {
 
 	Card _2c = Card.newInstance(Ace, DIAMONDS);
 
-	private ICatRec rec;
-	IResult res;
-
+	@SuppressWarnings("null")
 	private ICatRec create() {
 		return new Cat_Rec(Arrays.asList(), Arrays.asList());
 	}
 
+	@SuppressWarnings("null")
 	private ICatRec create(Card hand1, Card hand2, Card... community) {
 		return new Cat_Rec(Arrays.asList(hand1, hand2),
 				Arrays.asList(community));
@@ -154,6 +153,9 @@ public class TestCarRec {
 
 	@Test
 	public void testStraightFlush() {
+		ICatRec rec;
+		IResult res;
+
 		rec = create(Ah, Kh, Qh, Jh, Th);
 		res = straightFlush(Ace, King, Queen, Jack, Ten);
 		assertTrue(rec.check().equals(res));
@@ -193,6 +195,8 @@ public class TestCarRec {
 
 	@Test
 	public void testFourOfAKind() {
+		ICatRec rec;
+		IResult res;
 		rec = create(Ah, Kh, Qs, Jh, Th, Kd, Kh, Ks);
 		res = fourOfAKind(King, King, King, King, Ace);
 		assertTrue(rec.check().equals(res));
@@ -229,6 +233,8 @@ public class TestCarRec {
 
 	@Test
 	public void testFullHouse() {
+		ICatRec rec;
+		IResult res;
 		rec = create(Ah, Kh, Qs, Jh, Th, Kd, Ks, Ts);
 		res = fullHouse(King, King, King, Ten, Ten);
 		assertTrue(rec.check().equals(res));
@@ -248,6 +254,8 @@ public class TestCarRec {
 
 	@Test
 	public void testFlush() {
+		ICatRec rec;
+		IResult res;
 		rec = create(Ah, Kh, Qs, Jh, Th, Ks, h5);// straight
 		res = flush(Ace, King, Jack, Ten, Five);
 		assertTrue(rec.check().equals(res));
@@ -271,6 +279,8 @@ public class TestCarRec {
 
 	@Test
 	public void testStraight() {
+		ICatRec rec;
+		IResult res;
 		rec = create(Ah, Ks, Qs, Jh, Th, Ks, h5);
 		res = straight(Ace, King, Queen, Jack, Ten);
 		assertTrue(rec.check().equals(res));
@@ -294,6 +304,8 @@ public class TestCarRec {
 
 	@Test
 	public void testThreeOfAKind() {
+		ICatRec rec;
+		IResult res;
 		rec = create(Ah, Ks, Js, Jh, Th, Js, h5);
 		res = threeOfAKind(Jack, Jack, Jack, Ace, King);
 		assertTrue(rec.check().equals(res));
@@ -306,6 +318,8 @@ public class TestCarRec {
 
 	@Test
 	public void testTwoPair() {
+		ICatRec rec;
+		IResult res;
 		rec = create(Ah, Ks, Js, Jh, Th, Kd, h5);
 		res = twoPair(King, King, Jack, Jack, Ace);
 		assertTrue(rec.check().equals(res));
@@ -317,6 +331,8 @@ public class TestCarRec {
 
 	@Test
 	public void testPair() {
+		ICatRec rec;
+		IResult res;
 		rec = create(Ah, Ks, s4, Jh, Th, Kd, h5);
 		res = pair(King, King, Ace, Jack, Ten);
 		assertTrue(rec.check().equals(res));
@@ -336,6 +352,8 @@ public class TestCarRec {
 
 	@Test
 	public void testHighCard() {
+		ICatRec rec;
+		IResult res;
 		rec = create(Ah, Ks, s4, Jh, Th, d8, h5);
 		res = highCard(Ace, King, Jack, Ten, Eight);
 		assertTrue(rec.check().equals(res));

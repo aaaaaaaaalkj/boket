@@ -62,13 +62,14 @@ public class PreflopProbabilities implements HandGenerator {
 
 		double randNumber;
 
-		double variance = 0.3;// 1 - contribution;
+		double variance = 0.03;// 1 - contribution;
 
 		variance = Math.max(.03, variance);
 
 		randNumber = rand(contribution, variance);
 
 		int procent = (int) Math.round(randNumber * 100);
+
 
 		List<PossiblePreflopHand> list = map.get(countPlayers).get(procent);
 

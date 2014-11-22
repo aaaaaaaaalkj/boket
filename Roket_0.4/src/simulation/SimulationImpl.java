@@ -11,6 +11,7 @@ import managementCards.CardManagement;
 import managementCards.ICardManagement;
 import managementCards.OutcomeImpl;
 import managementCards.cards.Card;
+import managementCards.cards.Hand;
 import managementPayments.PayOuts;
 import managementPayments.PaymentManagement;
 import managementRewards.RewardsManagement;
@@ -54,7 +55,8 @@ public class SimulationImpl implements ISimulation {
 		int i = 0;
 		for (String name : new String[] { "Alex", "Maria", "Natascha",
 				"Penelope", "Christine", "Lena", "Anna", "Karina" }) {
-			addPlayer(new PlayerImpl(name, i++, StrategyDefinitions.s, 100));
+			addPlayer(new PlayerImpl(name, i++, new Hand(Card._3s, Card._7c),
+					StrategyDefinitions.s, 100));
 		}
 	}
 

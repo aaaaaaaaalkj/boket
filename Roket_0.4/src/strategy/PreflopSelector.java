@@ -1,5 +1,7 @@
 package strategy;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -55,7 +57,7 @@ public final class PreflopSelector implements ISelector {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import old.Hand;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 import card_simulation.CardSimulation;
 
 public class PotOddsStrategy {
@@ -40,17 +44,6 @@ public class PotOddsStrategy {
 				+ "]";
 	}
 
-	private double computePot(Raw_Situation s) {
-		double pot2 = s.getPot();
-		for (int i = 1; i < posts.length; i++) {
-			if (posts[i] < BB && s.getActiveStatus()[i]) {
-				pot2 += toPay + posts[0] - posts[i];
-			}
-		}
-		pot2 = ((double) Math.round(pot2 * 100)) / 100;
-		return pot2;
-	}
-
 	public PotOddsStrategy(Raw_Situation s) {
 
 		this.posts = s.getPosts().clone();
@@ -63,18 +56,20 @@ public class PotOddsStrategy {
 			round -= 2;
 		}
 
-		pot = computePot(s);
-
-		naked_pod = pot;
+		naked_pod = s.getPot();
 		for (double d : posts) {
 			naked_pod -= d;
 		}
-
-		// memory.setHighestBid(round, maxPost);
-		// memory.setPot(round, pot);
-
-		// lastPost = memory.getighestBid(round - 1);
-		// lastPot = memory.getPot(round - 1);
+		naked_pod = ((double) Math.round(naked_pod * 100)) / 100;
+		double pot2 = naked_pod;
+		double[] new_posts = new double[posts.length];
+		for (int i = 0; i < posts.length; i++) {
+			if (s.getActiveStatus()[i]) {
+				new_posts[i] = toPay + posts[0];
+				pot2 += new_posts[i];
+			}
+		}
+		pot = ((double) Math.round(pot2 * 100)) / 100;
 
 		int count = 0;
 		for (int i = 0; i < posts.length; i++) {
@@ -86,11 +81,11 @@ public class PotOddsStrategy {
 		List<Double> activeContributors = new ArrayList<>();
 		for (int i = 1; i < posts.length; i++) {
 			if (s.activeStatus[i]) {
-				if (i <= s.button && posts[i] == 0) {
+				if (i <= s.button && new_posts[i] == 0) {
 					activeContributors.add(naked_pod / count
 							/ pot);
 				} else {
-					activeContributors.add(posts[i] / pot);
+					activeContributors.add(new_posts[i] / pot);
 				}
 			}
 		}
@@ -101,15 +96,16 @@ public class PotOddsStrategy {
 							((double) Math.round(activeContributors.get(i) * 100)) / 100);
 		}
 
-		if (s.hand == null || s.communityCards == null
-				|| s.communityCards.contains(null)) {
+		@Nullable
+		Hand hand = s.hand;
+		if (hand == null) {
 			return;
 		}
 
 		System.out.println("contributions: "
 				+ activeContributors.stream().map(String::valueOf)
 						.collect(joining(", ")));
-		odds = new CardSimulation(count, activeContributors, s.hand,
+		odds = new CardSimulation(count, activeContributors, hand,
 				s.communityCards)
 				.run();
 

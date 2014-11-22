@@ -14,20 +14,22 @@ import java.util.EnumSet;
 
 public class AllowedDecision {
 	private final Collection<DecisionType> allowedDecisions;
-	private final Integer maxBetOrRaiseValue;
+	private final int maxBetOrRaiseValue;
+	private final static int ILLEGAL_VALUE = -1;
 
-	private AllowedDecision(Integer value, DecisionType... col) {
+	@SuppressWarnings("null")
+	private AllowedDecision(int value, DecisionType... col) {
 		this.allowedDecisions = Collections.unmodifiableCollection(
 				EnumSet.copyOf(Arrays.asList(col)));
 		this.maxBetOrRaiseValue = value;
 	}
 
 	public static AllowedDecision foldAllin() {
-		return new AllowedDecision(null, FOLD, ALL_IN);
+		return new AllowedDecision(ILLEGAL_VALUE, FOLD, ALL_IN);
 	}
 
 	public static AllowedDecision call() {
-		return new AllowedDecision(null, FOLD, ALL_IN, CALL);
+		return new AllowedDecision(ILLEGAL_VALUE, FOLD, ALL_IN, CALL);
 	}
 
 	public static AllowedDecision callRaise(int value) {
@@ -57,7 +59,7 @@ public class AllowedDecision {
 				&& allowedDecisions.contains(BET);
 	}
 
-	public Integer maxBetRaiseAllowed() {
+	public int maxBetRaiseAllowed() {
 		return maxBetOrRaiseValue;
 	}
 

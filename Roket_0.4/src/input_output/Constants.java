@@ -2,6 +2,9 @@ package input_output;
 
 import java.awt.Color;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import tools.Pos;
 
 public class Constants {
@@ -9,7 +12,8 @@ public class Constants {
 	public static final int radiusOfPlayerCircles = 40;
 	public static final int cardOffset = 54;
 
-	public static final Pos[] centersOfPlayerCirles = new Pos[] { pos(47, 245),
+	public static final Pos @NonNull [] centersOfPlayerCirles = new Pos @Nullable [] {
+			pos(47, 245),
 			pos(130, 116), pos(276, 57), pos(509, 57), pos(649, 116),
 			pos(729, 245), pos(605, 361), pos(388, 388), pos(174, 360) };
 

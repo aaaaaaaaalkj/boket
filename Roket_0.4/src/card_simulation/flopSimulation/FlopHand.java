@@ -16,6 +16,8 @@ import managementCards.cards.Suit;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.ResultImpl;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class FlopHand {
 	List<Card> cards;
 
@@ -37,7 +39,7 @@ public class FlopHand {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -202,13 +204,15 @@ public class FlopHand {
 		System.out.println(this);
 	}
 
-	private Double my_score = null;
+	private @Nullable Double my_score;
 
 	public double getScore() {
-		if (my_score == null) {
-			my_score = ((double) Math.round(((double) won / played) * 1000)) / 1000;
+		Double my_score2 = my_score;
+		if (my_score2 == null) {
+			my_score2 = ((double) Math.round(((double) won / played) * 1000)) / 1000;
+			my_score = my_score2;
 		}
-		return my_score;
+		return my_score2;
 	}
 
 	@Override

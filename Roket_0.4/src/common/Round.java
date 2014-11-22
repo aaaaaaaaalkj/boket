@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import strategy.ISituation;
 import strategy.conditions.ICondition;
 
@@ -13,14 +15,14 @@ public enum Round implements ICondition {
 	public static final List<Round> VALUES = Collections
 			.unmodifiableList(Arrays.asList(values()));
 
-	public Round next() {
+	public @Nullable Round next() {
 		if (this == SHOWDOWN || this == QUIET_END)
 			return null;
 		else
 			return VALUES.get(this.ordinal() + 1);
 	}
 
-	public Round last() {
+	public @Nullable Round last() {
 		if (this == PREFLOP)
 			return null;
 		else

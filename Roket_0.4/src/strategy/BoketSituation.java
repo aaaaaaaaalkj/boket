@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.Cathegory;
+import old.Hand;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -78,27 +79,32 @@ public class BoketSituation implements ISituation {
 
 		this.pot = PotType.of(pot / s.getStack());
 
-		assert s.getHand() != null : "hand is null";
+		Hand hand = s.getHand();
 
-		this.connector = ConnectorType.fromRanks(s.getHand().first.getRank(),
-				s.getHand().second.getRank()
-				);
-		this.suited = s.getHand().isSuited()
-				? SuitedType.SUITED
-				: SuitedType.OFF_SUIT;
+		if (hand == null) {
+			throw new IllegalArgumentException("Raw-Situation's hand is null");
+		} else {
+			this.connector = ConnectorType.fromRanks(
+					hand.first.getRank(),
+					hand.second.getRank()
+					);
+			this.suited = hand.isSuited()
+					? SuitedType.SUITED
+					: SuitedType.OFF_SUIT;
 
-		;
-		Cat_Rec catRec = new Cat_Rec(
-				s.getHand().getCards(),
-				s.getCommunityCards()
-				);
+			;
+			Cat_Rec catRec = new Cat_Rec(
+					hand.getCards(),
+					s.getCommunityCards()
+					);
 
-		draw = catRec.checkDraw();
-		flushDanger = catRec.checkFlushDanger();
-		straightDanger = catRec.checkStraightDanger();
-		pairBasedDanger = catRec.checkPairBasedDanger();
+			draw = catRec.checkDraw();
+			flushDanger = catRec.checkFlushDanger();
+			straightDanger = catRec.checkStraightDanger();
+			pairBasedDanger = catRec.checkPairBasedDanger();
 
-		cathegory = catRec.check().getCathegory();
+			cathegory = catRec.check().getCathegory();
+		}
 	}
 
 	@Override

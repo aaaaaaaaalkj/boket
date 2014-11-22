@@ -2,6 +2,8 @@ package input_output;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class Pattern {
 
 	private boolean[] value;
@@ -23,7 +25,7 @@ public class Pattern {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(@Nullable Object o) {
 		Pattern p;
 		if (o instanceof Pattern)
 			p = (Pattern) o;

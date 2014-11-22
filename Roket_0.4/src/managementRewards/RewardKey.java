@@ -1,5 +1,7 @@
 package managementRewards;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import strategy.ISituation;
 import strategy.TypeOfDecision;
 
@@ -36,7 +38,7 @@ public class RewardKey {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

@@ -1,6 +1,9 @@
 package strategy;
 
 import managementCards.cat_rec_new.Cathegory;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -76,7 +79,7 @@ public class PostflopSelector implements ISelector {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

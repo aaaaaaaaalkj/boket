@@ -8,12 +8,15 @@ import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 import managementCards.cat_rec_new.Cathegory;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class Cat_Rec_old {
 
 	public final static int NUM = Rank.values().length;
 
 	public static Result_old getResult(Set<Card> set) {
 		// X.assertTrue(set.size() == 7, "set.size: " + set.size());
+		@Nullable
 		Result_old r, r2;
 		r = checkStraightFlush(set);
 		if (null != r)
@@ -32,7 +35,7 @@ public class Cat_Rec_old {
 		return r;
 	}
 
-	public static Result_old checkFlush(Set<Card> set) {
+	public static @Nullable Result_old checkFlush(Set<Card> set) {
 		throw new RuntimeException("not supported");
 		// for (Suit color : Suit.values()) {
 		// int counter = 0;
@@ -68,7 +71,7 @@ public class Cat_Rec_old {
 		return false;
 	}
 
-	public static Result_old checkStraight(Set<Card> set) {
+	public static @Nullable Result_old checkStraight(Set<Card> set) {
 		int counter = 0;
 		int high = -1;
 		for (int i = NUM - 1; i > -2; i--) {
@@ -183,7 +186,7 @@ public class Cat_Rec_old {
 		return false;
 	}
 
-	public static Result_old checkStraightFlush(Set<Card> set) {
+	public static @Nullable Result_old checkStraightFlush(Set<Card> set) {
 		int counter = 0;
 		int high = -1;
 		for (Suit color : Suit.values()) {
@@ -320,7 +323,8 @@ public class Cat_Rec_old {
 		throw new RuntimeException("should never happen1. cat: " + cat);
 	}
 
-	private static final int[] toIntArr(ArrayList<Integer> list) {
+	@SuppressWarnings("null")
+	private static final  @Nullable  int[] toIntArr(ArrayList<Integer> list) {
 		int[] ar = new int[list.size()];
 		for (int i = 0; i < list.size(); i++)
 			ar[i] = list.get(i);

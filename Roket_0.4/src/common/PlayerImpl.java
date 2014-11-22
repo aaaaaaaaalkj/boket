@@ -17,11 +17,12 @@ public final class PlayerImpl implements IPlayer {
 	private PlayerState state;
 	private AmountOfJetons post;
 
-	public PlayerImpl(String name, int position, IStrategy strategy, int bb) {
+	public PlayerImpl(String name, int position, Hand hand, IStrategy strategy,
+			int bb) {
 		this.name = name;
 		this.position = position;
 		this.strategy = strategy;
-		this.hand = Hand.empty();
+		this.hand = hand;
 		this.stack = Stack.create(bb);
 		this.state = PlayerState.ACTIVE;
 		this.post = AmountOfJetons.ZERO;

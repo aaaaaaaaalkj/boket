@@ -13,14 +13,18 @@ import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 import old.Hand;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 import tools.Pos;
 
 public class Card_Recognition {
 	private static final Color cardEdge = Constants.cardEdge;
+	@SuppressWarnings("null")
 	private static final Pos handPos = Constants.centersOfPlayerCirles[0];
 	private static final int radius = Constants.radiusOfPlayerCircles;
 
-	private static Pos searchCard(Pos pos, MyRobot robot) {
+	private static @Nullable Pos searchCard(Pos pos, MyRobot robot) {
 		Pos hit = robot.pixelSearch(pos.x, pos.y, 25, 25, cardEdge);
 		if (null == hit) {
 			return null;
@@ -38,14 +42,17 @@ public class Card_Recognition {
 			Pos hit = searchCard(pos, robot);
 			if (null == hit)
 				break;
-			list.add(recognizeCard(hit, robot));
+			Card card = recognizeCard(hit, robot);
+			if (card != null) {
+				list.add(card);
+			}
 			pos = hit.plus(Constants.cardOffset, 0);
 		}
 		// TODO: maybe its possible that list.get(0) == null
 		return list;
 	}
 
-	public static Hand recognizeHand(Pos logo, MyRobot robot) {
+	public static @Nullable Hand recognizeHand(Pos logo, MyRobot robot) {
 		Pos pos = logo.plus(handPos).minus(radius, radius);
 
 		Pos hit = searchCard(pos, robot);
@@ -67,7 +74,7 @@ public class Card_Recognition {
 		return Hand.newInstance(first, second);
 	}
 
-	public static Card recognizeCard(Pos pos, MyRobot robot) {
+	public static @Nullable Card recognizeCard(Pos pos, MyRobot robot) {
 		Suit resColor = recognizeCardColor(pos, robot);
 		if (null == resColor) {
 			System.out.println("no card color found");
@@ -81,7 +88,7 @@ public class Card_Recognition {
 		return Card.newInstance(resNum, resColor);
 	}
 
-	private static Rank recognizeCardNum(Pos pos, MyRobot robot) {
+	private static @Nullable Rank recognizeCardNum(Pos pos, MyRobot robot) {
 		final int num = 6;
 		Pos[] positions = { pos(7, 11), pos(9, 14), pos(4, 11), pos(7, 5),
 				pos(6, 12), pos(11, 8) };
@@ -107,12 +114,16 @@ public class Card_Recognition {
 				resNum = Rank.values()[i];
 			}
 		}
-		if (resNum == null)
+		if (resNum == null) {
 			System.out.println("cant recognize card" + myPattern);
-		return resNum;
+			return null;
+		} else {
+			return resNum;
+		}
+
 	}
 
-	private static Suit recognizeCardColor(Pos pos, MyRobot robot) {
+	private static @Nullable Suit recognizeCardColor(Pos pos, MyRobot robot) {
 		Suit resColor;
 		Color cardColor = robot.getPixelColor(pos.plus(9, 25));
 

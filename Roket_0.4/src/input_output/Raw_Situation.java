@@ -6,12 +6,15 @@ import java.util.List;
 import managementCards.cards.Card;
 import old.Hand;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 public class Raw_Situation {
 	public static final int NUM_SEATS = 9;
 	public static final double BIG_BLIND = 0.02;
 
-	public Hand hand;
-	public List<Card> communityCards = new ArrayList<>();
+	public @Nullable Hand hand;
+	public List<@NonNull Card> communityCards = new ArrayList<>();
 
 	public int checkSum;
 	public boolean[] activeStatus = new boolean[NUM_SEATS];
@@ -51,7 +54,7 @@ public class Raw_Situation {
 		return BIG_BLIND;
 	}
 
-	public Hand getHand() {
+	public @Nullable Hand getHand() {
 		return hand;
 	}
 

@@ -5,17 +5,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /*
  * 
  * For each game a fresh Deck should be initialized. Dont reuse
  */
 public class Deck {
-	List<Card> cards;
+	List<@NonNull Card> cards;
 
 	private Deck(Random rand) {
 		cards = new ArrayList<>();
-		for (Rank n : Rank.values()) {
-			for (Suit c : Suit.values()) {
+		for (Rank n : Rank.VALUES) {
+			for (Suit c : Suit.VALUES) {
 				cards.add(new Card(n, c));
 			}
 		}
@@ -47,12 +49,14 @@ public class Deck {
 		return cards.remove(card);
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public String toString() {
 		return cards.toString();
 	}
 
-	public List<Card> toList() {
+	@SuppressWarnings("null")
+	public List<@NonNull Card> toList() {
 		return Collections.unmodifiableList(cards);
 	}
 

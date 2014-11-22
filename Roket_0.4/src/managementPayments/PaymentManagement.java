@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import managementPaymentsNew.IPayManagement;
+
+import org.apache.commons.lang3.NotImplementedException;
+
 import strategy.PlayerDecision;
 import strategy.TypeOfDecision;
 
@@ -293,6 +296,6 @@ public class PaymentManagement implements IPayManagement {
 	@Override
 	public ActionInfo action(int player, TypeOfDecision dec) {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException("todo");
 	}
 }

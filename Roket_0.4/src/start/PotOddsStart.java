@@ -12,7 +12,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import managementPaymentsNew.decisions.DecisionType;
-import old.Situation;
 import pot_odds_strategy.PotOddsDecision;
 import pot_odds_strategy.PotOddsStrategy;
 import tools.Pos;
@@ -72,15 +71,6 @@ public class PotOddsStart {
 		}
 	}
 
-	public static void start2(Situation s) {
-		// funktioniert nur im Preflop und da nur in der ersten Raisrunde,
-		// sprich gibt komische Positionen bei zweiter Raisrunde aus, macht aber
-		// nichts
-
-		// PreflopSelector sel = new PreflopSelector();
-		// Position pos = Position.BB;
-
-	}
 
 	private static void handleSituation(ScreenScraper scraper,
 			boolean myTurn) {
@@ -96,7 +86,13 @@ public class PotOddsStart {
 			System.out.println(strategy);
 			System.out.println(raw);
 			System.out.println(d);
-			decision2ouput(d, scraper.getLogo(), raw);
+
+			Pos logo = scraper.getLogo();
+			if (null == logo) {
+				// do nothing
+			} else {
+				decision2ouput(d, logo, raw);
+			}
 		} else {
 			System.out.println("wait for my turn (" + d + ")");
 		}

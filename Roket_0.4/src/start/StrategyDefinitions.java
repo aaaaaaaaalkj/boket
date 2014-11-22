@@ -20,7 +20,6 @@ import static strategy.conditions.postflop.DrawType.OESD;
 import static strategy.conditions.preflop.ConnectorType.CONNECTOR;
 import static strategy.conditions.preflop.ConnectorType.POCKET_PAIR;
 import static strategy.conditions.preflop.SuitedType.SUITED;
-import strategy.AndreasHaufenStrategy;
 import strategy.conditions.ICondition;
 import strategy.conditions.UtilityCond;
 import strategy.conditions.common.ContributionType;
@@ -32,7 +31,6 @@ import strategy.manualStrategy.StrategyImpl;
 
 public class StrategyDefinitions {
 	public static StrategyImpl s = new StrategyImpl();
-	public static AndreasHaufenStrategy andreasStr = new AndreasHaufenStrategy();
 
 	public static StrategyImpl utilityStr = new StrategyImpl();
 

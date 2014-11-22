@@ -54,6 +54,9 @@ import java.util.stream.Stream;
 import managementCards.cards.Card;
 import old.strategy.PreflopBuket;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 public final class Hand {
 
 	public final Card first;
@@ -107,8 +110,13 @@ public final class Hand {
 		return new Hand(c1, c2);
 	}
 
-	public static Hand newInstance(Card c1, Card c2) {
-		return new Hand(c1, c2);
+	public static @Nullable Hand newInstance(@Nullable Card c1,
+			@Nullable Card c2) {
+		if (c1 == null || c2 == null) {
+			return null;
+		} else {
+			return new Hand(c1, c2);
+		}
 	}
 
 	public PreflopBuket getPreflopBuket() {
@@ -278,11 +286,13 @@ public final class Hand {
 		return Math.abs(first.getRank().ordinal() - second.getRank().ordinal());
 	}
 
+	@SuppressWarnings("null")
 	public Stream<Card> stream() {
 		return Stream.of(first, second);
 	}
 
-	public List<Card> getCards() {
+	@SuppressWarnings("null")
+	public List<@NonNull Card> getCards() {
 		return Arrays.asList(first, second);
 	}
 }

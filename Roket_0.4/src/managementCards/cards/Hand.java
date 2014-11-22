@@ -1,34 +1,30 @@
 package managementCards.cards;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 public final class Hand {
-	private Optional<Card> first;
-	private Optional<Card> second;
+	private Card first;
+	private Card second;
 
-	private Hand(Card c1, Card c2) {
-		this.first = Optional.ofNullable(c1);
-		this.second = Optional.ofNullable(c2);
+	public Hand(Card c1, Card c2) {
+		this.first = c1;
+		this.second = c2;
 	}
 
-	public static Hand empty() {
-		return new Hand(null, null);
-	}
-
-	public Optional<Card> getFirst() {
+	public Card getFirst() {
 		return first;
 	}
 
-	public Optional<Card> getSecond() {
+	public Card getSecond() {
 		return second;
 	}
 
 	public void setCards(Card first, Card second) {
-		this.first = Optional.of(first);
-		this.second = Optional.of(second);
+		this.first = first;
+		this.second = second;
 	}
 
 	// public ConnectorType getConnectorType() {
@@ -59,13 +55,13 @@ public final class Hand {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((first == null) ? 0 : first.hashCode());
-		result = prime * result + ((second == null) ? 0 : second.hashCode());
+		result = prime * result + (first.hashCode());
+		result = prime * result + (second.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -73,25 +69,16 @@ public final class Hand {
 		if (getClass() != obj.getClass())
 			return false;
 		Hand other = (Hand) obj;
-		if (first == null) {
-			if (other.first != null)
-				return false;
-		} else if (!first.equals(other.first))
+		if (!first.equals(other.first))
 			return false;
-		if (second == null) {
-			if (other.second != null)
-				return false;
-		} else if (!second.equals(other.second))
+		if (!second.equals(other.second))
 			return false;
 		return true;
 	}
 
+	@SuppressWarnings("null")
 	public List<Card> getCards() {
-		if (first.isPresent() && second.isPresent()) {
-			return Arrays.asList(first.get(), second.get());
-		} else {
-			return Collections.emptyList();
-		}
+		return Arrays.asList(first, second);
 	}
 
 }

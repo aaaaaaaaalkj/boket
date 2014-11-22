@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public final class Card implements Comparable<Card> {
 	private final Rank rank;
 	private final Suit suit;
@@ -21,10 +23,12 @@ public final class Card implements Comparable<Card> {
 		return suit;
 	}
 
+	@SuppressWarnings("null")
 	public static Card newInstance(int rank, Suit suit) {
 		return new Card(Rank.values()[rank - 2], suit);
 	}
 
+	@SuppressWarnings("null")
 	public static Card newInstance(String str) {
 		return new Card(Rank.fromShortString(str.substring(0, 1)),
 				Suit.fromShortString(str.substring(1)));
@@ -51,13 +55,13 @@ public final class Card implements Comparable<Card> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((suit == null) ? 0 : suit.hashCode());
-		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+		result = prime * result + (suit.hashCode());
+		result = prime * result + (rank.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -107,7 +111,7 @@ public final class Card implements Comparable<Card> {
 					deck.remove(card);
 					return card;
 				})
-				.orElse(null);
+				.orElseThrow(IllegalStateException::new);
 	}
 
 	public String shortString() {

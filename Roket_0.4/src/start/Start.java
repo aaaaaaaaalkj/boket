@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import old.Situation;
 import strategy.BoketSituation;
 import strategy.ISituation;
 import strategy.TypeOfDecision;
@@ -59,7 +58,12 @@ public class Start {
 			System.out.println(sit);
 			// System.out.println(raw);
 			System.out.println(d);
-			decision2ouput(d, scraper.getLogo(), raw);
+			Pos logo = scraper.getLogo();
+			if (null == logo) {
+				// do nothing
+			} else {
+				decision2ouput(d, logo, raw);
+			}
 		} else {
 			System.out.println("wait for my turn (" + d + ")");
 		}
@@ -93,15 +97,7 @@ public class Start {
 
 	}
 
-	public static void start2(Situation s) {
-		// funktioniert nur im Preflop und da nur in der ersten Raisrunde,
-		// sprich gibt komische Positionen bei zweiter Raisrunde aus, macht aber
-		// nichts
 
-		// PreflopSelector sel = new PreflopSelector();
-		// Position pos = Position.BB;
-
-	}
 
 	public static void decision2ouput(TypeOfDecision d, Pos logo,
 			Raw_Situation raw) {

@@ -40,6 +40,9 @@ import java.util.stream.Collectors;
 import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
+
+import org.eclipse.jdt.annotation.NonNull;
+
 import strategy.conditions.postflop.DrawType;
 import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
@@ -56,7 +59,7 @@ public final class Cat_Rec implements ICatRec {
 	static long clock = 0;
 	static long count = 0;
 
-	public Cat_Rec(List<Card> hand, List<Card> community_cards) {
+	public Cat_Rec(List<@NonNull Card> hand, List<@NonNull Card> community_cards) {
 
 		all = new ArrayList<>();
 		all.addAll(hand);

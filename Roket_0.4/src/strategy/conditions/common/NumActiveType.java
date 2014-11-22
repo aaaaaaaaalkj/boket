@@ -2,12 +2,15 @@ package strategy.conditions.common;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import strategy.ISituation;
 import strategy.conditions.ICondition;
 
 public enum NumActiveType implements ICondition {
 	TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7), EIGHT(8), NINE(9);
-	public static final NumActiveType[] VALUES = values();
+	@SuppressWarnings("null")
+	public static final @NonNull NumActiveType @NonNull [] VALUES = values();
 
 	private final int value;
 
@@ -39,14 +42,20 @@ public enum NumActiveType implements ICondition {
 	public static NumActiveType fromInt(int size) {
 		if (size == 1) {
 			// this can happen shortly aufter last fold
-			return null;
+			throw new IllegalStateException(
+					"illegal intermediate state. only one player at table");
 		}
 		assert size >= 2 && size <= 9 : "Too many or too few active players: "
 				+ size;
-		return Arrays.stream(VALUES)
+
+		return Arrays
+				.stream(VALUES)
 				.filter(v -> v.getValue() == size)
 				.findAny()
-				.orElse(null);
+				.orElseThrow(
+						() -> new IllegalStateException(
+								"no NumActiveType found for " + size
+										+ " players"));
 	}
 
 }

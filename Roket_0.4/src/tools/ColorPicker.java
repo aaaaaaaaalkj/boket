@@ -12,13 +12,18 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import pot_odds_strategy.PotOddsDecision;
 import pot_odds_strategy.PotOddsStrategy;
 
 public class ColorPicker {
-	private static Pos logo;
 
-	private static void testPostRec() throws AWTException {
+	public ColorPicker() {
+		// TODO Auto-generated constructor stub
+	}
+
+	private void testPostRec() throws AWTException {
 		List<Pos> indicators = new ArrayList<>();
 		indicators.add(pos(0, 2)); // dollar-offset
 		indicators.add(pos(0, 3));
@@ -34,7 +39,7 @@ public class ColorPicker {
 		System.out.println(d);
 	}
 
-	private static void testRobot() throws AWTException {
+	private void testRobot() throws AWTException {
 		Color ref = new Color(16774863);
 		Pos pos = new Pos(252, 426);
 		MyRobot robot = new MyRobot();
@@ -42,20 +47,7 @@ public class ColorPicker {
 				ref);
 	}
 
-	public static void test2() throws AWTException {
-
-		// for (double d2 = -2; d2 <= 2; d2 += .1) {
-		//
-		// double v = Math.abs(d2) % 1;
-		//
-		// v = Math.floor(v * 100) / 100;
-		// d2 = Math.floor(d2 * 100) / 100;
-		//
-		// System.out.println(d2 + " : " + (v));
-		// }
-
-
-
+	public void test2() throws AWTException {
 		ScreenScraper scraper = new ScreenScraper();
 		Raw_Situation raw = scraper.getSituation();
 		raw.print();
@@ -70,24 +62,7 @@ public class ColorPicker {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// findColorAtMousePosition();
-		test2();
-
-		// start(new MyRobot());
-		System.exit(1);
-		while (true) {
-
-			// Point p = MouseInfo.getPointerInfo().getLocation();
-
-			// Pos p2 = pos(p.x, p.y);
-			// =255,g=246,b=207]
-			findColorAtMousePosition();
-			try {
-				Thread.sleep(400);
-			} catch (InterruptedException e) {
-				// ignore
-			}
-		}
+		new ColorPicker().test2();
 
 		// Color c = new Color(12010269);
 		// logo = recognizeLogo();
@@ -98,7 +73,7 @@ public class ColorPicker {
 
 	}
 
-	public static void findColorAtMousePosition() {
+	public void findColorAtMousePosition() {
 		try {
 			Robot r = new Robot();
 			Point p = MouseInfo.getPointerInfo().getLocation();
@@ -117,27 +92,32 @@ public class ColorPicker {
 
 	}
 
-	private static Pos recognizeLogo(MyRobot robot) {
+	private @Nullable Pos recognizeLogo(MyRobot robot) {
 		// Farbe im Logo von Pokerstars
 		Color c = new Color(0x00FFCAC5);
-		logo = robot.pixelSearch(0, 0, 100, 250, c);
+		Pos logo = robot.pixelSearch(0, 0, 100, 250, c);
 		return logo;
 	}
 
-	public static void test() {
+	public void test() {
 		// Color cardColor = getPixelColor(new Pos().plus(9, 25));
 	}
 
-	public static void start(MyRobot robot) {
-		recognizeLogo(robot);
+	public void start(MyRobot robot) {
+		Pos logo = recognizeLogo(robot);
 		// Color refColor = new Color(12010269);
 		// System.out.println(refColor);
 
-		Pos p = new Pos(40, 314).plus(logo);
-		Color c = robot.getPixelColor(p);
-		System.out.println(c);
+		if (logo == null) {
+			System.out.println("logo is null");
+		} else {
 
-		robot.mouseMove(p);
+			Pos p = new Pos(40, 314).plus(logo);
+			Color c = robot.getPixelColor(p);
+			System.out.println(c);
+
+			robot.mouseMove(p);
+		}
 		// 38,231
 	}
 

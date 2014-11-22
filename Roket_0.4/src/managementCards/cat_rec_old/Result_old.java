@@ -9,6 +9,8 @@ import managementCards.cat_rec_new.Cathegory;
 import managementCards.cat_rec_new.IResult;
 import managementCards.cat_rec_new.ResultImpl;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class Result_old  {
 	public Cathegory cathegory;
 	public int[] tieBreaker;
@@ -101,7 +103,7 @@ public class Result_old  {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

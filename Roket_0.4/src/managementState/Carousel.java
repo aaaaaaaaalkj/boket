@@ -5,6 +5,8 @@ import java.util.Set;
 
 import managementPaymentsNew.decisions.DecisionType;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import common.Round;
 
 public class Carousel implements IStateManagement {
@@ -21,9 +23,9 @@ public class Carousel implements IStateManagement {
 		this.allinPlayers = new HashSet<>();
 		this.round = Round.PREFLOP;
 		this.numSeats = numSeats;
-		for (int i = 0; i < numSeats; i++) {
-			activePlayers.add(i);
-			todoPlayers.add(i);
+		for (Integer player = 0; player < numSeats; player++) {
+			activePlayers.add(player);
+			todoPlayers.add(player);
 		}
 		currentIndex = 2;
 	}
@@ -33,12 +35,16 @@ public class Carousel implements IStateManagement {
 	}
 
 	private GameStateImpl quiteEnd(Round old) {
-		return GameStateImpl.quietEnd(old,
-				activePlayers.size() > 0 ?
-						// find the winning player
-						activePlayers.stream().findAny().orElse(null)
-						: allinPlayers.stream().findAny().orElse(null)
-				, getNotFolded());
+		int winningPlayer;
+		if (activePlayers.size() > 0) {
+			winningPlayer = activePlayers.iterator().next();
+		} else {
+			throw new IllegalStateException("no winning player found");
+		}
+		return GameStateImpl.quietEnd(
+				old,
+				winningPlayer,
+				getNotFolded());
 	}
 
 	private GameStateImpl gameEnd(Round old) {
@@ -89,7 +95,10 @@ public class Carousel implements IStateManagement {
 	public void update(DecisionType d) {
 		switch (d) {
 		case ALL_IN:
-			allinPlayers.add(currentIndex);
+			@SuppressWarnings("null")
+			@NonNull
+			Integer currentPlayer = currentIndex;
+			allinPlayers.add(currentPlayer);
 			activePlayers.remove(currentIndex);
 			break;
 		case BET: // same as raise
@@ -109,5 +118,4 @@ public class Carousel implements IStateManagement {
 			throw new IllegalStateException("Unexpected enum-constant: " + d);
 		}
 	}
-
 }

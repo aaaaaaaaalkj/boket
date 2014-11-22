@@ -1,9 +1,18 @@
 package old.strategy;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class PreflopSelector {
 	PreflopBuket buket;
 	private Position position;
 	private PreflopSituation situation;
+
+	public PreflopSelector(PreflopBuket buket, Position position,
+			PreflopSituation sit) {
+		this.buket = buket;
+		this.position = position;
+		this.situation = sit;
+	}
 
 	@Override
 	public int hashCode() {
@@ -15,28 +24,16 @@ public class PreflopSelector {
 		return buket;
 	}
 
-	public void setBuket(PreflopBuket buket) {
-		this.buket = buket;
-	}
-
 	public Position getPosition() {
 		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
 	}
 
 	public PreflopSituation getSituation() {
 		return situation;
 	}
 
-	public void setSituation(PreflopSituation situation) {
-		this.situation = situation;
-	}
-
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(@Nullable Object o) {
 		if (o == this)
 			return true;
 		if (o instanceof PreflopSelector) {

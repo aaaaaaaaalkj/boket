@@ -14,6 +14,9 @@ import java.util.Set;
 import managementCards.cat_rec_new.IResult;
 import managementPaymentsNew.decisions.AllowedDecision;
 import managementPaymentsNew.decisions.Decision;
+
+import org.apache.commons.lang3.NotImplementedException;
+
 import strategy.conditions.common.PotType;
 
 public final class PayManagementNew implements IPayManagement2 {
@@ -187,7 +190,7 @@ public final class PayManagementNew implements IPayManagement2 {
 	public List<Integer> payOut(Set<Integer> notFolded, List<IResult> results) {
 		collectPostsToSidePots();
 
-		return null;
+		throw new NotImplementedException("todo");
 	}
 
 }

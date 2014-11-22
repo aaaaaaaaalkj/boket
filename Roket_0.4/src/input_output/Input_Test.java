@@ -4,6 +4,9 @@ import java.awt.AWTException;
 import java.awt.Color;
 
 import managementCards.cards.Card;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 import tools.Pos;
 
 public class Input_Test {
@@ -12,11 +15,14 @@ public class Input_Test {
 		MyRobot robot = new MyRobot();
 		Pos logo = recognizeLogo(robot);
 
-		Pos p = new Pos(20 - 14, 20 - 14).plus(logo);
-		Pos p2 = new Pos(550 - 14, 470 - 14).plus(logo);
+		if (logo != null) {
 
-		Pos res = robot.pixelSearch(p, p2, ref);
-		System.out.println(res);
+			Pos p = new Pos(20 - 14, 20 - 14).plus(logo);
+			Pos p2 = new Pos(550 - 14, 470 - 14).plus(logo);
+
+			Pos res = robot.pixelSearch(p, p2, ref);
+			System.out.println(res);
+		}
 	}
 
 	public static void main(String[] args) throws AWTException {
@@ -55,32 +61,35 @@ public class Input_Test {
 
 		Pos logo = recognizeLogo(robot);
 
-		pos = new Pos(24, 217).plus(logo); // pocket1
+		if (logo != null) {
 
-		c = Card_Recognition.recognizeCard(pos, robot);
-		System.out.println(c);
+			pos = new Pos(24, 217).plus(logo); // pocket1
 
-		pos = new Pos(39, 221).plus(logo); // pocket2
-		c = Card_Recognition.recognizeCard(pos, robot);
-		System.out.println(c);
+			c = Card_Recognition.recognizeCard(pos, robot);
+			System.out.println(c);
 
-		pos = new Pos(262, 168).plus(logo); // flop 1
-		c = Card_Recognition.recognizeCard(pos, robot);
-		System.out.println(c);
-		pos = new Pos(316, 168).plus(logo); // flop 2
-		c = Card_Recognition.recognizeCard(pos, robot);
-		System.out.println(c);
-		pos = new Pos(370, 168).plus(logo); // flop 3
-		c = Card_Recognition.recognizeCard(pos, robot);
-		System.out.println(c);
+			pos = new Pos(39, 221).plus(logo); // pocket2
+			c = Card_Recognition.recognizeCard(pos, robot);
+			System.out.println(c);
 
-		pos = new Pos(424, 168).plus(logo); // turn
-		c = Card_Recognition.recognizeCard(pos, robot);
-		System.out.println(c);
-		pos = new Pos(478, 168).plus(logo); // river
-		c = Card_Recognition.recognizeCard(pos, robot);
-		System.out.println(c);
+			pos = new Pos(262, 168).plus(logo); // flop 1
+			c = Card_Recognition.recognizeCard(pos, robot);
+			System.out.println(c);
+			pos = new Pos(316, 168).plus(logo); // flop 2
+			c = Card_Recognition.recognizeCard(pos, robot);
+			System.out.println(c);
+			pos = new Pos(370, 168).plus(logo); // flop 3
+			c = Card_Recognition.recognizeCard(pos, robot);
+			System.out.println(c);
 
+			pos = new Pos(424, 168).plus(logo); // turn
+			c = Card_Recognition.recognizeCard(pos, robot);
+			System.out.println(c);
+			pos = new Pos(478, 168).plus(logo); // river
+			c = Card_Recognition.recognizeCard(pos, robot);
+			System.out.println(c);
+
+		}
 		// 1. Flopkarte: 262, 168
 		// 2. flopkarte: 316,168
 		// 3. flopkarte: 370, 168
@@ -89,7 +98,7 @@ public class Input_Test {
 
 	}
 
-	private static Pos recognizeLogo(MyRobot robot) {
+	private static @Nullable Pos recognizeLogo(MyRobot robot) {
 		// Farbe im Logo von Pokerstars
 		Color c = new Color(0x00FFCAC5);
 		Pos logo = robot.pixelSearch(0, 0, 100, 250, c);

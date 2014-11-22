@@ -7,6 +7,8 @@ import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import tools.Pos;
 
 public class MyRobot {
@@ -45,11 +47,11 @@ public class MyRobot {
 	 * 
 	 * @return coords of the color c
 	 */
-	public Pos pixelSearch(Pos p, Pos p2, Color c) {
+	public @Nullable Pos pixelSearch(Pos p, Pos p2, Color c) {
 		return pixelSearch(p.x, p.y, (p2.x - p.x), (p2.y - p.y), c);
 	}
 
-	public Pos pixelSearch(int x, int y, int w, int h, Color c) {
+	public @Nullable Pos pixelSearch(int x, int y, int w, int h, Color c) {
 		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
 		int[] rgbs = new int[w * h];

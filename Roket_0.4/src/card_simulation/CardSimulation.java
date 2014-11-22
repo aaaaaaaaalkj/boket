@@ -12,6 +12,10 @@ import managementCards.cards.Deck;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.ResultImpl;
 import old.Hand;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import card_simulation.flopSimulation.Flop;
 import card_simulation.flopSimulation.FlopHand;
 import card_simulation.flopSimulation.FlopHands;
@@ -24,7 +28,7 @@ public class CardSimulation {
 	// private final List<List<PossibleHand>> hands;
 	private static final HandGenerator p = new PreflopProbabilities();
 	List<Double> activeContributors;
-	private HandGenerator suche;
+	private @Nullable HandGenerator suche;
 
 	public CardSimulation(int count, List<Double> activeContributors,
 			Hand hand,
@@ -106,16 +110,33 @@ public class CardSimulation {
 		}
 		double faktor = 1;
 
-		HandGenerator handGen = null;
+		@NonNull
+		HandGenerator handGen;
 		if (community.size() == 0) {
 			faktor = 1;
 			handGen = p;
 		} else if (community.size() == 3) {
 			faktor = 2;
-			handGen = flopHands;
+			if (flopHands == null) {
+				throw new IllegalStateException(
+						"expected flopHands to be non-null, but it is null");
+			} else {
+				handGen = flopHands;
+			}
 		} else if (community.size() >= 4) {
 			faktor = 3;
-			handGen = suche;
+			@Nullable
+			HandGenerator suche2 = suche;
+			if (suche2 == null) {
+				throw new IllegalStateException(
+						"expected suche to be non-null, but it is null");
+			} else {
+				handGen = suche2;
+			}
+		} else {
+			throw new IllegalStateException(
+					"unexpected number of community cards : "
+							+ community.size());
 		}
 		for (int i = 0; i < numExperiments; i++) {
 			won += experiment(handGen, faktor, prepairDeck());

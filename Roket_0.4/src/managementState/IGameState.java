@@ -6,7 +6,7 @@ import common.Round;
 
 public interface IGameState {
 
-	Integer getCurrentPlayer();
+	int getCurrentPlayer();
 
 	Round getRound();
 

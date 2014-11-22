@@ -14,8 +14,11 @@ import managementCards.cards.Rank;
 import managementCards.cat_rec_new.Cathegory;
 import managementCards.cat_rec_new.ResultImpl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 public class AllResults { // Singleton
-	private final Map<ResultImpl, Integer> scores;
+	private final Map<ResultImpl, @NonNull Integer> scores;
 	private final String file_path;
 
 	private AllResults(String file) throws FileNotFoundException {
@@ -24,23 +27,25 @@ public class AllResults { // Singleton
 		load();
 	}
 
-	private static AllResults my_instance;
+	private static @Nullable AllResults my_instance;
 
 	public static AllResults getInstance(String file)
 			throws FileNotFoundException {
-		if (null == my_instance) {
+		AllResults res = my_instance;
+		if (null == res) {
 			my_instance = new AllResults(file);
+			res = my_instance;
 		}
-		return my_instance;
+		return res;
 	}
 
 	public int getScore(ResultImpl res) {
-		Integer i = scores.get(res);
-		if (i == null) {
+		if (scores.containsKey(res)) {
+			return scores.get(res);
+		} else {
 			throw new IllegalArgumentException("No Score is defined for res: "
 					+ res);
 		}
-		return i;
 	}
 
 	private void load() throws FileNotFoundException {
@@ -56,6 +61,8 @@ public class AllResults { // Singleton
 
 			String[] numbers = s.split(",");
 
+			@SuppressWarnings("null")
+			@NonNull
 			Cathegory cat = Cathegory.VALUES[Integer.valueOf(numbers[0])];
 			List<Rank> ranks = new ArrayList<>();
 

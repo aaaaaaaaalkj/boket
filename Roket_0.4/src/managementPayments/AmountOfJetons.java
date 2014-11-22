@@ -1,5 +1,7 @@
 package managementPayments;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class AmountOfJetons implements Comparable<AmountOfJetons> {
 	private final int numSmallBlinds;
 	public static final AmountOfJetons INFINITY = new AmountOfJetons(
@@ -27,7 +29,7 @@ public class AmountOfJetons implements Comparable<AmountOfJetons> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

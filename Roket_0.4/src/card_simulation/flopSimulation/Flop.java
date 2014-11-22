@@ -13,6 +13,8 @@ import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class Flop implements Comparable<Flop> {
 	List<Card> cards;
 
@@ -53,7 +55,7 @@ public class Flop implements Comparable<Flop> {
 					.stream()
 					.filter(s -> cards.stream().map(Card::getSuit)
 							.filter(s::equals).count() == 0)
-					.findAny().orElse(null);
+					.findAny().orElseThrow(IllegalStateException::new);
 			for (int i = 0; i < cards.size(); i++) {
 				Card card = cards.get(i);
 				if (card.getSuit() == Suit.DIAMONDS) {
@@ -97,7 +99,7 @@ public class Flop implements Comparable<Flop> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

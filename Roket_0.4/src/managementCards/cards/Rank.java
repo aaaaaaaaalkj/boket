@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public enum Rank {
 	Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace;
 	private final static String ALL = "23456789TJQKA";
@@ -15,7 +17,9 @@ public enum Rank {
 	}
 
 	// values() creates a new array each call. better to cache
-	public static final List<Rank> VALUES = Collections.unmodifiableList(Arrays
+	@SuppressWarnings("null")
+	public static final List<@NonNull Rank> VALUES = Collections
+			.unmodifiableList(Arrays
 			.asList(values()));
 
 	public static List<Rank> valuesReversed() {

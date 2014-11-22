@@ -7,13 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import old.Situation;
+import org.eclipse.jdt.annotation.Nullable;
+
 import tools.Pos;
 
 public class ScreenScraper {
-	private Pos logo;
+	private static final int NUM_SEATS = 9;
 	private final Raw_Situation situation;
 	private final MyRobot robot;
+	private @Nullable Pos logo;
 
 	public ScreenScraper() throws AWTException {
 		robot = new MyRobot();
@@ -25,16 +27,18 @@ public class ScreenScraper {
 		return robot.getScreenshot();
 	}
 
-	public Raw_Situation run() {
-		if (!recognizeLogo())
+	public @Nullable Raw_Situation run() {
+		Pos logo = recognizeLogo();
+		if (logo == null)
 			return null;
+		this.logo = logo;
 
-		recognizeBrownButtons();
-		searchButton();
-		tableCheckSum();
-		activePlayers();
-		postRecognition();
-		stackRecognition();
+		recognizeBrownButtons(logo);
+		searchButton(logo);
+		tableCheckSum(logo);
+		activePlayers(logo);
+		postRecognition(logo);
+		stackRecognition(logo);
 
 		situation.hand = Card_Recognition.recognizeHand(logo, robot);
 		situation.communityCards = Card_Recognition
@@ -47,12 +51,12 @@ public class ScreenScraper {
 		return situation;
 	}
 
-	private void stackRecognition() {
+	private void stackRecognition(Pos logo) {
 		Pos[] positions = { pos(20, 306), pos(10, 122), pos(155, 64),
 				pos(565, 65), pos(700, 121), pos(700, 306), pos(480, 370),
 				pos(350, 446), pos(225, 370) };
-		situation.stacks = new double[Situation.numSeats];
-		for (int i = 0; i < Situation.numSeats; i++) {//
+		situation.stacks = new double[NUM_SEATS];
+		for (int i = 0; i < NUM_SEATS; i++) {//
 
 			List<Pos> indicators = new ArrayList<>();
 			indicators.add(pos(0, 2));
@@ -84,7 +88,7 @@ public class ScreenScraper {
 		return new Pos(x, y);
 	}
 
-	private void activePlayers() {
+	private void activePlayers(Pos logo) {
 
 		// 10-player-table
 		Pos[] positions = { pos(105, 207), pos(176, 132), pos(238, 108),
@@ -96,9 +100,9 @@ public class ScreenScraper {
 				pos(528, 98), pos(590, 126), pos(664, 216), pos(580, 289),
 				pos(412, 324), pos(165, 288) };
 
-		situation.activeStatus = new boolean[Situation.numSeats];
+		situation.activeStatus = new boolean[NUM_SEATS];
 
-		for (int i = 0; i < Situation.numSeats; i++) {
+		for (int i = 0; i < NUM_SEATS; i++) {
 			int dif = robot.maxColor(positions[i].plus(logo), pos(25, 30));
 			if (dif == 146)
 				situation.activeStatus[i] = true;
@@ -106,24 +110,23 @@ public class ScreenScraper {
 		situation.activeStatus[0] = situation.itsMyTurn;
 	}
 
-	private void tableCheckSum() {
+	private void tableCheckSum(Pos logo) {
 		situation.checkSum = robot.pixelCheckSum(logo.plus(new Pos(15, -5)),
 				logo.plus(new Pos(50, 5)));
 		// lobby = 1439337809
 	}
 
-	private boolean recognizeLogo() {
+	private @Nullable Pos recognizeLogo() {
 		// Farbe im Logo von Pokerstars
 		Color c = new Color(0x00FFCAC5);
-		logo = robot.pixelSearch(0, 0, 100, 250, c);
-		if (logo == null)
-			return false;
+		Pos logo = robot.pixelSearch(0, 0, 100, 250, c);
+
+		return logo;
 		// TODO: checken sind die zwei Pixel für win7 ?
 		// logo = logo.plus(0, 2);
-		return true;
 	}
 
-	void searchButton() {
+	void searchButton(Pos logo) {
 		Pos[] centersOfPlayerCirles = Constants.centersOfPlayerCirles;
 		Color c = new Color(12010269);
 		Pos button = robot.pixelSearch(logo.x, logo.y, 850, 550, c);
@@ -145,7 +148,7 @@ public class ScreenScraper {
 		situation.button = minIndex;
 	}
 
-	private void postRecognition() {
+	private void postRecognition(Pos logo) {
 		// für OCR werden Rechtecke gebraucht, wo nach Ziffern gesucht wird.
 		// for 10-seats-table:
 		// Pos[] positions = { pos(116, 197), pos(141, 156), pos(218, 114),
@@ -161,8 +164,8 @@ public class ScreenScraper {
 				pos(474, 290), pos(320, 308),
 				pos(205, 291) };
 		situation.pot = 0;
-		situation.posts = new double[Situation.numSeats];
-		for (int i = 0; i < Situation.numSeats; i++) {
+		situation.posts = new double[NUM_SEATS];
+		for (int i = 0; i < NUM_SEATS; i++) {
 			situation.posts[i] = ocr(logo, positions[i]).orElse(0.);
 			situation.pot += situation.posts[i];
 		}
@@ -258,7 +261,8 @@ public class ScreenScraper {
 		return Optional.empty();
 	}
 
-	private Integer recognizeFirstLetter(Pos logo, Pos pos, Pos first, Color ref) {
+	private @Nullable Integer recognizeFirstLetter(Pos logo, Pos pos,
+			Pos first, Color ref) {
 		Pos x;
 		Pos start = logo.plus(pos).plus(first);
 
@@ -404,13 +408,13 @@ public class ScreenScraper {
 		}
 	}
 
-	private void recognizeBrownButtons() {
+	private void recognizeBrownButtons(Pos logo) {
 		// first button
-		situation.brownButtons[0] = checkBrownButton(new Pos(417, 525));
+		situation.brownButtons[0] = checkBrownButton(logo, new Pos(417, 525));
 		// middle button
-		situation.brownButtons[1] = checkBrownButton(new Pos(550, 525));
+		situation.brownButtons[1] = checkBrownButton(logo, new Pos(550, 525));
 		// last button
-		situation.brownButtons[2] = checkBrownButton(new Pos(683, 525));
+		situation.brownButtons[2] = checkBrownButton(logo, new Pos(683, 525));
 
 		int sum = 0;
 		sum += situation.brownButtons[0] ? 1 : 0;
@@ -423,7 +427,7 @@ public class ScreenScraper {
 		}
 	}
 
-	private boolean checkBrownButton(Pos pos) {
+	private boolean checkBrownButton(Pos logo, Pos pos) {
 		Color brown = robot.getPixelColor(pos.plus(logo));
 
 		int difference = Math.abs(brown.getRed() - 148)
@@ -437,7 +441,7 @@ public class ScreenScraper {
 		return situation;
 	}
 
-	public Pos getLogo() {
+	public @Nullable Pos getLogo() {
 		return logo;
 	}
 

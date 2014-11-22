@@ -2,13 +2,16 @@ package simulation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import managementCards.CardManagement;
 import managementCards.cat_rec_new.IResult;
 import managementPaymentsNew.IPayManagement2;
+import managementPaymentsNew.PayManagementNew;
 import managementPaymentsNew.decisions.Decision;
+import managementState.Carousel;
 import managementState.IGameState;
 import managementState.IStateManagement;
 import strategy.ISituation;
@@ -24,12 +27,16 @@ public class NewSimulation {
 	IStateManagement stateManagement;
 	List<IStrategy> strategies;
 
+	@SuppressWarnings("null")
 	private static final Logger log = Logger.getLogger(NewSimulation.class
 			.getName());
 
 	public NewSimulation() {
+		int numSeats = 5;
 		this.strategies = new ArrayList<>();
-		// TODO: initialize
+		this.cardMandagement = new CardManagement(numSeats, new Random());
+		this.payManagement = PayManagementNew.newInstance(numSeats, 100);
+		this.stateManagement = new Carousel(numSeats);
 	}
 
 	public void start() {

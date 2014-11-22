@@ -13,6 +13,8 @@ import managementCards.cards.Suit;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.ResultImpl;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class NaiveSearch implements HandGenerator {
 	List<Card> myHand;
 	List<Card> community;
@@ -22,6 +24,7 @@ public class NaiveSearch implements HandGenerator {
 
 	private NaiveSearch(List<Card> myHand, List<Card> community) {
 		this.myHand = myHand;
+		this.hands = new ArrayList<>();
 		this.community = community;
 
 		try {
@@ -30,42 +33,45 @@ public class NaiveSearch implements HandGenerator {
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-
+		deck = new ArrayList<>();
 		prepareDeck();
 		run();
 	}
 
-	private static NaiveSearch instance;
+	private static @Nullable NaiveSearch instance;
 
 	public static NaiveSearch getInstance(List<Card> myHand,
 			List<Card> community) {
-		if (instance == null || !instance.myHand.equals(myHand)
-				|| !instance.community.equals(community)) {
-			instance = new NaiveSearch(myHand, community);
+		NaiveSearch x = instance;
+
+		if (x == null || !x.myHand.equals(myHand)
+				|| !x.community.equals(community)) {
+			x = new NaiveSearch(myHand, community);
+			instance = x;
 		} else {
 			System.out.println("reusing NativeSearch");
 		}
-		return instance;
+		return x;
 	}
 
-	public List<PossibleHand> getPossibleHands(double min, double max,
-			double count_opponents) {
-		if (hands.size() == 0) {
-			throw new IllegalStateException("no hands available");
-		}
-		int start = (int) (hands.size() * Math.pow(min, 1. / count_opponents));
-		int end = (int) (hands.size() * Math.pow(max, 1. / count_opponents));
-
-		List<PossibleHand> res = hands.subList(start, end);
-
-		if (res.size() == 0) {
-			throw new IllegalArgumentException(
-					"no hands found between min " + start + " and max " + end
-							+ ". hands.size = " + hands.size());
-		} else {
-			return res;
-		}
-	}
+	// public List<PossibleHand> getPossibleHands(double min, double max,
+	// double count_opponents) {
+	// if (hands.size() == 0) {
+	// throw new IllegalStateException("no hands available");
+	// }
+	// int start = (int) (hands.size() * Math.pow(min, 1. / count_opponents));
+	// int end = (int) (hands.size() * Math.pow(max, 1. / count_opponents));
+	//
+	// List<PossibleHand> res = hands.subList(start, end);
+	//
+	// if (res.size() == 0) {
+	// throw new IllegalArgumentException(
+	// "no hands found between min " + start + " and max " + end
+	// + ". hands.size = " + hands.size());
+	// } else {
+	// return res;
+	// }
+	// }
 
 	public PossibleHand getPossibleHand(int index) {
 		if (hands.size() == 0) {
@@ -75,7 +81,6 @@ public class NaiveSearch implements HandGenerator {
 	}
 
 	private void run() {
-		hands = new ArrayList<>();
 
 		System.out.println("start");
 		if (community.size() == 3) { // flop
@@ -151,7 +156,6 @@ public class NaiveSearch implements HandGenerator {
 	}
 
 	private void prepareDeck() {
-		deck = new ArrayList<>();
 		for (Suit suit : Suit.VALUES) {
 			for (Rank rank : Rank.VALUES) {
 				Card c = new Card(rank, suit);

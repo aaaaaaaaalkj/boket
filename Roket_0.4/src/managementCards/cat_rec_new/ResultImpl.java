@@ -5,6 +5,8 @@ import java.util.List;
 
 import managementCards.cards.Rank;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public final class ResultImpl implements IResult {
 	private final Cathegory cathegory;
 	private final List<Rank> tieBreaker;
@@ -36,7 +38,7 @@ public final class ResultImpl implements IResult {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -55,7 +57,7 @@ public final class ResultImpl implements IResult {
 	}
 
 	@Override
-	public int compareTo(IResult res2) {
+	public int compareTo(@Nullable IResult res2) {
 		if (res2 instanceof ResultImpl) {
 			ResultImpl res = (ResultImpl) res2;
 			if (cathegory.ordinal() > res.cathegory.ordinal())
