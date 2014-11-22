@@ -76,7 +76,7 @@ public final class Hand {
 			s += second.getRank().shortString();
 			s += first.getRank().shortString();
 		}
-		h = StartingHand.valueOf(s);
+		h = StartingHand.fromString(s);
 	}
 
 	public boolean isPocketPair() {

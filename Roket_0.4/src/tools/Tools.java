@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -119,5 +120,17 @@ public class Tools {
 	@SuppressWarnings("null")
 	public static <K> Set<K> keySet(Map<K, ?> set) {
 		return set.keySet();
+	}
+
+	public static Collector<@NonNull Integer, @NonNull ?, @NonNull Integer>
+			summingInt() {
+		ToIntFunction<Integer> mapper = x -> x;
+		@SuppressWarnings("null")
+		@NonNull
+		Collector<@NonNull Integer, @NonNull ?, @NonNull Integer> res = Collectors
+				.summingInt(mapper);
+
+		return res;
+
 	}
 }

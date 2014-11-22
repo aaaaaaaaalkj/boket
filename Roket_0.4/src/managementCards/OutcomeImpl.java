@@ -9,6 +9,7 @@ import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.IResult;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import common.IOutcome;
 import common.IPlayer;
@@ -22,7 +23,15 @@ public class OutcomeImpl implements IOutcome {
 
 	public void computeResult(IPlayer player, List<@NonNull Card> communityCards) {
 		results.put(player,
-				new Cat_Rec(player.getHand(), communityCards).check());
+				new Cat_Rec(player.getHand(), x(communityCards)).check());
+	}
+
+	private List<@NonNull Card> x(@Nullable List<@NonNull Card> list) {
+		if (null == list) {
+			throw new IllegalArgumentException("will never happen");
+		} else {
+			return list;
+		}
 	}
 
 	@Override

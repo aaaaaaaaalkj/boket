@@ -43,6 +43,10 @@ public enum StartingHand {
 		return set;
 	}
 
+	public static StartingHand fromString(String s) {
+		return valueOf(s);
+	}
+
 	public static void main(String[] args) {
 		String[] ar = { "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q",
 				"K", "A" };

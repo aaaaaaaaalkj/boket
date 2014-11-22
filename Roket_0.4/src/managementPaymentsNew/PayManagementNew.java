@@ -61,12 +61,31 @@ public final class PayManagementNew implements IPayManagement2 {
 		return m;
 	}
 
+	private Optional<Integer> positiveNonZeroPosts() {
+		@NonNull
+		Optional<Integer> res = Tools.empty();
+		for (Wallet w : posts) {
+			Integer amount = w.getAmount();
+			if (amount <= 0) {
+				continue;
+			} else {
+				if (res.isPresent()) {
+					@SuppressWarnings("null")
+					@NonNull
+					Integer min = Math.min(res.get(), amount);
+					res = Tools.of(min);
+				} else {
+					res = Tools.of(amount);
+				}
+			}
+		}
+		return res;
+	}
+
 	public void collectPostsToSidePots() {
 		Optional<Integer> min;
 
-		while ((min = Tools.min(posts.stream()
-				.map(Wallet::getAmount)
-				.filter(post -> post > 0))).isPresent()) {
+		while ((min = positiveNonZeroPosts()).isPresent()) {
 
 			List<Integer> players = posts.stream()
 					.filter(x -> x.getAmount() > 0)
@@ -83,7 +102,7 @@ public final class PayManagementNew implements IPayManagement2 {
 		}
 	}
 
-	private void pay(int player, int amount) {
+	private void pay(Integer player, int amount) {
 		if (amount > getStack(player)) {
 			throw new IllegalArgumentException("player " + player
 					+ " doesnt have " + amount + " smallblinds");
@@ -162,7 +181,7 @@ public final class PayManagementNew implements IPayManagement2 {
 	@Override
 	public int getPotSize() {
 		return posts.stream().map(Wallet::getAmount)
-				.collect(summingInt(x -> x))
+				.collect(Tools.summingInt())
 				+ pots.stream().map(SidePot::getValue)
 						.collect(summingInt(x -> x));
 	}
