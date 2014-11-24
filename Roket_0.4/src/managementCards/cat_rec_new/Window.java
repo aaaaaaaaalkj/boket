@@ -70,9 +70,8 @@ public enum Window {
 	}
 
 	public boolean applies(Collection<Rank> ranks) {
-		return list.stream()
-				.filter(ranks::contains)
-				.count() == list.size();
+		return Tools.contains(list, ranks);
 	}
+
 
 }

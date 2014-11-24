@@ -1,12 +1,16 @@
 package tools;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -112,9 +116,9 @@ public class Tools {
 		return s.substring(beginIndex, endIndex);
 	}
 
-	@SuppressWarnings({ "unchecked", "null" })
-	public static final <T> List<T> emptyList() {
-		return (List<T>) Collections.emptyList();
+	@SuppressWarnings("null")
+	public static final <T> @NonNull List<T> emptyList() {
+		return Collections.emptyList();
 	}
 
 	@SuppressWarnings("null")
@@ -132,5 +136,80 @@ public class Tools {
 
 		return res;
 
+	}
+
+	@SuppressWarnings("null")
+	public static <T> List<T> nCopies(int n, T o) {
+		return Collections.nCopies(n, o);
+	}
+
+	@SuppressWarnings("null")
+	public static <T, K, A, D>
+			Collector<T, ?, Map<K, D>> groupingBy(
+					Function<? super T, ? extends K> classifier,
+					Collector<? super T, A, D> downstream) {
+		return Collectors.groupingBy(classifier, downstream);
+
+	}
+
+	@SuppressWarnings("null")
+	public static <E> List<E> subList(List<E> list, int fromIndex, int toIndex) {
+		return list.subList(fromIndex, toIndex);
+	}
+
+	public static <E> List<E> flatten(List<List<E>> listOfLists) {
+		List<E> tie2 = new ArrayList<>();
+		for (List<E> list : listOfLists) {
+			for (E r : list) {
+				tie2.add(r);
+			}
+		}
+		return tie2;
+	}
+
+	public static <E> List<E> first(int num, List<E> list) {
+		return subList(list, 0, Math.min(num, list.size()));
+	}
+
+	public static <E, K, V> Map<K, List<V>> groupingBy(Iterable<E> col,
+			Function<E, K> key_func, Function<E, V> val_func) {
+		Map<K, List<V>> map = new HashMap<>();
+		for (E c : col) {
+			K key = key_func.apply(c);
+			if (!map.containsKey(key)) {
+				map.put(key, new ArrayList<>());
+			}
+			map.get(key_func.apply(c)).add(val_func.apply(c));
+		}
+		return map;
+	}
+
+	/**
+	 * Checks whters each element from the first Iterable is contained in the
+	 * second one.
+	 * 
+	 * @param col1
+	 *            - all elements of this collection must occour in the second
+	 *            for this method to return true
+	 * @param col2
+	 *            - collection which will be searched
+	 * @return true if and only if the second collection contains all the
+	 *         elements of the first
+	 */
+	public static <T> boolean contains(List<T> col1, Collection<T> col2) {
+		for (int i = 0; i < col1.size(); i++) {
+			if (!col2.contains(col1.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static <F, T> List<T> map(List<F> list, Function<F, T> mapper) {
+		List<T> res = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			res.add(mapper.apply(list.get(i)));
+		}
+		return res;
 	}
 }

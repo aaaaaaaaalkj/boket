@@ -72,15 +72,8 @@ public class PreflopProbabilities implements HandGenerator {
 
 		int procent = (int) Math.round(randNumber * 100);
 
-		List<PossiblePreflopHand> list = map.get(countPlayers).get(procent);
-
-		// for (int i = 0; i < 100; i++) {
-		// System.out
-		// .println("procent: " + i + " size: "
-		// + map.get(countPlayers).get(i).size());
-		// }
-
 		if (map.get(countPlayers).containsKey(procent)) {
+			List<PossiblePreflopHand> list = map.get(countPlayers).get(procent);
 
 			int i = 0;
 			while (list.isEmpty()) {
@@ -92,12 +85,24 @@ public class PreflopProbabilities implements HandGenerator {
 					if (!map2.get(procent + i).isEmpty()) {
 						list = map2.get(procent + i);
 					}
-				} else if (map2.containsKey(procent - i)) {
+				}
+				if (map2.containsKey(procent - i)) {
 					if (!map2.get(procent - i).isEmpty()) {
 						list = map2.get(procent - i);
 					}
-				} else {
-					throw new IllegalStateException("no elements in preflop");
+				}
+
+				if (!map2.containsKey(procent - i)
+						&& !map2.containsKey(procent + i)) {
+					//
+					// for (Integer x : map.keySet()) {
+					// for (Integer y : map.get(x).keySet()) {
+					// System.out.println(x + " 	" + y + " "
+					// + map.get(x).get(y));
+					// }
+					// }
+					throw new IllegalStateException("no elements in preflop"
+							+ procent);
 				}
 			}
 

@@ -18,7 +18,7 @@ public class MyRobot {
 	public MyRobot() throws AWTException {
 		long l = System.currentTimeMillis();
 		this.capture = new Robot().createScreenCapture(
-				new Rectangle(0, 0, 1000, 1000)
+				new Rectangle(0, 0, 1000, 800)
 				);
 		l = System.currentTimeMillis() - l;
 		// System.out.println("screen-cpature took " + l + " millis");

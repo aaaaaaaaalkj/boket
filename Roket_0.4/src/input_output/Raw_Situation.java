@@ -66,6 +66,16 @@ public class Raw_Situation {
 		return checkSum;
 	}
 
+	public int getNumActive() {
+		int count = 0;
+		for (boolean b : activeStatus) {
+			if (b) {
+				count++;
+			}
+		}
+		return count;
+	}
+
 	public boolean[] getActiveStatus() {
 		return activeStatus;
 	}

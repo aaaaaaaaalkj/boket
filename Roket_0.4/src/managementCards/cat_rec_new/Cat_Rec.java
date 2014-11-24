@@ -3,8 +3,6 @@ package managementCards.cat_rec_new;
 import static java.util.Comparator.naturalOrder;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 import static managementCards.cards.Rank.Ace;
@@ -26,17 +24,15 @@ import static managementCards.cat_rec_new.Freq.THREE;
 import static managementCards.cat_rec_new.Freq.TWO;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import managementCards.cards.Card;
 import managementCards.cards.Rank;
@@ -48,18 +44,15 @@ import strategy.conditions.postflop.DrawType;
 import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
+import tools.Tools;
 
 public final class Cat_Rec implements ICatRec {
 	List<Card> all;
 	List<Card> community;
 
-	@SuppressWarnings("null")
 	public Cat_Rec(Card first, Card second, List<Card> community_cards) {
-		this(Arrays.asList(first, second), community_cards);
+		this(Tools.asList(first, second), community_cards);
 	}
-
-	static long clock = 0;
-	static long count = 0;
 
 	public Cat_Rec(List<@NonNull Card> hand, List<@NonNull Card> community_cards) {
 
@@ -73,63 +66,74 @@ public final class Cat_Rec implements ICatRec {
 
 	}
 
-	public ResultImpl check() {
-		long l = System.currentTimeMillis();
-		@SuppressWarnings("null")
-		List<Rank> ranks = all.stream()
-				.map(Card::getRank)
-				.collect(toList());
-		ResultImpl pairB = getPairBasedResult(ranks);
-		ResultImpl flushB = getFlushOrStraightResult();
+	static long count1 = 0;
+	static long count2 = 0;
+	static int x = 0;
 
+	public ResultImpl check() {
+
+		List<Rank> ranks = Tools.map(all, Card::getRank);
+
+		long l;
+
+		l = System.currentTimeMillis();
+		ResultImpl pairB = getPairBasedResult(ranks);
 		l = System.currentTimeMillis() - l;
-		clock += l;
-		count++;
-		if (count % 100000 == 0) {
-			System.out.println("----------" + (clock));
+
+		count1 += l;
+
+		l = System.currentTimeMillis();
+		ResultImpl flushB = getFlushOrStraightResult();
+		l = System.currentTimeMillis() - l;
+		count2 += l;
+
+		x++;
+
+		if (x % 50000 == 0) {
+			System.out.println("pairbased: " + count1);
+			System.out.println("straight/flush: " + count2);
 		}
 
 		return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
 	}
 
-	@SuppressWarnings("null")
 	private ResultImpl getPairBasedResult(List<Rank> ranks) {
-		@NonNull
 		List<@NonNull List<@NonNull Rank>> choosenCards;
 		if (has(ranks, FOUR)) {
-			choosenCards = Arrays
+			choosenCards = Tools
 					.asList(extract(ranks, FOUR), getTop(ranks, 1));
 			return result(FOUR_OF_A_KIND, choosenCards);
 		}
 		if (num(ranks, THREE) > 1) {
-			choosenCards = Arrays.asList(extract(ranks, THREE),
+			choosenCards = Tools.asList(extract(ranks, THREE),
 					extract(ranks, THREE));
 			return result(FULL_HOUSE, choosenCards);
 		}
 		if ((has(ranks, THREE) && has(ranks, TWO))) {
-			choosenCards = Arrays.asList(extract(ranks, THREE),
+			choosenCards = Tools.asList(extract(ranks, THREE),
 					extract(ranks, TWO));
 			return result(FULL_HOUSE, choosenCards);
 		}
 		if (has(ranks, THREE)) {
-			choosenCards = Arrays.asList(extract(ranks, THREE),
+			choosenCards = Tools.asList(extract(ranks, THREE),
 					getTop(ranks, 2));
 			return result(THREE_OF_A_KIND, choosenCards);
 		}
 		if (num(ranks, TWO) > 1) {
-			choosenCards = Arrays.asList(extract(ranks, TWO),
+			choosenCards = Tools.asList(extract(ranks, TWO),
 					extract(ranks, TWO), getTop(ranks, 1));
 			return result(TWO_PAIR, choosenCards);
 		}
 		if (has(ranks, TWO)) {
-			choosenCards = Arrays.asList(extract(ranks, TWO), getTop(ranks, 3));
+			choosenCards = Tools.asList(extract(ranks, TWO), getTop(ranks, 3));
 			return result(PAIR, choosenCards);
 		}
 		if (has(ranks, ONE)) {
-			choosenCards = Arrays.asList(getTop(ranks, 5));
+			choosenCards = Tools.asList(getTop(ranks, 5));
 			return result(HIGH_CARD, choosenCards);
 		}
-		return result(HIGH_CARD, Collections.emptyList());
+		List<List<Rank>> list = Tools.emptyList();
+		return result(HIGH_CARD, list);
 	}
 
 	// +++++++++++++++++++++++++
@@ -146,23 +150,36 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	private List<Rank> extract(List<Rank> ranks, Freq f) {
-		@SuppressWarnings("null")
 		List<Rank> list = Rank.VALUES.stream()
 				.filter(c -> Collections.frequency(ranks, c) == f.value)
-				.collect(Collectors.toList());
+				.collect(Tools.toList());
 		Collections.sort(list); // ascending
 		Rank rank = list.get(list.size() - 1); // get last elem
-		@SuppressWarnings("null")
-		@NonNull
-		List<Rank> res = Collections.nCopies(f.value, rank);
+		List<Rank> res = Tools.nCopies(f.value, rank);
 		ranks.removeAll(res);
 		return res;
 	}
 
 	private long num(List<Rank> ranks, Freq f) {
+		// Collections.sort(ranks);
+		// long res = 0;
+		// int count = 1;
+		// for (int i = 1; i < ranks.size(); i++) {
+		// if (ranks.get(i).equals(ranks.get(i - 1))) {
+		// count++;
+		// } else {
+		// if (count == f.value) {
+		// res++;
+		// }
+		// count = 1;
+		// }
+		// }
+		// return res;
+
 		return Rank.VALUES.stream()
 				.filter(c -> Collections.frequency(ranks, c) == f.value)
 				.count();
+
 	}
 
 	private boolean has(List<Rank> ranks, Freq f) {
@@ -171,71 +188,64 @@ public final class Cat_Rec implements ICatRec {
 
 	// +++++++++++++++++++++++++
 	private ResultImpl result(Cathegory cat, List<List<Rank>> tieBreakers) {
-		@SuppressWarnings("null")
-		List<Rank> tie = tieBreakers.stream()
-				.flatMap(Collection::stream)
-				.limit(5)
-				.collect(toList());
-		return new ResultImpl(cat, tie);
+		List<Rank> tie2 = Tools.first(5, Tools.flatten(tieBreakers));
+		return new ResultImpl(cat, tie2);
 	}
 
 	private ResultImpl getFlushOrStraightResult() {
 
-		@SuppressWarnings("null")
-		Map<Suit, List<Rank>> map = all
-				.stream()
-				.collect(
-						groupingBy(
-								Card::getSuit,
-								mapping(Card::getRank, toList())
-						)
-				);
+		Map<Suit, List<Rank>> map;
+		map = Tools.groupingBy(all, Card::getSuit, Card::getRank);
 
-		// StraightFlush
-		for (Suit c : Suit.VALUES) {
-			for (Window w : Window.getDescValues()) {
-				if (map.containsKey(c) && w.applies(map.get(c))) {
-					return new ResultImpl(
-							Cathegory.STRAIGHT_FLUSH,
-							w.getRanks());
-				}
-			}
-		}
+		Optional<ResultImpl> straightResult = Tools.empty();
+		Optional<ResultImpl> flushResult = Tools.empty();
+		Optional<ResultImpl> straightflushResult = Tools.empty();
+
 		// Flush
 		for (Suit c : Suit.values()) {
 			if (map.containsKey(c) && map.get(c).size() >= 5) {
 				List<Rank> tieBreakers = new ArrayList<>(map.get(c)
 						.subList(0, 5));
-				// Collections.sort(tieBreakers);
-				// Collections.reverse(tieBreakers);
-				ResultImpl res = new ResultImpl(Cathegory.FLUSH, tieBreakers);
-
-				// ResultImpl x = new ResultImpl(Cathegory.FLUSH, Arrays.asList(
-				// Rank.Ace, Rank.Four, Rank.Four, Rank.Three, Rank.Two));
-				//
-				// if (x.equals(res)) {
-				// System.out.println(all);
-				// System.out.println("------- c: " + c + "  " + map.get(c));
-				// }
-
-				return res;
+				flushResult = Tools.of(new ResultImpl(Cathegory.FLUSH,
+						tieBreakers));
+				break;
 			}
 		}
 		// Straight
-
-		@SuppressWarnings("null")
-		@NonNull
-		List<Rank> ranks2 = all.stream()
-				.map(Card::getRank)
-				.collect(toList());
+		List<Rank> ranks2;
+		ranks2 = Tools.map(all, Card::getRank);
 
 		for (Window w : Window.getDescValues()) {
 			if (w.applies(ranks2)) {
-				return new ResultImpl(Cathegory.STRAIGHT, w.getRanks());
+				straightResult = Tools.of(new ResultImpl(Cathegory.STRAIGHT, w
+						.getRanks()));
+				break;
 			}
 		}
-		// Nothing
-		return new ResultImpl(Cathegory.HIGH_CARD); // worst possible result
+
+		if (straightResult.isPresent() && flushResult.isPresent()) {
+			// StraightFlush
+			out: for (Suit c : Suit.VALUES) {
+				for (Window w : Window.getDescValues()) {
+					if (map.containsKey(c) && w.applies(map.get(c))) {
+						straightflushResult = Tools.of(new ResultImpl(
+								Cathegory.STRAIGHT_FLUSH,
+								w.getRanks()));
+						break out;
+					}
+				}
+			}
+		}
+		if (straightflushResult.isPresent()) {
+			return straightflushResult.get();
+		} else if (flushResult.isPresent()) {
+			return flushResult.get();
+		} else if (straightResult.isPresent()) {
+			return straightResult.get();
+		} else {
+			// Nothing
+			return new ResultImpl(Cathegory.HIGH_CARD); // worst possible result
+		}
 	}
 
 	private boolean checkOESD() {
@@ -351,10 +361,7 @@ public final class Cat_Rec implements ICatRec {
 	}
 
 	public PairBasedDanger checkPairBasedDanger() {
-		@SuppressWarnings("null")
-		List<Rank> ranks = community.stream()
-				.map(Card::getRank)
-				.collect(toList());
+		List<Rank> ranks = Tools.map(community, Card::getRank);
 		ResultImpl pairB = getPairBasedResult(ranks);
 		Cathegory c = pairB.getCathegory();
 		if (c == PAIR) {

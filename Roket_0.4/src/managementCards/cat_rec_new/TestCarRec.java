@@ -163,7 +163,8 @@ public class TestCarRec {
 
 		rec = create(Qs, Ts, Ks, As, Js, s9);
 		res = straightFlush(Ace, King, Queen, Jack, Ten);
-		assertTrue(rec.check().equals(res));
+		System.out.println(rec.check());
+		assertTrue(rec.toString(), rec.check().equals(res));
 
 		rec = create(s2, s5, s3, As, s4, Tc, c3);
 		res = straightFlush(Five, Four, Three, Two, Ace);

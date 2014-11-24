@@ -4,7 +4,8 @@ import managementPaymentsNew.decisions.DecisionType;
 
 public class PotOddsDecision {
 	private final DecisionType dec;
-	private final Double value;
+	private final double value;
+	private final static double INVALID_VALUE = -1;
 
 	private PotOddsDecision(DecisionType dec, double value) {
 		this.dec = dec;
@@ -15,16 +16,19 @@ public class PotOddsDecision {
 		return dec;
 	}
 
-	public Double getValue() {
+	public double getValue() {
+		if (value == INVALID_VALUE) {
+			throw new IllegalStateException(dec + " dosnt have a value");
+		}
 		return value;
 	}
 
 	public static PotOddsDecision fold() {
-		return new PotOddsDecision(DecisionType.FOLD, 0.);
+		return new PotOddsDecision(DecisionType.FOLD, INVALID_VALUE);
 	}
 
 	public static PotOddsDecision call() {
-		return new PotOddsDecision(DecisionType.CALL, 0.);
+		return new PotOddsDecision(DecisionType.CALL, INVALID_VALUE);
 	}
 
 	public static PotOddsDecision raise(double d) {
@@ -34,7 +38,7 @@ public class PotOddsDecision {
 	@Override
 	public String toString() {
 		return "decision = " + dec
-				+ (value == 0 ? " " + value : "") + "";
+				+ (value == INVALID_VALUE ? " " + value : "") + "";
 	}
 
 }

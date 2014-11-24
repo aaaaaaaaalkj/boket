@@ -9,14 +9,10 @@ import managementCards.cards.Deck;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.ResultImpl;
 import old.Hand;
-
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import tools.Tools;
-import card_simulation.flopSimulation.Flop;
-import card_simulation.flopSimulation.FlopHand;
-import card_simulation.flopSimulation.FlopHands;
+import card_simulation.flopSimulation.CommunityCardsX;
+import card_simulation.flopSimulation.Generator;
+import card_simulation.flopSimulation.LateRoundHand;
 
 public class CardSimulation {
 	private final List<Card> hand;
@@ -24,9 +20,8 @@ public class CardSimulation {
 	private final int numPlayers;
 	private final Random rand = new Random();
 	// private final List<List<PossibleHand>> hands;
-	private static final HandGenerator p = new PreflopProbabilities();
+	private static final HandGenerator preflop = new PreflopProbabilities();
 	List<Double> activeContributors;
-	private @Nullable HandGenerator suche;
 
 	public CardSimulation(int count, List<Double> activeContributors,
 			Hand hand,
@@ -38,31 +33,6 @@ public class CardSimulation {
 		this.community.addAll(community);
 		// this.hands = new ArrayList<>();
 
-		if (community.size() >= 4) {
-			long l = System.currentTimeMillis();
-			//
-			suche = NaiveSearch.getInstance(this.hand,
-					this.community);
-
-			l = System.currentTimeMillis() - l;
-
-			System.out.println("NativeSearch took " + l + " millis");
-
-			// for (double d : activeContributors) {
-			// // double min = Math.max(0, d - .05);
-			// // double max = Math.min(1, d + .8);
-			//
-			// // List<PossibleHand> list = suche.getPossibleHands(min, max,
-			// // count - 1);
-			// // this.hands.add(list);
-			//
-			// // System.out.println(((double) Math.round(d * 100) / 100)
-			// // + " -> "
-			// // + list.get(0) + " "
-			// // + list.get(list.size() / 2)
-			// // + " " + list.get(list.size() - 1));
-			// }
-		}
 	}
 
 	public double run() {
@@ -71,15 +41,27 @@ public class CardSimulation {
 
 		long l = System.currentTimeMillis();
 
-		List<FlopHand> hands = null;
-		FlopHands flopHands = null;
-		Flop flop = new Flop(community);
-		if (community.size() == 3) {
+		List<LateRoundHand> hands = null;
 
-			hands = FlopHand.createAll(flop);
-			FlopHand.simulation(numPlayers, hands, flop, 30000);
+		if (community.size() == 0) {
+			for (int player = 1; player < numPlayers; player++) {
+				List<Card> hand = preflop.getHand(numPlayers,
+						activeContributors.get(player - 1).doubleValue());
+				System.out.println((player - 1) + ": " + hand);
+			}
+		}
+		double faktor = 1;
 
-			flopHands = new FlopHands(hands);
+		HandGenerator handGen;
+		if (community.size() == 0) {
+			faktor = 1;
+			handGen = preflop;
+		} else if (community.size() == 3) {
+			CommunityCardsX flop = new CommunityCardsX(community);
+			hands = LateRoundHand.createAll(flop);
+			LateRoundHand.simulation(numPlayers, hands, flop, 30000);
+
+			Generator flopHands = new Generator(hands);
 
 			for (int player = 1; player < numPlayers; player++) {
 				List<Card> cards = flopHands.getHand(
@@ -90,46 +72,30 @@ public class CardSimulation {
 
 			}
 
-			System.out
-					.println("contribution: " + activeContributors.get(0) * 2);
-
-			// String s = hands.stream().map(Object::toString)
-			// .collect(joining("\n"));
-			// System.out.println(s);
-		}
-
-		if (community.size() == 0) {
-			for (int player = 1; player < numPlayers; player++) {
-				List<Card> hand = p.getHand(numPlayers,
-						activeContributors.get(player - 1).doubleValue());
-				System.out.println((player - 1) + ": " + hand);
-			}
-		}
-		double faktor = 1;
-
-		@NonNull
-		HandGenerator handGen;
-		if (community.size() == 0) {
-			faktor = 1;
-			handGen = p;
-		} else if (community.size() == 3) {
 			faktor = 2;
-			if (flopHands == null) {
-				throw new IllegalStateException(
-						"expected flopHands to be non-null, but it is null");
-			} else {
-				handGen = flopHands;
-			}
+			// System.out
+			// .println("contribution: " + activeContributors.get(0)
+			// * faktor);
+
+			handGen = flopHands;
 		} else if (community.size() >= 4) {
-			faktor = 3;
-			@Nullable
-			HandGenerator suche2 = suche;
-			if (suche2 == null) {
-				throw new IllegalStateException(
-						"expected suche to be non-null, but it is null");
-			} else {
-				handGen = suche2;
+			faktor = 1.5;
+
+			CommunityCardsX turn = new CommunityCardsX(community);
+			hands = LateRoundHand.createAll(turn);
+			LateRoundHand.simulation(numPlayers, hands, turn, 30000);
+			// NaiveSearch.getInstance(this.hand, this.community);
+			handGen = new Generator(hands);
+
+			for (int player = 1; player < numPlayers; player++) {
+				List<Card> cards = handGen.getHand(numPlayers,
+						activeContributors.get(player - 1) * faktor);
+
+				System.out.println(player + ": [" + cards.get(0) + " "
+						+ cards.get(1) + "]");
+
 			}
+
 		} else {
 			throw new IllegalStateException(
 					"unexpected number of community cards : "
@@ -197,8 +163,10 @@ public class CardSimulation {
 			hisHand = handGen.getHand(numPlayers,
 					activeContributors.get(player - 1) * faktor);
 
+			// System.out.println(hisHand);
+
 			ResultImpl result = new Cat_Rec(hisHand, community_cards).check();
-			if (result.compareTo(myResult) == 1) {
+			if (result.compareTo(myResult) > 0) {
 				// System.out.println("-----" + result);
 				return 0;
 			} else {

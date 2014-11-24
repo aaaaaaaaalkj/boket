@@ -9,9 +9,9 @@ import java.util.Random;
 import managementCards.cards.Card;
 import card_simulation.HandGenerator;
 
-public class FlopHands implements HandGenerator {
+public class Generator implements HandGenerator {
 	private static final Random r = new Random();
-	private final Map<Integer, List<FlopHand>> map;
+	private final Map<Integer, List<LateRoundHand>> map;
 
 	public double getRand(double contribution, double variance) {
 		double randNumber = (r.nextGaussian() * variance) + contribution;
@@ -24,13 +24,13 @@ public class FlopHands implements HandGenerator {
 		return randNumber;
 	}
 
-	public FlopHands(List<FlopHand> list) {
+	public Generator(List<LateRoundHand> list) {
 		map = new HashMap<>();
 		for (int i = 0; i <= 100; i++) {
 			map.put(i, new ArrayList<>());
 		}
 
-		for (FlopHand hand : list) {
+		for (LateRoundHand hand : list) {
 			double score = hand.getScore();
 
 			int procent = (int) Math.round(score * 100);
@@ -45,21 +45,25 @@ public class FlopHands implements HandGenerator {
 			contribution = 1;
 		}
 
-		double variance = 1 - contribution;
+		double variance;
 
-		variance = Math.max(.03, variance);
+		// variance= 1 - contribution;
+
+		variance = 0.03;
 
 		double randNumber;
 		randNumber = getRand(contribution, variance);
 
 		int procent = (int) Math.round(randNumber * 100);
 
+		// System.out.println(procent);
+
 		if (!map.containsKey(procent)) {
 			throw new IllegalStateException("list is null: " + procent + " "
 					+ contribution);
 		} else {
 
-			List<FlopHand> list = map.get(procent);
+			List<LateRoundHand> list = map.get(procent);
 
 			if (procent < 50) {
 				while (list.isEmpty()) {

@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 
 import managementCards.all_cathegories.AllResults;
 import managementCards.cards.Card;
@@ -82,38 +81,7 @@ public class NaiveSearch implements HandGenerator {
 
 	private void run() {
 
-		System.out.println("start");
-		if (community.size() == 3) { // flop
-
-			CountDownLatch latch = new CountDownLatch(2);
-
-			Worker w1 = new Worker(community,
-					deck, allRes,
-					0,
-					deck.size() * 1 / 3,
-					latch);
-			Worker w2 = new Worker(community,
-					deck, allRes,
-					deck.size() * 1 / 3,
-					deck.size(),
-					latch);
-
-			w2.start();
-			w1.start();
-
-			try {
-				latch.await();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-			System.out.println("done");
-
-			// score = (w1.getScore() + w2.getScore()) / 990;
-
-			hands.addAll(w1.getHands());
-			hands.addAll(w2.getHands());
-		}
+		System.out.println("naive search start");
 
 		for (int first = 0; first < deck.size(); first++) {
 			for (int second = first + 1; second < deck.size(); second++) {
@@ -193,7 +161,7 @@ public class NaiveSearch implements HandGenerator {
 		Random r = new Random();
 
 		double randNumber = (r.nextGaussian() * .06)
-				+ contribution * 3;
+				+ contribution;
 
 		if (randNumber > 1) {
 			randNumber = 1 - Math.abs(randNumber) % 1;

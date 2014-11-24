@@ -9,9 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import old.Hand;
-
-import org.eclipse.jdt.annotation.Nullable;
-
+import strenght_analysis.StrenghtAnalysis;
 import card_simulation.CardSimulation;
 
 public class PotOddsStrategy {
@@ -84,7 +82,7 @@ public class PotOddsStrategy {
 					activeContributors.add(naked_pod / count
 							/ pot);
 				} else {
-					activeContributors.add(new_posts[i] / pot);
+					activeContributors.add(posts[i] / s.pot);
 				}
 			}
 		}
@@ -95,7 +93,8 @@ public class PotOddsStrategy {
 							((double) Math.round(activeContributors.get(i) * 100)) / 100);
 		}
 
-		@Nullable
+		activeContributors = new StrenghtAnalysis(s).getStrength();
+
 		Hand hand = s.hand;
 		if (hand == null) {
 			return;
@@ -115,62 +114,6 @@ public class PotOddsStrategy {
 		// s.activeStatus)
 
 		valueOfSituation = ((double) Math.round(value * 100)) / 100;
-	}
-
-	public double computeAndreasFaktor(int countActivePlayers, int button,
-			boolean[] active) {
-		for (int i = 1; i < posts.length; i++) {
-			System.out
-					.println(i
-							+ " "
-							+ prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner);
-
-			if (active[i]) {
-
-				if (posts[i] == 0) {
-					if (round == 0) {
-						prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner *=
-								(1. - (1. / (countActivePlayers - 1)));
-					} else {
-						prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner *=
-								(1. - lastPost / pot);
-					}
-				} else {
-					double post = posts[i];
-
-					if (round == 0) {
-						if (i == (button + 1) % 9) {
-							post -= .01;
-						}
-						if (i == (button + 2) % 9) {
-							post -= .02;
-						}
-					}
-
-					if (post == 0) {
-						prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner *=
-								(1. - (1. / (countActivePlayers - 1)));
-					} else {
-						prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner *=
-								(1. - post / pot);
-					}
-
-				}
-			}
-		}
-
-		gegenwahrscheinlichkeit_von_zufaelligen_gegnern_mit_zufaelligen_haenden =
-				Math.pow(1. - (1. / countActivePlayers), countActivePlayers);
-
-		double faktor = prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner
-				/ gegenwahrscheinlichkeit_von_zufaelligen_gegnern_mit_zufaelligen_haenden;
-
-		if (faktor > 1.0) {
-			faktor = 1.0;
-		}
-		// faktor *= faktor;
-
-		return faktor;
 	}
 
 	private double computeMinRaise() {

@@ -19,13 +19,13 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import tools.Tools;
 
-public class FlopHand {
+public class LateRoundHand {
 	List<Card> cards;
 
 	int won = 0;
 	int played = 0;
 
-	public FlopHand(Card c1, Card c2) {
+	public LateRoundHand(Card c1, Card c2) {
 		cards = new ArrayList<>();
 		cards.add(c1);
 		cards.add(c2);
@@ -47,7 +47,7 @@ public class FlopHand {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FlopHand other = (FlopHand) obj;
+		LateRoundHand other = (LateRoundHand) obj;
 		if (!cards.equals(other.cards))
 			return false;
 		return true;
@@ -64,38 +64,38 @@ public class FlopHand {
 		return cards;
 	}
 
-	public static List<FlopHand> createAll(Flop flop) {
+	public static List<LateRoundHand> createAll(CommunityCardsX community) {
 		List<Card> cards = createAllCards();
-		cards.removeAll(flop.getCards());
+		cards.removeAll(community.getCards());
 
-		List<FlopHand> hands = new ArrayList<FlopHand>();
+		List<LateRoundHand> hands = new ArrayList<LateRoundHand>();
 
 		for (int i = 0; i < cards.size(); i++) {
 			for (int j = i + 1; j < cards.size(); j++) {
-				hands.add(new FlopHand(cards.get(i), cards.get(j)));
+				hands.add(new LateRoundHand(cards.get(i), cards.get(j)));
 			}
 		}
 		return hands;
 
 	}
 
-	public static void simulation(int num_players, List<FlopHand> hands,
-			Flop flop, int count_iter) {
+	public static void simulation(int num_players, List<LateRoundHand> hands,
+			CommunityCardsX communityCards, int count_iter) {
 
 		List<Card> community = new ArrayList<Card>();
-		community.addAll(flop.getCards());
+		community.addAll(communityCards.getCards());
 
 		for (int run = 0; run < count_iter; run++) {
 			Set<Card> all_cards = new HashSet<Card>();
 			all_cards.addAll(createAllCards());
-			all_cards.removeAll(flop.getCards());
+			all_cards.removeAll(communityCards.getCards());
 
-			List<FlopHand> players = new ArrayList<FlopHand>();
+			List<LateRoundHand> players = new ArrayList<LateRoundHand>();
 
 			while (players.size() < num_players) {
 				int index = (int) (Math.random() * hands.size());
 
-				FlopHand hand = hands.get(index);
+				LateRoundHand hand = hands.get(index);
 
 				if (all_cards.contains(hand.getFirst())
 						&& all_cards.contains(hand.getSecond())) {
@@ -121,7 +121,7 @@ public class FlopHand {
 			community.add(card1);
 			community.add(card2);
 
-			Map<FlopHand, ResultImpl> results = new HashMap<>();
+			Map<LateRoundHand, ResultImpl> results = new HashMap<>();
 
 			for (int i = 0; i < players.size(); i++) {
 				ResultImpl r = new Cat_Rec(players.get(i).getCards(), community)
@@ -173,9 +173,9 @@ public class FlopHand {
 
 	public static void main(String[] args) {
 
-		Flop flop = new Flop(Tools.asList(Card.Ad, Card._3s, Card._7c));
+		CommunityCardsX flop = new CommunityCardsX(Tools.asList(Card.Ad, Card._3s, Card._7c));
 
-		List<FlopHand> hands = createAll(flop);
+		List<LateRoundHand> hands = createAll(flop);
 
 		simulation(5, hands, flop, 10000);
 

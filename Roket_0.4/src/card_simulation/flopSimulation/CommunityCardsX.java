@@ -16,14 +16,15 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import tools.Tools;
 
-public class Flop implements Comparable<Flop> {
+public class CommunityCardsX implements Comparable<CommunityCardsX> {
 	List<Card> cards;
 
 	public boolean contains(Card c) {
 		return cards.contains(c);
 	}
 
-	public Flop(List<Card> cards) {
+	public CommunityCardsX(List<Card> cards) {
+		// assert cards.size() == 3;
 		this.cards = cards;
 	}
 
@@ -52,6 +53,8 @@ public class Flop implements Comparable<Flop> {
 				.filter(card -> card.getSuit() == Suit.DIAMONDS)
 				.count();
 		if (diamonds > 0) {
+			// if there are diamonds, replace them with one other suit, which is
+			// not present in this flop
 			Suit missingSuit = Suit.VALUES
 					.stream()
 					.filter(s -> cards.stream().map(Card::getSuit)
@@ -64,6 +67,8 @@ public class Flop implements Comparable<Flop> {
 				}
 			}
 		}
+
+		// replace all suits which equal suit of the first card with diamonds
 		Suit suitOfFirst = cards.get(0).getSuit();
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
@@ -74,19 +79,27 @@ public class Flop implements Comparable<Flop> {
 		if (cards.stream().map(Card::getSuit).collect(Tools.toSet()).size() == 1) {
 			return; // all diamonds now
 		}
+		// if only one other suit as diamonds is present, replace it with hearts
 		if (cards.get(1).getSuit() == cards.get(2).getSuit()) {
 			cards.set(1, new Card(cards.get(1).getRank(), Suit.HEARTS));
 			cards.set(2, new Card(cards.get(2).getRank(), Suit.HEARTS));
 			return;
 		}
+		// if the suit of the second card is diamonds, replace the third suit
+		// with
+		// hearts
 		if (cards.get(1).getSuit() == Suit.DIAMONDS) {
 			cards.set(2, new Card(cards.get(2).getRank(), Suit.HEARTS));
 			return;
 		}
+		// if the suit of the third card is diamonds then replace the suit of
+		// the second card with hearts
 		if (cards.get(2).getSuit() == Suit.DIAMONDS) {
 			cards.set(1, new Card(cards.get(1).getRank(), Suit.HEARTS));
 			return;
 		}
+		// since the suits of second and third card differ and are not diamonds
+		// at this position, we can savely replace them with hearts and spades
 		cards.set(1, new Card(cards.get(1).getRank(), Suit.HEARTS));
 		cards.set(2, new Card(cards.get(2).getRank(), Suit.SPADES));
 	}
@@ -107,14 +120,14 @@ public class Flop implements Comparable<Flop> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Flop other = (Flop) obj;
+		CommunityCardsX other = (CommunityCardsX) obj;
 		if (!cards.equals(other.cards))
 			return false;
 		return true;
 	}
 
 	public static void main(String[] args) {
-		Set<Flop> set = new HashSet<>();
+		Set<CommunityCardsX> set = new HashSet<>();
 
 		List<Card> list = new ArrayList<>();
 
@@ -130,13 +143,13 @@ public class Flop implements Comparable<Flop> {
 					cards.add(list.get(i));
 					cards.add(list.get(j));
 					cards.add(list.get(k));
-					Flop f = new Flop(cards);
+					CommunityCardsX f = new CommunityCardsX(cards);
 					f.normalize();
 					set.add(f);
 				}
 			}
 		}
-		List<Flop> flops = new ArrayList<>();
+		List<CommunityCardsX> flops = new ArrayList<>();
 		flops.addAll(set);
 		Collections.sort(flops);
 
@@ -154,7 +167,7 @@ public class Flop implements Comparable<Flop> {
 	}
 
 	@Override
-	public int compareTo(Flop o) {
+	public int compareTo(CommunityCardsX o) {
 		int i = cards.get(0).compareTo(o.cards.get(0));
 		if (i == 0) {
 			i = cards.get(1).compareTo(o.cards.get(1));
