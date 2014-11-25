@@ -212,4 +212,14 @@ public class Tools {
 		}
 		return res;
 	}
+
+	public static void round(List<Double> d) {
+		for (int i = 0; i < d.size(); i++) {
+			d.set(i, Tools.round(d.get(i)));
+		}
+	}
+
+	public static Double round(double d) {
+		return ((double) Math.round(d * 100)) / 100;
+	}
 }

@@ -166,7 +166,7 @@ public class ScreenScraper {
 		positions = new Pos[] { pos(139 - 14, 248 - 14),
 				pos(169 - 14, 176 - 14), pos(259 - 14, 147 - 14),
 				pos(400, 124), pos(500, 175), pos(538 - 14, 241 - 14),
-				pos(474, 290), pos(320, 308),
+				pos(455, 290), pos(320, 308),
 				pos(205, 291) };
 		double pot = 0;
 		situation.posts(new double @NonNull [NUM_SEATS]);

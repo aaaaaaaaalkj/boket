@@ -13,6 +13,7 @@ import old.Hand;
 import org.slf4j.LoggerFactory;
 
 import strenght_analysis.StrenghtAnalysis;
+import tools.Tools;
 import card_simulation.CardSimulation;
 
 public class PotOddsStrategy {
@@ -48,11 +49,11 @@ public class PotOddsStrategy {
 	}
 
 	public PotOddsStrategy(Raw_Situation s) {
-
+		List<Double> activeContributors;
 		this.posts = s.getPosts().clone();
 
 		double maxPost = Arrays.stream(s.getPosts()).max().getAsDouble();
-		toPay = ((double) Math.round((maxPost - s.getPosts()[0]) * 100) / 100);
+		toPay = Tools.round(maxPost - s.getPosts()[0]);
 
 		round = s.getCommunityCards().size();
 		if (round > 2) {
@@ -63,7 +64,7 @@ public class PotOddsStrategy {
 		for (double d : posts) {
 			naked_pod -= d;
 		}
-		naked_pod = ((double) Math.round(naked_pod * 100)) / 100;
+		naked_pod = Tools.round(naked_pod);
 		double pot2 = naked_pod;
 		double[] new_posts = new double[posts.length];
 		for (int i = 0; i < posts.length; i++) {
@@ -72,31 +73,13 @@ public class PotOddsStrategy {
 				pot2 += new_posts[i];
 			}
 		}
-		pot = ((double) Math.round(pot2 * 100)) / 100;
+		pot = Tools.round(pot2);
 
 		int count = 0;
 		for (int i = 0; i < posts.length; i++) {
 			if (s.getActiveStatus()[i]) {
 				count++;
 			}
-		}
-
-		List<Double> activeContributors = new ArrayList<>();
-		for (int i = 1; i < posts.length; i++) {
-			if (s.getActiveStatus()[i]) {
-				if (i <= s.getButton() && new_posts[i] == 0) {
-					activeContributors.add(naked_pod / count
-							/ pot);
-				} else {
-					activeContributors.add(posts[i] / s.getPot());
-				}
-			}
-		}
-
-		for (int i = 0; i < activeContributors.size(); i++) {
-			activeContributors
-					.set(i,
-							((double) Math.round(activeContributors.get(i) * 100)) / 100);
 		}
 
 		activeContributors = new StrenghtAnalysis(s).getStrength();
@@ -116,10 +99,7 @@ public class PotOddsStrategy {
 		// Andreas möchte hier eine 2 statt 1 haben
 		double value = Math.min(Integer.MAX_VALUE, pot * odds / (1 - odds));
 
-		// * computeAndreasFaktor(countActivePlayers, s.button,
-		// s.activeStatus)
-
-		valueOfSituation = ((double) Math.round(value * 100)) / 100;
+		valueOfSituation = Tools.round(value);
 	}
 
 	private double computeMinRaise() {
@@ -151,7 +131,7 @@ public class PotOddsStrategy {
 			return PotOddsDecision.call(toPay);
 		} else {
 
-			double res = ((double) Math.round((valueOfSituation - toPay) * 100)) / 100;
+			double res = Tools.round(valueOfSituation - toPay);
 
 			res = Math.min(100000, res);
 

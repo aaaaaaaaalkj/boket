@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import pot_odds_strategy.PotOddsDecision;
 import pot_odds_strategy.PotOddsStrategy;
-import test_parkour.TestParkour;
 
 public class ColorPicker {
 	@SuppressWarnings("null")
@@ -117,8 +116,8 @@ public class ColorPicker {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("Entering application.");
-		// new ColorPicker().test2();
-		new TestParkour().test();
+		new ColorPicker().test2();
+		// new TestParkour().test();
 
 		// ScreenScraper scraper = new ScreenScraper();
 		// Raw_Situation raw = scraper.getSituation();

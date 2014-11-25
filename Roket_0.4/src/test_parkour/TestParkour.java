@@ -17,4 +17,8 @@ public class TestParkour {
 		Raw_Situation raw = scraper.getSituation();
 		logger.info(raw.toString2());
 	}
+
+	public static void main(String[] args) throws AWTException {
+		new TestParkour().test();
+	}
 }

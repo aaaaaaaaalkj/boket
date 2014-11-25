@@ -100,7 +100,7 @@ public class StrenghtAnalysis {
 			}
 
 		}
-		logger.debug("contributions: {}", contributions);
+		// logger.debug("contributions: {}", contributions);
 
 		for (int i = 1; i < sit.getPosts().length; i++) {
 			if (sit.getActiveStatus()[i] && i <= sit.getButton()

@@ -84,7 +84,7 @@ public class CardSimulation {
 
 			handGen = flopHands;
 		} else if (community.size() >= 4) {
-			faktor = 1.5;
+			faktor = 2;
 
 			CommunityCardsX turn = new CommunityCardsX(community);
 			hands = LateRoundHand.createAll(turn);
@@ -111,7 +111,7 @@ public class CardSimulation {
 		double res = round(((double) won) / numExperiments);
 
 		l = System.currentTimeMillis() - l;
-		logger.debug("card simulations took " + l + " millis");
+		logger.trace("card simulations took " + l + " millis");
 
 		return res;
 	}
