@@ -9,12 +9,18 @@ import managementCards.cards.Deck;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.ResultImpl;
 import old.Hand;
+
+import org.slf4j.LoggerFactory;
+
 import tools.Tools;
 import card_simulation.flopSimulation.CommunityCardsX;
 import card_simulation.flopSimulation.Generator;
 import card_simulation.flopSimulation.LateRoundHand;
 
 public class CardSimulation {
+	@SuppressWarnings("null")
+	final static org.slf4j.Logger logger = LoggerFactory
+			.getLogger(CardSimulation.class);
 	private final List<Card> hand;
 	private final List<Card> community;
 	private final int numPlayers;
@@ -47,7 +53,7 @@ public class CardSimulation {
 			for (int player = 1; player < numPlayers; player++) {
 				List<Card> hand = preflop.getHand(numPlayers,
 						activeContributors.get(player - 1).doubleValue());
-				System.out.println((player - 1) + ": " + hand);
+				logger.debug("{}:{}", (player - 1), hand);
 			}
 		}
 		double faktor = 1;
@@ -67,8 +73,7 @@ public class CardSimulation {
 				List<Card> cards = flopHands.getHand(
 						activeContributors.get(player - 1) * 2);
 
-				System.out.println(player + ": [" + cards.get(0) + " "
-						+ cards.get(1) + "]");
+				logger.debug("{}: {{} {}]", player, cards.get(0), cards.get(1));
 
 			}
 
@@ -91,8 +96,7 @@ public class CardSimulation {
 				List<Card> cards = handGen.getHand(numPlayers,
 						activeContributors.get(player - 1) * faktor);
 
-				System.out.println(player + ": [" + cards.get(0) + " "
-						+ cards.get(1) + "]");
+				logger.debug("{}: {{} {}]", player, cards.get(0), cards.get(1));
 
 			}
 
@@ -107,7 +111,7 @@ public class CardSimulation {
 		double res = round(((double) won) / numExperiments);
 
 		l = System.currentTimeMillis() - l;
-		System.out.println("card simulations took " + l + " millis");
+		logger.debug("card simulations took " + l + " millis");
 
 		return res;
 	}
@@ -155,7 +159,7 @@ public class CardSimulation {
 
 		ResultImpl myResult = new Cat_Rec(hand, community_cards).check();
 
-		// System.out.println(myResult);
+		// logger.info(myResult);
 
 		for (int player = 1; player < numPlayers; player++) {
 			List<Card> hisHand;
@@ -163,14 +167,14 @@ public class CardSimulation {
 			hisHand = handGen.getHand(numPlayers,
 					activeContributors.get(player - 1) * faktor);
 
-			// System.out.println(hisHand);
+			// logger.info(hisHand);
 
 			ResultImpl result = new Cat_Rec(hisHand, community_cards).check();
 			if (result.compareTo(myResult) > 0) {
-				// System.out.println("-----" + result);
+				// logger.info("-----" + result);
 				return 0;
 			} else {
-				// System.out.println(myResult + " ------------ " + result);
+				// logger.info(myResult + " ------------ " + result);
 			}
 		}
 		return 1;

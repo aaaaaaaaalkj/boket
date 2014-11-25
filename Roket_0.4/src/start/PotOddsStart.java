@@ -52,8 +52,8 @@ public class PotOddsStart {
 
 			Raw_Situation raw = scraper.getSituation();
 
-			if (raw.brownButtons[0] && !raw.brownButtons[1]
-					&& !raw.brownButtons[2]) {
+			if (raw.getBrownButtons()[0] && !raw.getBrownButtons()[1]
+					&& !raw.getBrownButtons()[2]) {
 				// fast fold possible
 				handleSituation(scraper, false);
 			}
@@ -74,6 +74,7 @@ public class PotOddsStart {
 	private static void handleSituation(ScreenScraper scraper,
 			boolean myTurn) {
 		Raw_Situation raw = scraper.getSituation();
+
 		saveImage(scraper.getScreenshot());
 
 		PotOddsStrategy strategy = new PotOddsStrategy(raw);

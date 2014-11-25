@@ -9,8 +9,13 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.LoggerFactory;
 
 public class StrenghtAnalysis {
+	@SuppressWarnings("null")
+	final static org.slf4j.Logger logger = LoggerFactory
+			.getLogger(StrenghtAnalysis.class);
+
 	Raw_Situation sit;
 
 	/*
@@ -40,39 +45,42 @@ public class StrenghtAnalysis {
 		// strength.add(1. / countPlayers);
 		// }
 
-		int raiser = sit.button;
+		int raiser = sit.getButton();
 		double post1 = 0;
 		boolean first = true;
-		for (int i = next(sit.button); i != next(sit.button) || first; i = next(i)) {
+		for (int i = next(sit.getButton()); i != next(sit.getButton()) || first; i = next(i)) {
 			first = false;
-			if (sit.posts[i] > post1) {
-				post1 = sit.posts[i];
+			if (sit.getPosts()[i] > post1) {
+				post1 = sit.getPosts()[i];
 				raiser = i;
 			}
 		}
 
-		System.out.println("raiser: " + raiser);
+		logger.trace("raiser: {}", raiser);
 
 		double naked_pod = sit.getPot();
-		for (double d : sit.posts) {
+		for (double d : sit.getPosts()) {
 			naked_pod -= d;
 		}
 
-		double pot_so_far = sit.communityCards.size() == 0 ? 0.03 : naked_pod;
+		double pot_so_far = sit.getCommunityCards().size() == 0 ? 0.03
+				: naked_pod;
 		first = true;
+		String contributions = "";
 		for (int i = next(raiser); i != next(raiser) || first; i = next(i)) {
 			first = false;
-			double blind_preflop = sit.communityCards.size() == 0 ?
-					(i == next(sit.button) ? 0.01
-							: i == next(next(sit.button)) ? 0.02 : 0.) : 0.;
+			double blind_preflop = sit.getCommunityCards().size() == 0 ?
+					(i == next(sit.getButton()) ? 0.01
+							: i == next(next(sit.getButton())) ? 0.02 : 0.)
+					: 0.;
 
-			double post = sit.posts[i] - blind_preflop;
+			double post = sit.getPosts()[i] - blind_preflop;
 
 			if (!schalter) {
 				pot_so_far += post;
 			}
 
-			if (sit.activeStatus[i]) {
+			if (sit.getActiveStatus()[i]) {
 				double contribution = pot_so_far == 0 ? 0 : post / pot_so_far;
 
 				if (contribution == 0) {
@@ -83,7 +91,7 @@ public class StrenghtAnalysis {
 
 				if (i != 0) { // ignore our own contribution
 					strength.add(contribution);
-					System.out.println(contribution);
+					contributions += ", " + contribution;
 				}
 
 			}
@@ -92,9 +100,11 @@ public class StrenghtAnalysis {
 			}
 
 		}
+		logger.debug("contributions: {}", contributions);
 
-		for (int i = 1; i < sit.posts.length; i++) {
-			if (sit.activeStatus[i] && i <= sit.button && sit.posts[i] == 0) {
+		for (int i = 1; i < sit.getPosts().length; i++) {
+			if (sit.getActiveStatus()[i] && i <= sit.getButton()
+					&& sit.getPosts()[i] == 0) {
 
 			}
 		}
@@ -104,7 +114,7 @@ public class StrenghtAnalysis {
 
 	private int next(int i) {
 		int res = i + 1;
-		if (res >= sit.posts.length) {
+		if (res >= sit.getPosts().length) {
 			res = 0;
 		}
 		return res;
@@ -126,7 +136,7 @@ public class StrenghtAnalysis {
 	//
 	// }
 	//
-	// System.out.println(strength);
+	// logger.info(strength);
 	// }
 
 	public List<Double> getStrength() {

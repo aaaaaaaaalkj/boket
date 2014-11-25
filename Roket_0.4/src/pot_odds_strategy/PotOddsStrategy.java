@@ -9,17 +9,23 @@ import java.util.Arrays;
 import java.util.List;
 
 import old.Hand;
+
+import org.slf4j.LoggerFactory;
+
 import strenght_analysis.StrenghtAnalysis;
 import card_simulation.CardSimulation;
 
 public class PotOddsStrategy {
+	@SuppressWarnings("null")
+	final static org.slf4j.Logger logger = LoggerFactory
+			.getLogger(PotOddsStrategy.class);
+
 	private double valueOfSituation;
 	private double toPay;
 	private double[] posts;
 	private double odds;
 	private double pot;
 	private int round;
-	private double lastPost;
 	double prod_der_gegenwahrscheinlichkeiten_meiner_aktiven_gegner = 1;
 	double gegenwahrscheinlichkeit_von_zufaelligen_gegnern_mit_zufaelligen_haenden;
 	private double naked_pod;
@@ -70,19 +76,19 @@ public class PotOddsStrategy {
 
 		int count = 0;
 		for (int i = 0; i < posts.length; i++) {
-			if (s.activeStatus[i]) {
+			if (s.getActiveStatus()[i]) {
 				count++;
 			}
 		}
 
 		List<Double> activeContributors = new ArrayList<>();
 		for (int i = 1; i < posts.length; i++) {
-			if (s.activeStatus[i]) {
-				if (i <= s.button && new_posts[i] == 0) {
+			if (s.getActiveStatus()[i]) {
+				if (i <= s.getButton() && new_posts[i] == 0) {
 					activeContributors.add(naked_pod / count
 							/ pot);
 				} else {
-					activeContributors.add(posts[i] / s.pot);
+					activeContributors.add(posts[i] / s.getPot());
 				}
 			}
 		}
@@ -95,16 +101,16 @@ public class PotOddsStrategy {
 
 		activeContributors = new StrenghtAnalysis(s).getStrength();
 
-		Hand hand = s.hand;
+		Hand hand = s.getHand();
 		if (hand == null) {
 			return;
 		}
 
-		System.out.println("contributions: "
-				+ activeContributors.stream().map(String::valueOf)
+		logger.debug("contributions: {}"
+				, activeContributors.stream().map(String::valueOf)
 						.collect(joining(", ")));
 		odds = new CardSimulation(count, activeContributors, hand,
-				s.communityCards)
+				s.getCommunityCards())
 				.run();
 
 		// Andreas möchte hier eine 2 statt 1 haben

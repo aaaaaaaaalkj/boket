@@ -41,4 +41,7 @@ public class PotOddsDecision {
 				+ (value == INVALID_VALUE ? " " + value : "") + "";
 	}
 
+	public boolean equalType(PotOddsDecision d) {
+		return d.getDec().equals(getDec());
+	}
 }

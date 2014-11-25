@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import old.Hand;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -15,49 +17,47 @@ import tools.Tools;
 
 public class ScreenScraper {
 	private static final int NUM_SEATS = 9;
-	private final Raw_Situation situation;
+	private Raw_Situation situation2;
+	private final Raw_Situation.Builder situation;
 	private final MyRobot robot;
 	private @Nullable Pos logo;
 
 	public ScreenScraper() throws AWTException {
 		robot = new MyRobot();
-		situation = new Raw_Situation();
-		run();
+		situation = new Raw_Situation.Builder();
+
+		Pos logo = recognizeLogo();
+		if (logo != null) {
+			this.logo = logo;
+
+			recognizeBrownButtons(logo);
+			searchButton(logo);
+			tableCheckSum(logo);
+			activePlayers(logo);
+			postRecognition(logo);
+			stackRecognition(logo);
+
+			Hand hand = Card_Recognition.recognizeHand(logo, robot);
+			situation.hand(hand);
+			situation.communityCards(Card_Recognition
+					.recognizeCommunityCards(logo, robot));
+
+			if (hand != null) {
+				situation.activeStatus(0, true);
+			}
+		}
+		situation2 = situation.build();
 	}
 
 	public BufferedImage getScreenshot() {
 		return robot.getScreenshot();
 	}
 
-	public @Nullable Raw_Situation run() {
-		Pos logo = recognizeLogo();
-		if (logo == null)
-			return null;
-		this.logo = logo;
-
-		recognizeBrownButtons(logo);
-		searchButton(logo);
-		tableCheckSum(logo);
-		activePlayers(logo);
-		postRecognition(logo);
-		stackRecognition(logo);
-
-		situation.hand = Card_Recognition.recognizeHand(logo, robot);
-		situation.communityCards = Card_Recognition
-				.recognizeCommunityCards(logo, robot);
-
-		if (situation.hand != null) {
-			situation.activeStatus[0] = true;
-		}
-
-		return situation;
-	}
-
 	private void stackRecognition(Pos logo) {
 		Pos @NonNull [] positions = { pos(20, 306), pos(10, 122), pos(155, 64),
 				pos(565, 65), pos(700, 121), pos(700, 306), pos(480, 370),
 				pos(350, 446), pos(225, 370) };
-		situation.stacks = new double @NonNull [NUM_SEATS];
+		situation.stacks(new double @NonNull [NUM_SEATS]);
 		for (int i = 0; i < NUM_SEATS; i++) {//
 
 			List<Pos> indicators = new ArrayList<>();
@@ -79,13 +79,13 @@ public class ScreenScraper {
 					4, 7, 4, indicators);
 
 			if (opt.isPresent()) {
-				situation.stacks[i] = opt.get();
+				situation.stacks(i, opt.get());
 			} else {
 				// Pos p = new Pos(40, 314).plus(logo);
 				ref = new Color(32, 32, 32); // black
 				opt = ocr_real_money(logo.plus(p), ref,
 						4, 7, 4, indicators);
-				situation.stacks[i] = opt.orElse(0.);
+				situation.stacks(i, opt.orElse(0.));
 			}
 		}
 	}
@@ -106,19 +106,18 @@ public class ScreenScraper {
 				pos(528, 98), pos(590, 126), pos(664, 216), pos(580, 289),
 				pos(412, 324), pos(165, 288) };
 
-		situation.activeStatus = new boolean @NonNull [NUM_SEATS];
+		situation.activeStatus(new boolean @NonNull [NUM_SEATS]);
 
 		for (int i = 0; i < NUM_SEATS; i++) {
 			int dif = robot.maxColor(positions[i].plus(logo), pos(25, 30));
 			if (dif == 146)
-				situation.activeStatus[i] = true;
+				situation.activeStatus(i, true);
 		}
-		situation.activeStatus[0] = situation.itsMyTurn;
 	}
 
 	private void tableCheckSum(Pos logo) {
-		situation.checkSum = robot.pixelCheckSum(logo.plus(new Pos(15, -5)),
-				logo.plus(new Pos(50, 5)));
+		situation.checkSum(robot.pixelCheckSum(logo.plus(new Pos(15, -5)),
+				logo.plus(new Pos(50, 5))));
 		// lobby = 1439337809
 	}
 
@@ -151,7 +150,7 @@ public class ScreenScraper {
 				minIndex = i;
 			}
 		}
-		situation.button = minIndex;
+		situation.button(minIndex);
 	}
 
 	private void postRecognition(Pos logo) {
@@ -169,17 +168,18 @@ public class ScreenScraper {
 				pos(400, 124), pos(500, 175), pos(538 - 14, 241 - 14),
 				pos(474, 290), pos(320, 308),
 				pos(205, 291) };
-		situation.pot = 0;
-		situation.posts = new double @NonNull [NUM_SEATS];
+		double pot = 0;
+		situation.posts(new double @NonNull [NUM_SEATS]);
 		for (int i = 0; i < NUM_SEATS; i++) {
 			@SuppressWarnings("null")
 			@NonNull
 			Pos p = positions[i];
-			situation.posts[i] = ocr(logo, p).orElse(0.);
-			situation.pot += situation.posts[i];
+			double value = ocr(logo, p).orElse(0.);
+			situation.posts(i, value);
+			pot += value;
 		}
-		situation.pot += ocr(logo, (pos(308 - 14, 260 - 14))).orElse(0.);
-		situation.pot = ((double) Math.round(situation.pot * 100)) / 100;
+		pot += ocr(logo, (pos(308 - 14, 260 - 14))).orElse(0.);
+		situation.pot(((double) Math.round(pot * 100)) / 100);
 	}
 
 	public static boolean isNumber(String s) {
@@ -421,21 +421,26 @@ public class ScreenScraper {
 	}
 
 	private void recognizeBrownButtons(Pos logo) {
+
+		boolean first = checkBrownButton(logo, new Pos(417, 525));
+		boolean second = checkBrownButton(logo, new Pos(550, 525));
+		boolean third = checkBrownButton(logo, new Pos(683, 525));
+
 		// first button
-		situation.brownButtons[0] = checkBrownButton(logo, new Pos(417, 525));
+		situation.brownButtons(0, first);
 		// middle button
-		situation.brownButtons[1] = checkBrownButton(logo, new Pos(550, 525));
+		situation.brownButtons(1, second);
 		// last button
-		situation.brownButtons[2] = checkBrownButton(logo, new Pos(683, 525));
+		situation.brownButtons(2, third);
 
 		int sum = 0;
-		sum += situation.brownButtons[0] ? 1 : 0;
-		sum += situation.brownButtons[1] ? 1 : 0;
-		sum += situation.brownButtons[2] ? 1 : 0;
+		sum += first ? 1 : 0;
+		sum += second ? 1 : 0;
+		sum += third ? 1 : 0;
 
 		if (sum > 1) { // at least two buttons shown
-			situation.itsMyTurn = true;
-			situation.activeStatus[0] = true;
+			situation.itsMyTurn(true);
+			situation.activeStatus(0, true);
 		}
 	}
 
@@ -450,7 +455,7 @@ public class ScreenScraper {
 	}
 
 	public Raw_Situation getSituation() {
-		return situation;
+		return situation2;
 	}
 
 	public @Nullable Pos getLogo() {

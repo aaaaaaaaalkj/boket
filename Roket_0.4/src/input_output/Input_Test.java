@@ -42,7 +42,6 @@ public class Input_Test {
 		//
 		// System.out.println(c);
 
-		new ScreenScraper().run();
 
 		// Pos logo = recognizeLogo();
 		// int button = ScreenScraper.searchButton(logo);

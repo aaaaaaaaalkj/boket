@@ -18,15 +18,21 @@ import java.util.List;
 
 import managementCards.cards.Card;
 import managementCards.cards.Rank;
+import managementCards.cards.Suit;
 import managementCards.cat_rec_new.Cat_Rec;
 import managementCards.cat_rec_new.ResultImpl;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.slf4j.LoggerFactory;
 
 import pot_odds_strategy.PotOddsDecision;
 import pot_odds_strategy.PotOddsStrategy;
+import test_parkour.TestParkour;
 
 public class ColorPicker {
+	@SuppressWarnings("null")
+	final static org.slf4j.Logger logger = LoggerFactory
+			.getLogger(ColorPicker.class);
 
 	public ColorPicker() {
 		// TODO Auto-generated constructor stub
@@ -37,12 +43,12 @@ public class ColorPicker {
 		Raw_Situation raw = scraper.getSituation();
 		raw.print();
 		PotOddsStrategy strategy = new PotOddsStrategy(raw);
-		System.out.println(strategy);
+		logger.info("{}", strategy);
 		PotOddsDecision d = strategy.decide();
 		// ISituation sit = new BoketSituation(raw);
-		// System.out.println(sit);
+		// logger.info(sit);
 
-		System.out.println(d);
+		logger.info("{}", d);
 
 	}
 
@@ -92,11 +98,27 @@ public class ColorPicker {
 			sum3 += l;
 		}
 
-		System.out.println(sum1 + " \n" + sum2 + " \n" + sum3);
+		logger.info("{}\n{}\n{}", sum1, sum2, sum3);
+	}
+
+	private void generateCodeForCards() {
+		for (Suit s : Suit.VALUES) {
+			for (Rank r : Rank.VALUES) {
+				String underScore = r.ordinal() < 8 ? "_" : "";
+				String str = "public static final Card " + underScore
+						+ r.shortString()
+						+ s.shortString()
+						+ " = new Card(Rank." + r + ", Suit." + s + ");";
+
+				logger.info(str);
+			}
+		}
 	}
 
 	public static void main(String[] args) throws Exception {
-		new ColorPicker().test2();
+		logger.info("Entering application.");
+		// new ColorPicker().test2();
+		new TestParkour().test();
 
 		// ScreenScraper scraper = new ScreenScraper();
 		// Raw_Situation raw = scraper.getSituation();
@@ -112,7 +134,7 @@ public class ColorPicker {
 		// logo = recognizeLogo();
 		//
 		// Pos p = pixelSearch(logo.x, logo.y, 1000, 550, c);
-		// System.out.println(p);
+		// logger.info(p);
 		// MyRobot.mouseMove(p.plus(logo));
 
 	}
@@ -124,11 +146,11 @@ public class ColorPicker {
 			// logo = recognizeLogo();
 			// Pos p2 = new Pos(p.x, p.y);
 			//
-			// System.out.println(p2.minus(logo));
+			// logger.info(p2.minus(logo));
 
 			Color c = r.getPixelColor(p.x, p.y);
 
-			System.out.println(c);
+			logger.debug("{}", c);
 		} catch (AWTException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -150,15 +172,15 @@ public class ColorPicker {
 	public void start(MyRobot robot) {
 		Pos logo = recognizeLogo(robot);
 		// Color refColor = new Color(12010269);
-		// System.out.println(refColor);
+		// logger.info(refColor);
 
 		if (logo == null) {
-			System.out.println("logo is null");
+			logger.warn("logo is null");
 		} else {
 
 			Pos p = new Pos(40, 314).plus(logo);
 			Color c = robot.getPixelColor(p);
-			System.out.println(c);
+			logger.debug("[}", c);
 
 			robot.mouseMove(p);
 		}

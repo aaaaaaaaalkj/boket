@@ -39,6 +39,7 @@ import managementCards.cards.Rank;
 import managementCards.cards.Suit;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.LoggerFactory;
 
 import strategy.conditions.postflop.DrawType;
 import strategy.conditions.postflop.FlushDanger;
@@ -47,6 +48,9 @@ import strategy.conditions.postflop.StraightDanger;
 import tools.Tools;
 
 public final class Cat_Rec implements ICatRec {
+	@SuppressWarnings("null")
+	final static org.slf4j.Logger logger = LoggerFactory
+			.getLogger(Cat_Rec.class);
 	List<Card> all;
 	List<Card> community;
 
@@ -90,8 +94,8 @@ public final class Cat_Rec implements ICatRec {
 		x++;
 
 		if (x % 50000 == 0) {
-			System.out.println("pairbased: " + count1);
-			System.out.println("straight/flush: " + count2);
+			logger.trace("pairbased: {}", count1);
+			logger.trace("straight/flush: {}", count2);
 		}
 
 		return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
