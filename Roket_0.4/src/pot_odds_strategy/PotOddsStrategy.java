@@ -1,7 +1,6 @@
 package pot_odds_strategy;
 
 import static java.util.Comparator.naturalOrder;
-import static java.util.stream.Collectors.joining;
 import input_output.Raw_Situation;
 
 import java.util.ArrayList;
@@ -89,9 +88,8 @@ public class PotOddsStrategy {
 			return;
 		}
 
-		logger.debug("contributions: {}"
-				, activeContributors.stream().map(String::valueOf)
-						.collect(joining(", ")));
+		logger.debug("contributions: {}", activeContributors);
+
 		odds = new CardSimulation(count, activeContributors, hand,
 				s.getCommunityCards())
 				.run();

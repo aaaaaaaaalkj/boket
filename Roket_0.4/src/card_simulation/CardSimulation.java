@@ -45,75 +45,40 @@ public class CardSimulation {
 		int numExperiments = 6000;
 		int won = 0;
 
-		long l = System.currentTimeMillis();
-
-		List<LateRoundHand> hands = null;
-
-		if (community.size() == 0) {
-			for (int player = 1; player < numPlayers; player++) {
-				List<Card> hand = preflop.getHand(numPlayers,
-						activeContributors.get(player - 1).doubleValue());
-				logger.debug("{}:{}", (player - 1), hand);
-			}
-		}
-		double faktor = 1;
+		double faktor;
 
 		HandGenerator handGen;
 		if (community.size() == 0) {
 			faktor = 1;
 			handGen = preflop;
-		} else if (community.size() == 3) {
-			CommunityCardsX flop = new CommunityCardsX(community);
-			hands = LateRoundHand.createAll(flop);
-			LateRoundHand.simulation(numPlayers, hands, flop, 30000);
-
-			Generator flopHands = new Generator(hands);
-
-			for (int player = 1; player < numPlayers; player++) {
-				List<Card> cards = flopHands.getHand(
-						activeContributors.get(player - 1) * 2);
-
-				logger.debug("{}: {{} {}]", player, cards.get(0), cards.get(1));
-
-			}
-
-			faktor = 2;
-			// System.out
-			// .println("contribution: " + activeContributors.get(0)
-			// * faktor);
-
-			handGen = flopHands;
-		} else if (community.size() >= 4) {
-			faktor = 2;
-
-			CommunityCardsX turn = new CommunityCardsX(community);
-			hands = LateRoundHand.createAll(turn);
-			LateRoundHand.simulation(numPlayers, hands, turn, 30000);
-			// NaiveSearch.getInstance(this.hand, this.community);
-			handGen = new Generator(hands);
-
-			for (int player = 1; player < numPlayers; player++) {
-				List<Card> cards = handGen.getHand(numPlayers,
-						activeContributors.get(player - 1) * faktor);
-
-				logger.debug("{}: {{} {}]", player, cards.get(0), cards.get(1));
-
-			}
-
 		} else {
-			throw new IllegalStateException(
-					"unexpected number of community cards : "
-							+ community.size());
+			faktor = 2;
+			List<LateRoundHand> hands = null;
+
+			CommunityCardsX community1 = new CommunityCardsX(community);
+			hands = LateRoundHand.createAll(community1);
+			LateRoundHand.simulation(numPlayers, hands, community1, 30000);
+			handGen = new Generator(hands);
 		}
+
+		debug(handGen, faktor);
+
 		for (int i = 0; i < numExperiments; i++) {
 			won += experiment(handGen, faktor, prepairDeck());
 		}
 		double res = round(((double) won) / numExperiments);
 
-		l = System.currentTimeMillis() - l;
-		logger.trace("card simulations took " + l + " millis");
-
 		return res;
+	}
+
+	private void debug(HandGenerator handGen, double faktor) {
+		for (int player = 1; player < numPlayers; player++) {
+			List<Card> cards = handGen.getHand(numPlayers,
+					activeContributors.get(player - 1) * faktor);
+			logger.debug("{}: {{} {}]", player, cards.get(0), cards.get(1));
+
+		}
+
 	}
 
 	private double round(double d) {

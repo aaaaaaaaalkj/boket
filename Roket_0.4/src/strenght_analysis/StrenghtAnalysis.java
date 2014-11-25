@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.LoggerFactory;
 
+import tools.Tools;
+
 public class StrenghtAnalysis {
 	@SuppressWarnings("null")
 	final static org.slf4j.Logger logger = LoggerFactory
@@ -66,7 +68,6 @@ public class StrenghtAnalysis {
 		double pot_so_far = sit.getCommunityCards().size() == 0 ? 0.03
 				: naked_pod;
 		first = true;
-		String contributions = "";
 		for (int i = next(raiser); i != next(raiser) || first; i = next(i)) {
 			first = false;
 			double blind_preflop = sit.getCommunityCards().size() == 0 ?
@@ -87,11 +88,10 @@ public class StrenghtAnalysis {
 					contribution = 1. / countPlayers;
 				}
 
-				contribution = round(contribution);
+				contribution = Tools.round(contribution);
 
 				if (i != 0) { // ignore our own contribution
 					strength.add(contribution);
-					contributions += ", " + contribution;
 				}
 
 			}
@@ -100,7 +100,6 @@ public class StrenghtAnalysis {
 			}
 
 		}
-		// logger.debug("contributions: {}", contributions);
 
 		for (int i = 1; i < sit.getPosts().length; i++) {
 			if (sit.getActiveStatus()[i] && i <= sit.getButton()
@@ -118,10 +117,6 @@ public class StrenghtAnalysis {
 			res = 0;
 		}
 		return res;
-	}
-
-	private double round(double d) {
-		return ((double) Math.round(d * 100)) / 100;
 	}
 
 	// private void normalize() {
