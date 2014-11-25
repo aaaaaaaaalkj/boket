@@ -31,10 +31,11 @@ public class PotOddsStart {
 		return res;
 	}
 
-	private static void saveImage(BufferedImage capture) {
+	private static void saveImage(BufferedImage capture, String folder) {
 		try {
 			String type = "png";
-			File outputfile = new File("screenshots\\" + fillZeros(counter++)
+			File outputfile = new File("screenshots\\" + folder
+					+ fillZeros(counter++)
 					+ "."
 					+ type);
 			ImageIO.write(capture, type, outputfile);
@@ -75,12 +76,24 @@ public class PotOddsStart {
 			boolean myTurn) {
 		Raw_Situation raw = scraper.getSituation();
 
-		saveImage(scraper.getScreenshot());
+		saveImage(scraper.getScreenshot(), "");
 
 		PotOddsStrategy strategy = new PotOddsStrategy(raw);
 		PotOddsDecision d = strategy.decide();
 
 		if (d.getDec() == DecisionType.FOLD || myTurn) {
+
+			if (d.hasValue()) {
+				if (raw.getCommunityCards().size() >= 3) {
+					if (d.getValue() > .3) {
+						saveImage(scraper.getScreenshot(), "expensive\\");
+					}
+				} else {
+					if (d.getValue() > .1) {
+						saveImage(scraper.getScreenshot(), "expensive\\");
+					}
+				}
+			}
 
 			System.out.println("---------------------");
 			System.out.println(strategy);

@@ -148,7 +148,7 @@ public class PotOddsStrategy {
 		if (valueOfSituation < toPay) {
 			return PotOddsDecision.fold();
 		} else if (valueOfSituation < toPay + computeMinRaise()) {
-			return PotOddsDecision.call();
+			return PotOddsDecision.call(toPay);
 		} else {
 
 			double res = ((double) Math.round((valueOfSituation - toPay) * 100)) / 100;

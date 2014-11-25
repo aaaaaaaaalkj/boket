@@ -27,21 +27,26 @@ public class PotOddsDecision {
 		return new PotOddsDecision(DecisionType.FOLD, INVALID_VALUE);
 	}
 
-	public static PotOddsDecision call() {
-		return new PotOddsDecision(DecisionType.CALL, INVALID_VALUE);
+	public static PotOddsDecision call(double toPay) {
+		return new PotOddsDecision(DecisionType.CALL, toPay);
 	}
 
 	public static PotOddsDecision raise(double d) {
+		assert d >= 0;
 		return new PotOddsDecision(DecisionType.RAISE, d);
 	}
 
 	@Override
 	public String toString() {
 		return "decision = " + dec
-				+ (value == INVALID_VALUE ? " " + value : "") + "";
+				+ (value != INVALID_VALUE ? " _ " + value : "_");
 	}
 
 	public boolean equalType(PotOddsDecision d) {
 		return d.getDec().equals(getDec());
+	}
+
+	public boolean hasValue() {
+		return value != INVALID_VALUE;
 	}
 }

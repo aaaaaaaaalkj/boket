@@ -147,7 +147,7 @@ public class ParkourTest {
 				.brownButtons(true, false, true, false, false, false, false,
 						false, false).build();
 		PotOddsDecision res = test(sit);
-		assertTrue(res.equalType(PotOddsDecision.fold()));
+		assertTrue(res.toString(), res.equalType(PotOddsDecision.fold()));
 	}
 
 	private PotOddsDecision test(Raw_Situation raw) {
