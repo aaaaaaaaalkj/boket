@@ -28,10 +28,13 @@ public class CardSimulation {
 	// private final List<List<PossibleHand>> hands;
 	private static final HandGenerator preflop = new PreflopProbabilities();
 	List<Double> activeContributors;
+	List<Double> std_dev;
 
 	public CardSimulation(int count, List<Double> activeContributors,
+			List<Double> std_dev,
 			Hand hand,
 			List<Card> community) {
+		this.std_dev = std_dev;
 		this.activeContributors = activeContributors;
 		this.numPlayers = count;
 		this.hand = Tools.asList(hand.first, hand.second);
@@ -74,7 +77,8 @@ public class CardSimulation {
 	private void debug(HandGenerator handGen, double faktor) {
 		for (int player = 1; player < numPlayers; player++) {
 			List<Card> cards = handGen.getHand(numPlayers,
-					activeContributors.get(player - 1) * faktor);
+					activeContributors.get(player - 1) * faktor,
+					std_dev.get(player - 1));
 			logger.debug("{}: {{} {}]", player, cards.get(0), cards.get(1));
 
 		}
@@ -130,7 +134,9 @@ public class CardSimulation {
 			List<Card> hisHand;
 
 			hisHand = handGen.getHand(numPlayers,
-					activeContributors.get(player - 1) * faktor);
+					activeContributors.get(player - 1) * faktor,
+					std_dev.get(player - 1)
+					);
 
 			// logger.info(hisHand);
 

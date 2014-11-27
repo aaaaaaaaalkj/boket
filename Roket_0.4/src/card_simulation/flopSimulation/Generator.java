@@ -39,7 +39,7 @@ public class Generator implements HandGenerator {
 		}
 	}
 
-	public List<Card> getHand(double contribution) {
+	public List<Card> getHand(double contribution, double stdDev) {
 		if (contribution > 1) {
 			// why is this possible?
 			contribution = 1;
@@ -49,7 +49,7 @@ public class Generator implements HandGenerator {
 
 		// variance= 1 - contribution;
 
-		variance = 0.03;
+		variance = stdDev;
 
 		double randNumber;
 		randNumber = getRand(contribution, variance);
@@ -82,7 +82,7 @@ public class Generator implements HandGenerator {
 	}
 
 	@Override
-	public List<Card> getHand(int numPlayers, double contribution) {
-		return getHand(contribution);
+	public List<Card> getHand(int numPlayers, double contribution, double stdDev) {
+		return getHand(contribution, stdDev);
 	}
 }

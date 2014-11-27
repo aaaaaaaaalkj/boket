@@ -56,7 +56,8 @@ public class PreflopProbabilities implements HandGenerator {
 		return randNumber;
 	}
 
-	public PossiblePreflopHand get(int countPlayers, double contribution) {
+	public PossiblePreflopHand get(int countPlayers, double contribution,
+			double stdDev) {
 		if (contribution > 1) {
 			contribution = 1;
 		}
@@ -64,9 +65,7 @@ public class PreflopProbabilities implements HandGenerator {
 
 		double randNumber;
 
-		double variance = 0.03;// 1 - contribution;
-
-		variance = Math.max(.03, variance);
+		double variance = Math.max(.01, stdDev);
 
 		randNumber = rand(contribution, variance);
 
@@ -186,8 +185,8 @@ public class PreflopProbabilities implements HandGenerator {
 	}
 
 	@Override
-	public List<Card> getHand(int numPlayers, double contribution) {
-		return get(numPlayers, contribution).getHand();
+	public List<Card> getHand(int numPlayers, double contribution, double stdDev) {
+		return get(numPlayers, contribution, stdDev).getHand();
 	}
 
 }

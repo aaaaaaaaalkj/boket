@@ -157,10 +157,10 @@ public class NaiveSearch implements HandGenerator {
 	}
 
 	@Override
-	public List<Card> getHand(int numPlayers, double contribution) {
+	public List<Card> getHand(int numPlayers, double contribution, double stdDev) {
 		Random r = new Random();
 
-		double randNumber = (r.nextGaussian() * .06)
+		double randNumber = (r.nextGaussian() * stdDev)
 				+ contribution;
 
 		if (randNumber > 1) {

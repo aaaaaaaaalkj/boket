@@ -5,5 +5,5 @@ import java.util.List;
 import managementCards.cards.Card;
 
 public interface HandGenerator {
-	List<Card> getHand(int numPlayers, double contribution);
+	List<Card> getHand(int numPlayers, double contribution, double std_dev);
 }

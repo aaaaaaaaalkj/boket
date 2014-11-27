@@ -81,7 +81,9 @@ public class PotOddsStrategy {
 			}
 		}
 
-		activeContributors = new StrenghtAnalysis(s).getStrength();
+		StrenghtAnalysis anal = new StrenghtAnalysis(s);
+		activeContributors = anal.getStrength();
+		List<Double> stdDev = anal.getStdDev();
 
 		Hand hand = s.getHand();
 		if (hand == null) {
@@ -89,8 +91,10 @@ public class PotOddsStrategy {
 		}
 
 		logger.debug("contributions: {}", activeContributors);
+		logger.debug("stdDev: {}", stdDev);
 
-		odds = new CardSimulation(count, activeContributors, hand,
+		odds = new CardSimulation(count, activeContributors, stdDev,
+				hand,
 				s.getCommunityCards())
 				.run();
 
