@@ -75,6 +75,11 @@ public enum Rank {
 		return Tools.substring(ALL, this.ordinal(), this.ordinal() + 1);
 	}
 
+	public String shortString2() {
+		return (ordinal() < 8 ? "_" : "")
+				+ Tools.substring(ALL, this.ordinal(), this.ordinal() + 1);
+	}
+
 	public void print() {
 		System.out.println(this);
 	}

@@ -18,11 +18,13 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 public class AllResults { // Singleton
-	private final Map<ResultImpl, @NonNull Integer> scores;
+	private final Map<ResultImpl, @NonNull Short> scores;
+	private final Map<Short, @NonNull ResultImpl> scoresInverseMap;
 	private final String file_path;
 
 	private AllResults(String file) throws FileNotFoundException {
 		scores = new HashMap<>();
+		scoresInverseMap = new HashMap<>();
 		file_path = file;
 		load();
 	}
@@ -39,7 +41,7 @@ public class AllResults { // Singleton
 		return res;
 	}
 
-	public int getScore(ResultImpl res) {
+	public short getScore(ResultImpl res) {
 		if (scores.containsKey(res)) {
 			return scores.get(res);
 		} else {
@@ -61,9 +63,7 @@ public class AllResults { // Singleton
 
 			String[] numbers = s.split(",");
 
-			@SuppressWarnings("null")
-			@NonNull
-			Cathegory cat = Cathegory.VALUES[Integer.valueOf(numbers[0])];
+			Cathegory cat = Cathegory.getCathegory(Integer.valueOf(numbers[0]));
 			List<Rank> ranks = new ArrayList<>();
 
 			for (int i = 1; i <= 5; i++) {
@@ -81,11 +81,17 @@ public class AllResults { // Singleton
 
 		Collections.sort(results);
 
-		for (int score = 0; score < results.size(); score++) {
-			scores.put(results.get(score), score + 1);
+		for (int index = 0; index < results.size(); index++) {
+			ResultImpl res = results.get(index);
+			short score = (short) (index + 1); // score is 1-based
+			scores.put(res, score);
+			scoresInverseMap.put(score, res);
 		}
 
 		scanner.close();
 	}
 
+	public ResultImpl getResult(short score) {
+		return scoresInverseMap.get(score);
+	}
 }

@@ -16,6 +16,7 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.util.List;
 
+import managementCards.all_cathegories.AllResults;
 import managementCards.cards.Card;
 import managementCards.cards.Rank;
 import managementCards.cards.Suit;
@@ -116,25 +117,52 @@ public class ColorPicker {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("Entering application.");
-		new ColorPicker().test2();
-		// new TestParkour().test();
+		// new ColorPicker().test2();
 
-		// ScreenScraper scraper = new ScreenScraper();
-		// Raw_Situation raw = scraper.getSituation();
-		// raw.print();
-		// new StrenghtAnalysis(raw);
 
+
+		// for (int i = 0; i < 1000000; i++) {
 		// ResultImpl res = new Cat_Rec(
 		// Card._3s, Card.Ad, Tools.asList(Card.Kc, Card.Qc, Card.Qd,
 		// Card.Kd, Card.Ah))
 		// .check();
 
-		// Color c = new Color(12010269);
-		// logo = recognizeLogo();
-		//
-		// Pos p = pixelSearch(logo.x, logo.y, 1000, 550, c);
-		// logger.info(p);
-		// MyRobot.mouseMove(p.plus(logo));
+		// }
+		AllResults allRes = AllResults.getInstance("cathegories.txt");
+
+		// short[] map = createAll7Cards(allRes);
+
+		List<Card> cards = Tools.asList(
+				Card._2d,
+				Card._4h,
+				Card.Qd,
+				Card._9d,
+				Card._2h,
+				Card._9h,
+				Card.Js
+				);
+
+		HandEvaluator ev = new HandEvaluator();
+
+		short score = ev.getScore(cards);
+		// System.out.println(cards.stream().map(Card::ordinal)
+		// .collect(Tools.toList()));
+
+		ResultImpl res = new Cat_Rec(
+				cards.get(0), cards.get(1), Tools.asList(
+						cards.get(2),
+						cards.get(3),
+						cards.get(4),
+						cards.get(5),
+						cards.get(6)
+						))
+				.check();
+		short score2 = allRes.getScore(res);
+
+		System.out.println("score1: " + score + " , score2: " + score2);
+
+		// Tools.serialize(map, fileName);
+
 
 	}
 

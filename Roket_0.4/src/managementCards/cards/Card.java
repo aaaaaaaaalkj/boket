@@ -2,6 +2,7 @@ package managementCards.cards;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -13,6 +14,10 @@ public final class Card implements Comparable<Card> {
 	public Card(Rank rank, Suit suit) {
 		this.rank = rank;
 		this.suit = suit;
+	}
+
+	public int ordinal() {
+		return rank.ordinal() * 4 + suit.ordinal() + 1;
 	}
 
 	public Rank getRank() {
@@ -40,6 +45,20 @@ public final class Card implements Comparable<Card> {
 
 	public static Card newInstance(Suit color, Rank num) {
 		return new Card(num, color);
+	}
+
+	private static final List<Card> allCards = new ArrayList<>();
+	static {
+		for (Rank r : Rank.VALUES) {
+			for (Suit s : Suit.VALUES) {
+				allCards
+						.add(newInstance(r, s));
+			}
+		}
+	}
+
+	public static List<Card> getAllCards() {
+		return allCards;
 	}
 
 	public String toString() {
@@ -78,10 +97,12 @@ public final class Card implements Comparable<Card> {
 
 	@Override
 	public int compareTo(Card c) {
-		int i = this.rank.compareTo(c.rank);
-		if (i == 0)
-			i = this.suit.compareTo(c.suit);
-		return i;
+		return this.ordinal() - c.ordinal();
+
+		// int i = this.rank.compareTo(c.rank);
+		// if (i == 0)
+		// i = this.suit.compareTo(c.suit);
+		// return i;
 	}
 
 	// public static Card getCard(int k1, Set<Card> deck) {

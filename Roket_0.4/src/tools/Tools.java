@@ -1,5 +1,11 @@
 package tools;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,8 +24,13 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.slf4j.LoggerFactory;
 
 public class Tools {
+	@SuppressWarnings("null")
+	final static org.slf4j.Logger logger = LoggerFactory
+			.getLogger(Tools.class);
+
 	@SafeVarargs
 	public static <T> List<@NonNull T> asList(T... ts) {
 		@SuppressWarnings("null")
@@ -222,4 +233,38 @@ public class Tools {
 	public static Double round(double d) {
 		return ((double) Math.round(d * 100)) / 100;
 	}
+
+	public static void serialize(Object o, String fileName)
+			throws FileNotFoundException, IOException {
+		try (
+				FileOutputStream fileOut = new FileOutputStream(fileName);
+				ObjectOutputStream out = new ObjectOutputStream(fileOut);) {
+			out.writeObject(o);
+			logger.debug("Serialized data is saved in " + fileName);
+		}
+	}
+
+	@SuppressWarnings("null")
+	public static Object deserialize(String fileName) throws IOException,
+			ClassNotFoundException {
+		long l = System.currentTimeMillis();
+		try (
+				FileInputStream fileIn = new FileInputStream(fileName);
+				ObjectInputStream in = new ObjectInputStream(fileIn);) {
+			Object o = in.readObject();
+			l = System.currentTimeMillis() - l;
+			logger.debug("Deserializing data from " + fileName + " took " + l
+					+ " millis");
+			return o;
+		}
+	}
+
+	public static void reverse(int[] ar) {
+		for (int i = 0; i < ar.length / 2; i++) {
+			int x = ar[i];
+			ar[i] = ar[ar.length - i - 1];
+			ar[ar.length - i - 1] = x;
+		}
+	}
+
 }
