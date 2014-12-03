@@ -7,9 +7,9 @@ public class Post {
 	private final AmountOfJetons amount;
 	private final AmountOfJetons wholeAmount;
 
-	public Post(AmountOfJetons stack, AmountOfJetons post,
-			AmountOfJetons highestBid,
-			AmountOfJetons lastRaise, AmountOfJetons amount) {
+  public Post(final AmountOfJetons stack, final AmountOfJetons post,
+      final AmountOfJetons highestBid,
+      final AmountOfJetons lastRaise, final AmountOfJetons amount) {
 		this.stack = stack;
 		this.highestBid = highestBid;
 		this.lastRaise = lastRaise;
@@ -17,23 +17,23 @@ public class Post {
 		this.wholeAmount = amount.plus(post);
 	}
 
-	public boolean moreThanCall() {
+  public final boolean moreThanCall() {
 		return wholeAmount.greaterAs(highestBid);
 	}
 
-	public boolean lessThanHighestBid() {
+  public final boolean lessThanHighestBid() {
 		return highestBid.greaterAs(wholeAmount);
 	}
 
-	public boolean lessThanRaise() {
+  public final boolean lessThanRaise() {
 		return highestBid.plus(lastRaise).greaterAs(wholeAmount);
 	}
 
-	public boolean allIn() {
+  public final boolean allIn() {
 		return amount.equals(stack);
 	}
 
-	public boolean notAllIn() {
+  public final boolean notAllIn() {
 		return !allIn();
 	}
 }

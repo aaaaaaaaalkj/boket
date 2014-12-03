@@ -7,16 +7,16 @@ public class StrategyItem {
 	private final ICondition cond;
 	private final TypeOfDecision dec;
 
-	public StrategyItem(ICondition cond, TypeOfDecision dec) {
+  public StrategyItem(final ICondition cond, final TypeOfDecision dec) {
 		this.cond = cond;
 		this.dec = dec;
 	}
 
-	public ICondition getCondition() {
+  public final ICondition getCondition() {
 		return cond;
 	}
 
-	public TypeOfDecision getDecision() {
+  public final TypeOfDecision getDecision() {
 		return dec;
 	}
 

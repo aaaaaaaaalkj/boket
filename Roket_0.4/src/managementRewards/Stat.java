@@ -2,18 +2,18 @@ package managementRewards;
 
 import managementPayments.AmountOfJetons;
 
-public class Stat {
+public final class Stat {
 	private AmountOfJetons result;
 
 	public Stat() {
 		result = AmountOfJetons.ZERO;
 	}
 
-	public void pay(AmountOfJetons amount) {
+  public void pay(final AmountOfJetons amount) {
 		result = result.minus(amount);
 	}
 
-	public void won(AmountOfJetons amount) {
+  public void won(final AmountOfJetons amount) {
 		result = result.minus(amount);
 	}
 }

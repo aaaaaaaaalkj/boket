@@ -24,7 +24,7 @@ public enum PairBasedDanger implements ICondition {
 	}
 
 	@Override
-	public boolean eval(ISituation sit) {
+  public boolean eval(final ISituation sit) {
 		return this == sit.getPairBasedDanger();
 	}
 
@@ -32,7 +32,7 @@ public enum PairBasedDanger implements ICondition {
 		return (sit -> sit.getPairBasedDanger().ordinal() >= ordinal());
 	}
 
-	public static PairBasedDanger fromLong(long l) {
+  public static PairBasedDanger fromLong(final long l) {
 		return VALUES.get(Math.min((int) l, getCount() - 1));
 	}
 

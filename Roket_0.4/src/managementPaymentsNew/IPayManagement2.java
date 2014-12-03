@@ -3,9 +3,9 @@ package managementPaymentsNew;
 import java.util.List;
 import java.util.Set;
 
-import managementCards.cat_rec_new.IResult;
 import managementPaymentsNew.decisions.AllowedDecision;
 import managementPaymentsNew.decisions.Decision;
+import managementcards.catrecnew.IResult;
 import strategy.TypeOfDecision;
 import strategy.conditions.common.PotType;
 

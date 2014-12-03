@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import managementCards.cards.Card;
+import managementcards.cards.Card;
 import card_simulation.HandGenerator;
 
 public class Generator implements HandGenerator {
 	private static final Random r = new Random();
 	private final Map<Integer, List<LateRoundHand>> map;
 
-	public double getRand(double contribution, double variance) {
+  public final double getRand(final double contribution, final double variance) {
 		double randNumber = (r.nextGaussian() * variance) + contribution;
 
 		if (randNumber > 1) {
@@ -24,7 +24,7 @@ public class Generator implements HandGenerator {
 		return randNumber;
 	}
 
-	public Generator(List<LateRoundHand> list) {
+  public Generator(final List<LateRoundHand> list) {
 		map = new HashMap<>();
 		for (int i = 0; i <= 100; i++) {
 			map.put(i, new ArrayList<>());
@@ -39,7 +39,7 @@ public class Generator implements HandGenerator {
 		}
 	}
 
-	public List<Card> getHand(double contribution, double stdDev) {
+  public final List<Card> getHand(final double contribution, final double stdDev) {
 		if (contribution > 1) {
 			// why is this possible?
 			contribution = 1;
@@ -82,7 +82,8 @@ public class Generator implements HandGenerator {
 	}
 
 	@Override
-	public List<Card> getHand(int numPlayers, double contribution, double stdDev) {
+  public final List<Card> getHand(final int numPlayers, final double contribution,
+      final double stdDev) {
 		return getHand(contribution, stdDev);
 	}
 }

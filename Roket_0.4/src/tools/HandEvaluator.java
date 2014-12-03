@@ -4,37 +4,42 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import managementCards.all_cathegories.AllResults;
-import managementCards.cards.Card;
-import managementCards.cat_rec_new.IResult;
+import managementcards.all_cathegories.AllResults;
+import managementcards.cards.Card;
+import managementcards.catrecnew.IResult;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 public class HandEvaluator {
-	private static final String EVALUATED_HANDS_FILE_NAME = "hand_evaluator.ser";
-	private static final String RESULTS_TYPES_FILE_NAME = "cathegories.txt";
+  private static final String EVALUATED_HANDS_FILE_NAME = "hand_evaluator.ser";
+  private static final String RESULTS_TYPES_FILE_NAME = "cathegories.txt";
 
-	AllResults allRes;
-	private final short[] map;
-	private final BinomCoeff bino;
+  AllResults allRes;
+  private final short[] map;
+  private final BinomCoeff bino;
 
-	public HandEvaluator() throws ClassNotFoundException, IOException {
-		this.map = (short @NonNull []) Tools
-				.deserialize(EVALUATED_HANDS_FILE_NAME);
-		this.bino = new BinomCoeff(52, 7);
-		this.allRes = AllResults.getInstance(RESULTS_TYPES_FILE_NAME);
-	}
+  public HandEvaluator() throws ClassNotFoundException, IOException {
+    Object o = Tools.deserialize(EVALUATED_HANDS_FILE_NAME);
+    map = (short @NonNull []) o;
 
-	public short getScore(List<Card> cards) {
-		Collections.sort(cards);
-		int hash = bino.hash(cards);
-		short score = map[hash - 1];
-		return score;
-	}
+    int numCards = 52;
+    int numCardsNeeded = 7;
 
-	public IResult getResult(List<Card> cards) {
-		short score = getScore(cards);
-		return allRes.getResult(score);
+    this.bino = new BinomCoeff(numCards, numCardsNeeded);
 
-	}
+    this.allRes = AllResults.getInstance(RESULTS_TYPES_FILE_NAME);
+  }
+
+  public short getScore(List<Card> cards) {
+    Collections.sort(cards);
+    int hash = bino.hash(cards);
+    short score = map[hash - 1];
+    return score;
+  }
+
+  public IResult getResult(List<Card> cards) {
+    short score = getScore(cards);
+    return allRes.getResult(score);
+
+  }
 }

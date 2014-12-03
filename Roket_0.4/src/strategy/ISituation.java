@@ -1,6 +1,6 @@
 package strategy;
 
-import managementCards.cat_rec_new.Cathegory;
+import managementcards.catrecnew.Cathegory;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
 import strategy.conditions.common.PotType;
@@ -10,7 +10,6 @@ import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
 import strategy.conditions.preflop.ConnectorType;
 import strategy.conditions.preflop.SuitedType;
-
 import common.Round;
 
 public interface ISituation {

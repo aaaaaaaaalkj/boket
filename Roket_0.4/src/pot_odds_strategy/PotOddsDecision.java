@@ -2,12 +2,12 @@ package pot_odds_strategy;
 
 import managementPaymentsNew.decisions.DecisionType;
 
-public class PotOddsDecision {
+public final class PotOddsDecision {
 	private final DecisionType dec;
 	private final double value;
-	private final static double INVALID_VALUE = -1;
+  private static final double INVALID_VALUE = -1;
 
-	private PotOddsDecision(DecisionType dec, double value) {
+  private PotOddsDecision(final DecisionType dec, final double value) {
 		this.dec = dec;
 		this.value = value;
 	}
@@ -27,11 +27,11 @@ public class PotOddsDecision {
 		return new PotOddsDecision(DecisionType.FOLD, INVALID_VALUE);
 	}
 
-	public static PotOddsDecision call(double toPay) {
+  public static PotOddsDecision call(final double toPay) {
 		return new PotOddsDecision(DecisionType.CALL, toPay);
 	}
 
-	public static PotOddsDecision raise(double d) {
+  public static PotOddsDecision raise(final double d) {
 		assert d >= 0;
 		return new PotOddsDecision(DecisionType.RAISE, d);
 	}
@@ -42,7 +42,7 @@ public class PotOddsDecision {
 				+ (value != INVALID_VALUE ? " _ " + value : "_");
 	}
 
-	public boolean equalType(PotOddsDecision d) {
+  public boolean equalType(final PotOddsDecision d) {
 		return d.getDec().equals(getDec());
 	}
 

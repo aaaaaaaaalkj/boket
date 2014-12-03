@@ -24,15 +24,15 @@ public class MyRobot {
 		// System.out.println("screen-cpature took " + l + " millis");
 	}
 
-	public BufferedImage getScreenshot() {
+  public final BufferedImage getScreenshot() {
 		return capture;
 	}
 
-	public Color getPixelColor(Pos p) {
+  public final Color getPixelColor(final Pos p) {
 		return new Color(capture.getRGB(p.x, p.y));
 	}
 
-	public void mouseMove(Pos p) {
+  public final void mouseMove(final Pos p) {
 		try {
 			Robot rb = new Robot();
 			rb.mouseMove(p.x, p.y);
@@ -43,16 +43,17 @@ public class MyRobot {
 		}
 	}
 
-	/**
-	 * pixelSearch search the Color c in the recktangle x,y,w,h
-	 * 
-	 * @return coords of the color c
-	 */
-	public @Nullable Pos pixelSearch(Pos p, Pos p2, Color c) {
+	  /**
+   * pixelSearch search the Color c in the recktangle x,y,w,h.
+   * 
+   * @return coords of the color c
+   */
+  public @Nullable final Pos pixelSearch(final Pos p, final Pos p2, final Color c) {
 		return pixelSearch(p.x, p.y, (p2.x - p.x), (p2.y - p.y), c);
 	}
 
-	public @Nullable Pos pixelSearch(int x, int y, int w, int h, Color c) {
+  public @Nullable final Pos pixelSearch(final int x, final int y, final int w, final int h,
+      final Color c) {
 		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
 		int[] rgbs = new int[w * h];
@@ -68,7 +69,7 @@ public class MyRobot {
 		return null;
 	}
 
-	public int maxColor(Pos pos, Pos delta) {
+  public final int maxColor(final Pos pos, final Pos delta) {
 		int w = delta.x;
 		int h = delta.y;
 		int[] rgbs = new int[w * h];
@@ -90,7 +91,7 @@ public class MyRobot {
 		return maxDiff;
 	}
 
-	public int pixelCheckSum(Pos pos, Pos pos2) {
+  public final int pixelCheckSum(final Pos pos, final Pos pos2) {
 		int w = pos2.minus(pos).x;
 		int h = pos2.minus(pos).y;
 		int[] rgbs = new int[w * h];

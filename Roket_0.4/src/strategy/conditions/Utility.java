@@ -4,12 +4,12 @@ public class Utility {
 	private final double contribution;
 	private final double potOdds;
 
-	public Utility(double contribution, double potOdds) {
+  public Utility(final double contribution, final double potOdds) {
 		this.contribution = contribution;
 		this.potOdds = potOdds;
 	}
 
-	public double getDiff() {
+  public final double getDiff() {
 		return potOdds - contribution;
 	}
 }

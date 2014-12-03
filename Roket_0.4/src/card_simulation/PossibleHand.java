@@ -2,7 +2,7 @@ package card_simulation;
 
 import java.util.List;
 
-import managementCards.cards.Card;
+import managementcards.cards.Card;
 import tools.Tools;
 
 public class PossibleHand {
@@ -10,22 +10,22 @@ public class PossibleHand {
 	private final Card second;
 	private Double score;
 
-	public PossibleHand(Card first, Card second, Double result) {
+  public PossibleHand(final Card first, final Card second, final Double result) {
 		this.first = first;
 		this.second = second;
 		this.score = result;
 	}
 
-	public Double getScore() {
+  public final Double getScore() {
 		return score;
 	}
 
-	public List<Card> getHand() {
+  public final List<Card> getHand() {
 		return Tools.asList(first, second);
 	}
 
 	@Override
-	public String toString() {
+  public final String toString() {
 		String res = "[" + first.shortString() + "," + second.shortString()
 				+ "]";
 		return res;

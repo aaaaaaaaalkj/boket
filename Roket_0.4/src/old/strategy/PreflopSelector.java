@@ -3,39 +3,40 @@ package old.strategy;
 import org.eclipse.jdt.annotation.Nullable;
 
 public class PreflopSelector {
-	PreflopBuket buket;
+  private PreflopBuket buket;
 	private Position position;
 	private PreflopSituation situation;
 
-	public PreflopSelector(PreflopBuket buket, Position position,
-			PreflopSituation sit) {
+  public PreflopSelector(final PreflopBuket buket, final Position position,
+      final PreflopSituation sit) {
 		this.buket = buket;
 		this.position = position;
 		this.situation = sit;
 	}
 
 	@Override
-	public int hashCode() {
+  public final int hashCode() {
 		return buket.hashCode() + position.hashCode() * 71
 				+ situation.hashCode() * 1009;
 	}
 
-	public PreflopBuket getBuket() {
+  public final PreflopBuket getBuket() {
 		return buket;
 	}
 
-	public Position getPosition() {
+  public final Position getPosition() {
 		return position;
 	}
 
-	public PreflopSituation getSituation() {
+  public final PreflopSituation getSituation() {
 		return situation;
 	}
 
 	@Override
-	public boolean equals(@Nullable Object o) {
-		if (o == this)
-			return true;
+  public final boolean equals(@Nullable final Object o) {
+    if (o == this) {
+      return true;
+    }
 		if (o instanceof PreflopSelector) {
 			PreflopSelector p = (PreflopSelector) o;
 			return buket == p.buket && position == p.position
@@ -44,12 +45,12 @@ public class PreflopSelector {
 		return false;
 	}
 
-	public void print() {
+  public final void print() {
 		System.out.println(this);
 
 	}
 
-	public String toString() {
+  public final String toString() {
 		return buket.toString() + "\n" + position.toString() + "\n"
 				+ situation.toString();
 	}

@@ -12,11 +12,11 @@ public class RewardsManagement {
 	public RewardsManagement() {
 	}
 
-	public void saveStat(IStrategy stratetgy, Stat s) {
+  public final void saveStat(final IStrategy stratetgy, final Stat s) {
 		stats.put(stratetgy, s);
 	}
 
-	public Stat getStat(IStrategy strategy) {
+  public final Stat getStat(final IStrategy strategy) {
 		return stats.get(strategy);
 	}
 

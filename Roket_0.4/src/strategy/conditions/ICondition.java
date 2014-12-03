@@ -3,54 +3,54 @@ package strategy.conditions;
 import strategy.ISituation;
 
 public interface ICondition {
-	public boolean eval(ISituation sit);
+  boolean eval(ISituation sit);
 
-	public static class AndCondition implements ICondition {
-		ICondition first;
-		ICondition second;
+  public static class AndCondition implements ICondition {
+    private ICondition first;
+    private ICondition second;
 
-		public AndCondition(ICondition first, ICondition second) {
-			this.first = first;
-			this.second = second;
-		}
+    public AndCondition(final ICondition first, final ICondition second) {
+      this.first = first;
+      this.second = second;
+    }
 
-		@Override
-		public boolean eval(ISituation sit) {
-			return first.eval(sit) && second.eval(sit);
-		}
+    @Override
+    public final boolean eval(final ISituation sit) {
+      return first.eval(sit) && second.eval(sit);
+    }
 
-		@Override
-		public String toString() {
-			return "(" + first + ") AND (" + second + ")";
-		}
-	}
+    @Override
+    public final String toString() {
+      return "(" + first + ") AND (" + second + ")";
+    }
+  }
 
-	public static class OrCondition implements ICondition {
-		ICondition first;
-		ICondition second;
+  public static class OrCondition implements ICondition {
+    private ICondition first;
+    private ICondition second;
 
-		public OrCondition(ICondition first, ICondition second) {
-			this.first = first;
-			this.second = second;
-		}
+    public OrCondition(final ICondition first, final ICondition second) {
+      this.first = first;
+      this.second = second;
+    }
 
-		@Override
-		public boolean eval(ISituation sit) {
-			return first.eval(sit) || second.eval(sit);
-		}
+    @Override
+    public final boolean eval(final ISituation sit) {
+      return first.eval(sit) || second.eval(sit);
+    }
 
-		@Override
-		public String toString() {
-			return "(" + first + ") OR (" + second + ")";
-		}
-	}
+    @Override
+    public final String toString() {
+      return "(" + first + ") OR (" + second + ")";
+    }
+  }
 
-	default ICondition or(final ICondition other) {
-		return new OrCondition(this, other);
-	}
+  default ICondition or(final ICondition other) {
+    return new OrCondition(this, other);
+  }
 
-	default ICondition and(final ICondition other) {
-		return new AndCondition(this, other);
-	}
+  default ICondition and(final ICondition other) {
+    return new AndCondition(this, other);
+  }
 
 }

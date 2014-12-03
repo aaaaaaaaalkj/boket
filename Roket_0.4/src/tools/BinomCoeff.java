@@ -2,10 +2,10 @@ package tools;
 
 import java.util.List;
 
-import managementCards.all_cathegories.AllResults;
-import managementCards.cards.Card;
-import managementCards.cat_rec_new.Cat_Rec;
-import managementCards.cat_rec_new.ResultImpl;
+import managementcards.all_cathegories.AllResults;
+import managementcards.cards.Card;
+import managementcards.catrecnew.CatRec;
+import managementcards.catrecnew.ResultImpl;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -129,7 +129,7 @@ public class BinomCoeff {
 											c7.ordinal()
 											);
 
-									ResultImpl res = new Cat_Rec(
+									ResultImpl res = new CatRec(
 											c1, c2, Tools.asList(c3, c4, c5,
 													c6, c7))
 											.check();

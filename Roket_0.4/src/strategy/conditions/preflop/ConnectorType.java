@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.OptionalInt;
 
-import managementCards.cards.Rank;
-import managementCards.cat_rec_new.Window;
+import managementcards.cards.Rank;
+import managementcards.catrecnew.Window;
 import strategy.ISituation;
 import strategy.conditions.ICondition;
 
@@ -16,7 +16,7 @@ public enum ConnectorType implements ICondition {
 			.allOf(ConnectorType.class);
 
 	@Override
-	public boolean eval(ISituation sit) {
+  public boolean eval(final ISituation sit) {
 		return this == sit.getConnector();
 	}
 
@@ -49,7 +49,7 @@ public enum ConnectorType implements ICondition {
 	}
 
 	@SuppressWarnings("null")
-	public static ConnectorType fromInt(OptionalInt optionalInt) {
+  public static ConnectorType fromInt(final OptionalInt optionalInt) {
 		if (optionalInt.isPresent()
 				&& optionalInt.getAsInt() <= 4
 				&& optionalInt.getAsInt() >= 0) {

@@ -8,7 +8,7 @@ public enum ContributionType implements ICondition {
 
 	private final double value;
 
-	private ContributionType(double value) {
+  private ContributionType(final double value) {
 		this.value = value;
 	}
 
@@ -23,7 +23,7 @@ public enum ContributionType implements ICondition {
 	}
 
 	@Override
-	public boolean eval(ISituation sit) {
+  public boolean eval(final ISituation sit) {
 		return this == sit.getContribution();
 	}
 
@@ -35,7 +35,7 @@ public enum ContributionType implements ICondition {
 		return (sit -> sit.getContribution().ordinal() <= ordinal());
 	}
 
-	public static ContributionType fromDouble(double d) {
+  public static ContributionType fromDouble(final double d) {
 		if (Double.isNaN(d)) {
 			return ContributionType.LOW;
 		}

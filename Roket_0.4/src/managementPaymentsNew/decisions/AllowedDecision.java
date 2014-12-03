@@ -12,13 +12,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 
-public class AllowedDecision {
+public final class AllowedDecision {
 	private final Collection<DecisionType> allowedDecisions;
 	private final int maxBetOrRaiseValue;
-	private final static int ILLEGAL_VALUE = -1;
+  private static final int ILLEGAL_VALUE = -1;
 
 	@SuppressWarnings("null")
-	private AllowedDecision(int value, DecisionType... col) {
+  private AllowedDecision(final int value, final DecisionType... col) {
 		this.allowedDecisions = Collections.unmodifiableCollection(
 				EnumSet.copyOf(Arrays.asList(col)));
 		this.maxBetOrRaiseValue = value;
@@ -32,15 +32,15 @@ public class AllowedDecision {
 		return new AllowedDecision(ILLEGAL_VALUE, FOLD, ALL_IN, CALL);
 	}
 
-	public static AllowedDecision callRaise(int value) {
+  public static AllowedDecision callRaise(final int value) {
 		return new AllowedDecision(value, FOLD, ALL_IN, CALL, RAISE);
 	}
 
-	public static AllowedDecision checkBet(int value) {
+  public static AllowedDecision checkBet(final int value) {
 		return new AllowedDecision(value, FOLD, ALL_IN, CHECK, BET);
 	}
 
-	public boolean isAllowed(Decision d) {
+  public boolean isAllowed(final Decision d) {
 		return allowedDecisions.contains(d.getDecisionType())
 				&& (d.getDecisionType() == BET || d.getDecisionType() == RAISE ?
 						d.getValue() <= maxBetOrRaiseValue : true);

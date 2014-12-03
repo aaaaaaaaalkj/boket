@@ -21,5 +21,6 @@ public class Constants {
 
 	private static Pos pos(int x, int y) {
 		return new Pos(x, y);
+
 	}
 }

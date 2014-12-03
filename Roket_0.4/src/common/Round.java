@@ -17,21 +17,23 @@ public enum Round implements ICondition {
 			.unmodifiableList(Arrays.asList(values()));
 
 	public @Nullable Round next() {
-		if (this == SHOWDOWN || this == QUIET_END)
-			return null;
-		else
-			return VALUES.get(this.ordinal() + 1);
+    if (this == SHOWDOWN || this == QUIET_END) {
+      return null;
+    } else {
+      return VALUES.get(this.ordinal() + 1);
+    }
 	}
 
 	public @Nullable Round last() {
-		if (this == PREFLOP)
-			return null;
-		else
-			return VALUES.get(this.ordinal() - 1);
+    if (this == PREFLOP) {
+      return null;
+    } else {
+      return VALUES.get(this.ordinal() - 1);
+    }
 	}
 
 	@Override
-	public boolean eval(ISituation sit) {
+  public boolean eval(final ISituation sit) {
 		return sit.getRound() == this;
 	}
 

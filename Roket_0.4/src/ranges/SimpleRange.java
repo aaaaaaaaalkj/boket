@@ -2,38 +2,82 @@ package ranges;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 
-import managementCards.cards.Card;
-import managementCards.cards.Rank;
+import managementcards.cards.Card;
+import managementcards.cards.Rank;
+import tools.RandomEnumSet;
 
-public class SimpleRange implements Range {
-	private final EnumSet<ElementRange> elements;
+public class SimpleRange implements Range, Cloneable {
+	private final RandomEnumSet<ElementRange> elements;
+
+  public final SimpleRange clone() {
+		return new SimpleRange(elements.clone());
+	}
 
 	@SuppressWarnings("null")
 	public SimpleRange() {
-		this(EnumSet.noneOf(ElementRange.class));
+		this(RandomEnumSet.noneOf(ElementRange.class));
 	}
 
-	public SimpleRange(EnumSet<ElementRange> elements) {
+  public SimpleRange(final RandomEnumSet<ElementRange> elements) {
 		this.elements = elements;
 	}
 
-	public void add(ElementRange e) {
+  public final void add(final ElementRange e) {
 		elements.add(e);
 	}
 
-	public boolean remove(ElementRange e) {
+  public final boolean remove(final ElementRange e) {
 		return elements.remove(e);
 	}
 
-	public static void main(String[] args) {
+  public final ElementRange getRandom(final Random rnd) {
+		return elements.getRandom(rnd);
+	}
+
+  public final SimpleRange normalize(final Card c) {
+		elements.removeAll(ElementRange.find(c));
+		return this;
+	}
+
+  public final SimpleRange removeAssociated(final Iterable<Card> cards) {
+		for (Card c : cards) {
+			elements.removeAll(ElementRange.find(c));
+		}
+		return this;
+	}
+
+  public final SimpleRange removeAssociated(final Card card) {
+		elements.removeAll(ElementRange.find(card));
+		return this;
+	}
+
+  public final SimpleRange normalize(final ElementRange e) {
+		elements.removeAll(ElementRange.find(e));
+		return this;
+	}
+
+	@Override
+  public final boolean contains(final ElementRange r) {
+		return elements.contains(r);
+	}
+
+  public final int size() {
+		return elements.size();
+	}
+
+  public final void addAll(final SimpleRange other) {
+		this.elements.addAll(other.elements);
+	}
+
+  public static void main(final String[] args) {
 		code4Enum2();
 	}
 
 	@SuppressWarnings("unused")
-	private static final void code4Enum() {
+  private static void code4Enum() {
 		List<Card> cards = Card.getAllCards();
 		for (int i = cards.size() - 1; i >= 0; i--) {
 			for (int j = i - 1; j >= 0; j--) {
@@ -46,7 +90,7 @@ public class SimpleRange implements Range {
 		}
 	}
 
-	private static final void code4Enum2() {
+  private static void code4Enum2() {
 		List<Rank> ranks = new ArrayList<>(Rank.VALUES);
 		Collections.reverse(ranks);
 
@@ -71,16 +115,9 @@ public class SimpleRange implements Range {
 
 	}
 
-	@Override
-	public boolean contains(ElementRange r) {
-		return elements.contains(r);
-	}
-
-	public int size() {
-		return elements.size();
-	}
-
-	public void addAll(SimpleRange other) {
-		this.elements.addAll(other.elements);
+	@SuppressWarnings("null")
+	public static SimpleRange full() {
+		return new SimpleRange(new RandomEnumSet<>(ElementRange.class,
+				ElementRange.VALUES));
 	}
 }

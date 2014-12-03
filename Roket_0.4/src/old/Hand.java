@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import managementCards.cards.Card;
+import managementcards.cards.Card;
 import old.strategy.PreflopBuket;
 
 import org.eclipse.jdt.annotation.NonNull;

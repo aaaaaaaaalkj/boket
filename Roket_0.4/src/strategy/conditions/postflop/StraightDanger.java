@@ -22,7 +22,7 @@ public enum StraightDanger implements ICondition {
 	}
 
 	@Override
-	public boolean eval(ISituation sit) {
+  public boolean eval(final ISituation sit) {
 		return this == sit.getStraightDanger();
 	}
 

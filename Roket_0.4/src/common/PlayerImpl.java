@@ -2,10 +2,10 @@ package common;
 
 import java.util.List;
 
-import managementCards.cards.Card;
-import managementCards.cards.Hand;
 import managementPayments.AmountOfJetons;
 import managementState.PlayerState;
+import managementcards.cards.Card;
+import managementcards.cards.Hand;
 import strategy.IStrategy;
 
 public final class PlayerImpl implements IPlayer {
@@ -17,8 +17,9 @@ public final class PlayerImpl implements IPlayer {
 	private PlayerState state;
 	private AmountOfJetons post;
 
-	public PlayerImpl(String name, int position, Hand hand, IStrategy strategy,
-			int bb) {
+  public PlayerImpl(final String name, final int position, final Hand hand,
+      final IStrategy strategy,
+      final int bb) {
 		this.name = name;
 		this.position = position;
 		this.strategy = strategy;
@@ -38,7 +39,7 @@ public final class PlayerImpl implements IPlayer {
 	}
 
 	@Override
-	public void dealCards(Card first, Card second) {
+  public void dealCards(final Card first, final Card second) {
 		hand.setCards(first, second);
 	}
 
@@ -58,7 +59,7 @@ public final class PlayerImpl implements IPlayer {
 	}
 
 	@Override
-	public void setState(PlayerState state) {
+  public void setState(final PlayerState state) {
 		this.state = state;
 	}
 
@@ -68,7 +69,7 @@ public final class PlayerImpl implements IPlayer {
 	}
 
 	@Override
-	public void setPost(AmountOfJetons post) {
+  public void setPost(final AmountOfJetons post) {
 		this.post = post;
 	}
 

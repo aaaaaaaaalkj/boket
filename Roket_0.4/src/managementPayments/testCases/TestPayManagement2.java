@@ -13,7 +13,7 @@ public class TestPayManagement2 {
 	}
 
 	@Test
-	public void test() {
+  public final void test() {
 		fail("Not yet implemented");
 	}
 

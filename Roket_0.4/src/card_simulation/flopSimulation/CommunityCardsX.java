@@ -8,27 +8,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import managementCards.cards.Card;
-import managementCards.cards.Rank;
-import managementCards.cards.Suit;
+import managementcards.cards.Card;
+import managementcards.cards.Rank;
+import managementcards.cards.Suit;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 import tools.Tools;
 
 public class CommunityCardsX implements Comparable<CommunityCardsX> {
-	List<Card> cards;
+  private List<Card> cards;
 
-	public boolean contains(Card c) {
+  public final boolean contains(final Card c) {
 		return cards.contains(c);
 	}
 
-	public CommunityCardsX(List<Card> cards) {
+  public CommunityCardsX(final List<Card> cards) {
 		// assert cards.size() == 3;
 		this.cards = cards;
 	}
 
-	public void normalize() {
+  public final void normalize() {
 		normalize2();
 		cards.sort((a, b) -> {
 			if (a.getRank().compareTo(b.getRank()) != 0) {
@@ -40,7 +40,7 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 		Collections.reverse(cards);
 	}
 
-	public void normalize2() {
+  public final void normalize2() {
 		cards.sort((a, b) -> {
 			if (a.getRank().compareTo(b.getRank()) != 0) {
 				return a.getRank().compareTo(b.getRank());
@@ -105,7 +105,7 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 	}
 
 	@Override
-	public int hashCode() {
+  public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (cards.hashCode());
@@ -113,20 +113,24 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+  public final boolean equals(@Nullable final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
 		CommunityCardsX other = (CommunityCardsX) obj;
-		if (!cards.equals(other.cards))
-			return false;
+    if (!cards.equals(other.cards)) {
+      return false;
+    }
 		return true;
 	}
 
-	public static void main(String[] args) {
+  public static void main(final String[] args) {
 		Set<CommunityCardsX> set = new HashSet<>();
 
 		List<Card> list = new ArrayList<>();
@@ -161,13 +165,13 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 	}
 
 	@Override
-	public String toString() {
+  public final String toString() {
 		return "[" + cards.get(0) + "|" + cards.get(1) + "|" + cards.get(2)
 				+ "]";
 	}
 
 	@Override
-	public int compareTo(CommunityCardsX o) {
+  public final int compareTo(final CommunityCardsX o) {
 		int i = cards.get(0).compareTo(o.cards.get(0));
 		if (i == 0) {
 			i = cards.get(1).compareTo(o.cards.get(1));
@@ -178,7 +182,7 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 		return i;
 	}
 
-	public List<Card> getCards() {
+  public final List<Card> getCards() {
 		return cards;
 	}
 }

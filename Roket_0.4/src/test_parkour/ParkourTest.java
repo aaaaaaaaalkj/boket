@@ -1,7 +1,7 @@
 package test_parkour;
 
-import static managementCards.cards.Card.Ad;
-import static managementCards.cards.Card.Ah;
+import static managementcards.cards.Card.Ad;
+import static managementcards.cards.Card.Ah;
 import static org.junit.Assert.assertTrue;
 import input_output.Raw_Situation;
 
@@ -13,7 +13,7 @@ import pot_odds_strategy.PotOddsStrategy;
 
 public class ParkourTest {
 	@SuppressWarnings("null")
-	final static org.slf4j.Logger logger = LoggerFactory
+  static final org.slf4j.Logger logger = LoggerFactory
 			.getLogger(ParkourTest.class);
 
 	// @Test
@@ -133,7 +133,7 @@ public class ParkourTest {
 	// assertTrue(res.toString(), res.equalType(PotOddsDecision.fold()));
 	// }
 	//
-	private PotOddsDecision test(Raw_Situation raw) {
+  private PotOddsDecision test(final Raw_Situation raw) {
 		PotOddsStrategy strategy = new PotOddsStrategy(raw);
 
 		logger.info("{}", strategy);
@@ -141,7 +141,7 @@ public class ParkourTest {
 	}
 
 	@Test
-	public void goodPreflop() {
+  public final void goodPreflop() {
 		Raw_Situation sit;
 		sit = new Raw_Situation.Builder()
 				.hand(Ah, Ad)

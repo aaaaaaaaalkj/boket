@@ -2,33 +2,36 @@ package managementPayments;
 
 import strategy.PlayerDecision;
 
-public class ActionInfo {
-	private final boolean all_in;
-	private final boolean raised;
-	private final PlayerDecision playerDec;
-	private final AmountOfJetons amount;
+public final class ActionInfo {
+  private final boolean allIn;
+  private final boolean raised;
+  private final PlayerDecision playerDec;
+  private final AmountOfJetons amount;
 
-	public ActionInfo(boolean all_in, boolean raised, PlayerDecision playerDec,
-			AmountOfJetons amount) {
-		this.all_in = all_in;
-		this.raised = raised;
-		this.playerDec = playerDec;
-		this.amount = amount;
-	}
+  public ActionInfo(
+      final boolean allIn,
+      final boolean raised,
+      final PlayerDecision playerDec,
+      final AmountOfJetons amount) {
+    this.allIn = allIn;
+    this.raised = raised;
+    this.playerDec = playerDec;
+    this.amount = amount;
+  }
 
-	public boolean isAllIn() {
-		return all_in;
-	}
+  public boolean isAllIn() {
+    return allIn;
+  }
 
-	public boolean hasRaised() {
-		return raised;
-	}
+  public boolean hasRaised() {
+    return raised;
+  }
 
-	public PlayerDecision getPlayerDec() {
-		return playerDec;
-	}
+  public PlayerDecision getPlayerDec() {
+    return playerDec;
+  }
 
-	public AmountOfJetons getAmount() {
-		return amount;
-	}
+  public AmountOfJetons getAmount() {
+    return amount;
+  }
 }

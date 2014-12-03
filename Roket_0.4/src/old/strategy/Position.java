@@ -15,15 +15,17 @@ public enum Position {
 
 	public Position prev() {
 		int num = this.ordinal() - 1;
-		if (num < 0)
-			num = VALUES.size() - 1;
+    if (num < 0) {
+      num = VALUES.size() - 1;
+    }
 		return VALUES.get(num);
 	}
 
 	public Position next() {
 		int num = this.ordinal() + 1;
-		if (num >= VALUES.size())
-			num = 0;
+    if (num >= VALUES.size()) {
+      num = 0;
+    }
 		return VALUES.get(num);
 	}
 

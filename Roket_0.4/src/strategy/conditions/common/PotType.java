@@ -9,7 +9,7 @@ public enum PotType implements ICondition {
 
 	private final double value;
 
-	private PotType(double value) {
+  private PotType(final double value) {
 		this.value = value;
 	}
 
@@ -18,7 +18,7 @@ public enum PotType implements ICondition {
 	}
 
 	@Override
-	public boolean eval(ISituation sit) {
+  public boolean eval(final ISituation sit) {
 		return this == sit.getPot();
 	}
 
@@ -26,7 +26,7 @@ public enum PotType implements ICondition {
 		return (sit -> sit.getPot().ordinal() >= ordinal());
 	}
 
-	public static PotType of(double d) {
+  public static PotType of(final double d) {
 		if (d < SMALL.value) {
 			return SMALL;
 		} else if (d < MEDIUM.value) {

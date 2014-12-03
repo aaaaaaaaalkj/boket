@@ -9,10 +9,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Supplier;
 
-public class ImmutableRange implements Range {
+public final class ImmutableRange implements Range {
 	private final Set<ElementRange> elements;
 
-	private ImmutableRange(EnumSet<ElementRange> elements) {
+  private ImmutableRange(final EnumSet<ElementRange> elements) {
 		this.elements = elements;
 	}
 
@@ -41,12 +41,12 @@ public class ImmutableRange implements Range {
 		return SUITED;
 	}
 
-	public boolean contains(ElementRange r) {
+  public boolean contains(final ElementRange r) {
 		return elements.contains(r);
 	}
 
-	private static ImmutableRange create(@Nullable ImmutableRange defaultVar,
-			Supplier<EnumSet<ElementRange>> supplier) {
+  private static ImmutableRange create(@Nullable final ImmutableRange defaultVar,
+      final Supplier<EnumSet<ElementRange>> supplier) {
 		ImmutableRange res;
 		if (null != defaultVar) {
 			res = defaultVar;
@@ -56,7 +56,7 @@ public class ImmutableRange implements Range {
 		return res;
 	}
 
-	private static EnumSet<ElementRange> create(Predicate<ElementRange> pred) {
+  private static EnumSet<ElementRange> create(final Predicate<ElementRange> pred) {
 		@SuppressWarnings("null")
 		@NonNull
 		EnumSet<ElementRange> set = EnumSet.noneOf(ElementRange.class);

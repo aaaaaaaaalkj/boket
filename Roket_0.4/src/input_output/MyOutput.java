@@ -11,7 +11,7 @@ import java.util.List;
 import tools.Pos;
 
 public class MyOutput {
-	Robot robot;
+  private Robot robot;
 
 	public MyOutput() {
 		try {
@@ -21,7 +21,7 @@ public class MyOutput {
 		}
 	}
 
-	public static int safeLongToInt(long l) {
+  public static int safeLongToInt(final long l) {
 		if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException(l
 					+ " cannot be cast to int without changing its value.");
@@ -29,24 +29,24 @@ public class MyOutput {
 		return (int) l;
 	}
 
-	public void type2(double d, Pos logo) {
+  public final void type2(final double d, final Pos logo) {
 		moveAndDoubleClick(new Pos(630, 480).plus(logo));
 		type(d);
 	}
 
-	public void clickFoldButton(Pos logo) {
+  public final void clickFoldButton(final Pos logo) {
 		moveAndClick(new Pos(470, 530).plus(logo));
 	}
 
-	public void clickCallButton(Pos logo) {
+  public final void clickCallButton(final Pos logo) {
 		moveAndClick(new Pos(600, 530).plus(logo));
 	}
 
-	public void clickRaiseButton(Pos logo) {
+  public final void clickRaiseButton(final Pos logo) {
 		moveAndClick(new Pos(700, 550).plus(logo));
 	}
 
-	public void moveAndClick(Pos p) {
+  public final void moveAndClick(final Pos p) {
 		robot.mouseMove(p.x, p.y);
 		try {
 			Thread.sleep(900);
@@ -58,7 +58,7 @@ public class MyOutput {
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 
-	public void moveAndDoubleClick(Pos p) {
+  public final void moveAndDoubleClick(final Pos p) {
 		robot.mouseMove(p.x, p.y);
 		robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
 		robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
@@ -66,7 +66,7 @@ public class MyOutput {
 		robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 	}
 
-	public void type(double d) {
+  public final void type(final double d) {
 		if (d < 0) {
 			throw new IllegalArgumentException(
 					"its not allowed to type negative numbers");
@@ -136,7 +136,7 @@ public class MyOutput {
 
 	}
 
-	List<Integer> digits(int i) {
+  final List<Integer> digits(final int i) {
 		List<Integer> digits = new ArrayList<Integer>();
 
 		if (i == 0) {

@@ -7,11 +7,11 @@ public class Memory {
 	private final Map<Integer, Double> highestBid = new HashMap<>();
 	private final Map<Integer, Double> pot = new HashMap<>();
 
-	void setHighestBid(Integer round, Double value) {
+  final void setHighestBid(final Integer round, final Double value) {
 		highestBid.put(round, value);
 	}
 
-	double getighestBid(int round) {
+  final double getighestBid(final int round) {
 		if (round < 0) {
 			return 0.0; // return 0 on preflop
 		}
@@ -22,11 +22,11 @@ public class Memory {
 		}
 	}
 
-	void setPot(Integer round, Double value) {
+  final void setPot(final Integer round, final Double value) {
 		pot.put(round, value);
 	}
 
-	double getPot(int round) {
+  final double getPot(final int round) {
 		if (round < 0) {
 			return 0.01; // return 0.01 on preflop
 		}

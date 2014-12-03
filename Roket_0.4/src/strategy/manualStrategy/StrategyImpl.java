@@ -17,11 +17,11 @@ public class StrategyImpl implements IStrategy {
 		list = new ArrayList<>();
 	}
 
-	public void addCondition(ICondition cond, TypeOfDecision dec) {
+  public final void addCondition(final ICondition cond, final TypeOfDecision dec) {
 		list.add(new StrategyItem(cond, dec));
 	}
 
-	public TypeOfDecision decide(ISituation situation) {
+  public final TypeOfDecision decide(final ISituation situation) {
 		for (StrategyItem i : list) {
 			if (i.getCondition().eval(situation)) {
 				System.out.println(i.getCondition() + " -> " + i.getDecision());
@@ -31,7 +31,7 @@ public class StrategyImpl implements IStrategy {
 		return TypeOfDecision.FOLD;
 	}
 
-	public String toString() {
+  public final String toString() {
 		String res = "";
 		for (StrategyItem i : list) {
 			res += i.getCondition() + " -> " + i.getDecision() + "\n";
@@ -39,19 +39,19 @@ public class StrategyImpl implements IStrategy {
 		return res;
 	}
 
-	public void preflop(ICondition cond, TypeOfDecision dec) {
+  public final void preflop(final ICondition cond, final TypeOfDecision dec) {
 		addCondition(Round.PREFLOP.and(cond), dec);
 	}
 
-	public void flop(ICondition cond, TypeOfDecision dec) {
+  public final void flop(final ICondition cond, final TypeOfDecision dec) {
 		addCondition(Round.FLOP.and(cond), dec);
 	}
 
-	public void turn(ICondition cond, TypeOfDecision dec) {
+  public final void turn(final ICondition cond, final TypeOfDecision dec) {
 		addCondition(Round.TURN.and(cond), dec);
 	}
 
-	public void river(ICondition cond, TypeOfDecision dec) {
+  public final void river(final ICondition cond, final TypeOfDecision dec) {
 		addCondition(Round.RIVER.and(cond), dec);
 	}
 

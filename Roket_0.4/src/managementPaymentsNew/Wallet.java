@@ -1,19 +1,19 @@
 package managementPaymentsNew;
 
-public class Wallet {
+public final class Wallet {
 	private final Integer player;
 	private Integer amount;
 
-	private Wallet(Integer player, Integer amount) {
+  private Wallet(final Integer player, final Integer amount) {
 		this.player = player;
 		this.amount = amount;
 	}
 
-	public static Wallet newInstance(Integer player, Integer amount) {
+  public static Wallet newInstance(final Integer player, final Integer amount) {
 		return new Wallet(player, amount);
 	}
 
-	public void transferTo(Wallet w, Integer amount) {
+  public void transferTo(final Wallet w, final Integer amount) {
 		assert amount >= 0 && amount <= this.amount;
 		assert this.player == w.player;
 
@@ -21,7 +21,7 @@ public class Wallet {
 		w.amount += amount;
 	}
 
-	public void transferTo(SidePot s, Integer amount) {
+  public void transferTo(final SidePot s, final Integer amount) {
 		assert amount >= 0 && amount <= this.amount;
 
 		this.amount -= amount;

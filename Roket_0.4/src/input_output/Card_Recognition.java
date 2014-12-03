@@ -9,143 +9,148 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import managementCards.cards.Card;
-import managementCards.cards.Rank;
-import managementCards.cards.Suit;
+import managementcards.cards.Card;
+import managementcards.cards.Rank;
+import managementcards.cards.Suit;
 import old.Hand;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 import tools.Pos;
 
-public class Card_Recognition {
-	private static final Color cardEdge = Constants.cardEdge;
-	@SuppressWarnings("null")
-	private static final Pos handPos = Constants.centersOfPlayerCirles[0];
-	private static final int radius = Constants.radiusOfPlayerCircles;
+public final class Card_Recognition {
+  private static final Color cardEdge = Constants.cardEdge;
+  @SuppressWarnings("null")
+  private static final Pos handPos = Constants.centersOfPlayerCirles[0];
+  private static final int radius = Constants.radiusOfPlayerCircles;
 
-	private static @Nullable Pos searchCard(Pos pos, MyRobot robot) {
-		Pos hit = robot.pixelSearch(pos.x, pos.y, 25, 25, cardEdge);
-		if (null == hit) {
-			return null;
-		}
-		hit = hit.plus(pos).minus(4, 0);
-		return hit;
-	}
+  private Card_Recognition() {
+  }
 
-	public static List<Card> recognizeCommunityCards(Pos logo, MyRobot robot) {
+  private static @Nullable Pos searchCard(final Pos pos, final MyRobot robot) {
+    Pos hit = robot.pixelSearch(pos.x, pos.y, 25, 25, cardEdge);
+    if (null == hit) {
+      return null;
+    }
+    hit = hit.plus(pos).minus(4, 0);
+    return hit;
+  }
 
-		Pos pos = Constants.flop.plus(logo);
-		List<Card> list = new ArrayList<>();
+  public static List<Card> recognizeCommunityCards(final Pos logo, final MyRobot robot) {
 
-		for (int i = 0; i < 5; i++) {
-			Pos hit = searchCard(pos, robot);
-			if (null == hit)
-				break;
-			Card card = recognizeCard(hit, robot);
-			if (card != null) {
-				list.add(card);
-			}
-			pos = hit.plus(Constants.cardOffset, 0);
-		}
-		// TODO: maybe its possible that list.get(0) == null
-		return list;
-	}
+    Pos pos = Constants.flop.plus(logo);
+    List<Card> list = new ArrayList<>();
 
-	public static @Nullable Hand recognizeHand(Pos logo, MyRobot robot) {
-		Pos pos = logo.plus(handPos).minus(radius, radius);
+    for (int i = 0; i < 5; i++) {
+      Pos hit = searchCard(pos, robot);
+      if (null == hit) {
+        break;
+      }
+      Card card = recognizeCard(hit, robot);
+      if (card != null) {
+        list.add(card);
+      }
+      pos = hit.plus(Constants.cardOffset, 0);
+    }
+    // TODO: maybe its possible that list.get(0) == null
+    return list;
+  }
 
-		Pos hit = searchCard(pos, robot);
-		if (null == hit) {
-			// System.out.println("no hit found");
-			return null;
-		}
-		Card first = recognizeCard(hit, robot);
+  public static @Nullable Hand recognizeHand(final Pos logo, final MyRobot robot) {
+    Pos pos = logo.plus(handPos).minus(radius, radius);
 
-		pos = hit.plus(4, 1);
-		hit = searchCard(pos, robot);
-		if (null == hit) {
-			return null;
-		}
-		Card second = recognizeCard(hit, robot);
-		if (Objects.isNull(first) || Objects.isNull(second)) {
-			return null; // animation may interfere here
-		}
-		return Hand.newInstance(first, second);
-	}
+    Pos hit = searchCard(pos, robot);
+    if (null == hit) {
+      // System.out.println("no hit found");
+      return null;
+    }
+    Card first = recognizeCard(hit, robot);
 
-	public static @Nullable Card recognizeCard(Pos pos, MyRobot robot) {
-		Suit resColor = recognizeCardColor(pos, robot);
-		if (null == resColor) {
-			System.out.println("no card color found");
-			return null;
-		}
-		Rank resNum = recognizeCardNum(pos, robot);
-		if (resNum == null) {
-			System.out.println("no card num found");
-			return null;
-		}
-		return Card.newInstance(resNum, resColor);
-	}
+    pos = hit.plus(4, 1);
+    hit = searchCard(pos, robot);
+    if (null == hit) {
+      return null;
+    }
+    Card second = recognizeCard(hit, robot);
+    if (Objects.isNull(first) || Objects.isNull(second)) {
+      return null; // animation may interfere here
+    }
+    return Hand.newInstance(first, second);
+  }
 
-	private static @Nullable Rank recognizeCardNum(Pos pos, MyRobot robot) {
-		final int num = 6;
-		Pos[] positions = { pos(7, 11), pos(9, 14), pos(4, 11), pos(7, 5),
-				pos(6, 12), pos(11, 8) };
-		Pattern myPattern = new Pattern(num);
+  public static @Nullable Card recognizeCard(final Pos pos, final MyRobot robot) {
+    Suit resColor = recognizeCardColor(pos, robot);
+    if (null == resColor) {
+      System.out.println("no card color found");
+      return null;
+    }
+    Rank resNum = recognizeCardNum(pos, robot);
+    if (resNum == null) {
+      System.out.println("no card num found");
+      return null;
+    }
+    return Card.newInstance(resNum, resColor);
+  }
 
-		for (int i = 0; i < num; i++) {
-			Color c = robot.getPixelColor(positions[i].plus(pos));
-			Color ref = new Color(16777215);
-			if (c.equals(ref))
-				myPattern.set(i);
-		}
+  private static @Nullable Rank recognizeCardNum(final Pos pos, final MyRobot robot) {
+    final int num = 6;
+    Pos[] positions = { pos(7, 11), pos(9, 14), pos(4, 11), pos(7, 5),
+        pos(6, 12), pos(11, 8) };
+    Pattern myPattern = new Pattern(num);
 
-		Pattern[] pattern = { pat(1, 1, 1, 0, 1, 0), pat(0, 1, 1, 0, 1, 0),
-				pat(1, 0, 0, 1, 0, 1), pat(0, 1, 0, 0, 1, 1),
-				pat(0, 1, 0, 0, 0, 1), pat(1, 0, 1, 0, 1, 0),
-				pat(0, 1, 1, 0, 0, 0), pat(1, 1, 0, 0, 0, 0),
-				pat(0, 1, 0, 1, 1, 0), pat(1, 0, 1, 1, 1, 0),
-				pat(1, 0, 0, 0, 0, 0), pat(0, 0, 1, 0, 0, 0),
-				pat(0, 1, 1, 0, 0, 1) };
-		Rank resNum = null;
-		for (int i = 0; i < pattern.length; i++) {
-			if (pattern[i].equals(myPattern)) {
-				resNum = Rank.values()[i];
-			}
-		}
-		if (resNum == null) {
-			System.out.println("cant recognize card" + myPattern);
-			return null;
-		} else {
-			return resNum;
-		}
+    for (int i = 0; i < num; i++) {
+      Color c = robot.getPixelColor(positions[i].plus(pos));
+      Color ref = new Color(16777215);
+      if (c.equals(ref)) {
+        myPattern.set(i);
+      }
+    }
 
-	}
+    Pattern[] pattern = { pat(1, 1, 1, 0, 1, 0), pat(0, 1, 1, 0, 1, 0),
+        pat(1, 0, 0, 1, 0, 1), pat(0, 1, 0, 0, 1, 1),
+        pat(0, 1, 0, 0, 0, 1), pat(1, 0, 1, 0, 1, 0),
+        pat(0, 1, 1, 0, 0, 0), pat(1, 1, 0, 0, 0, 0),
+        pat(0, 1, 0, 1, 1, 0), pat(1, 0, 1, 1, 1, 0),
+        pat(1, 0, 0, 0, 0, 0), pat(0, 0, 1, 0, 0, 0),
+        pat(0, 1, 1, 0, 0, 1) };
+    Rank resNum = null;
+    for (int i = 0; i < pattern.length; i++) {
+      if (pattern[i].equals(myPattern)) {
+        resNum = Rank.values()[i];
+      }
+    }
+    if (resNum == null) {
+      System.out.println("cant recognize card" + myPattern);
+      return null;
+    } else {
+      return resNum;
+    }
 
-	private static @Nullable Suit recognizeCardColor(Pos pos, MyRobot robot) {
-		Suit resColor;
-		Color cardColor = robot.getPixelColor(pos.plus(9, 25));
+  }
 
-		switch (toRGB(cardColor)) {
-		case 13109256:
-			resColor = Suit.DIAMONDS;
-			break;
-		case 13174792:
-			resColor = Suit.HEARTS;
-			break;
-		case 0:
-			resColor = Suit.SPADES;
-			break;
-		case 16448250:
-			resColor = Suit.CLUBS;
-			break;
-		default:
-			// Logger.warning("unexpected Color in recognizeColor():"
-			// + toRGB(cardColor));
-			resColor = null;
-		}
-		return resColor;
-	}
+  private static @Nullable Suit recognizeCardColor(final Pos pos, final MyRobot robot) {
+    Suit resColor;
+    Color cardColor = robot.getPixelColor(pos.plus(9, 25));
+
+    switch (toRGB(cardColor)) {
+    case 13109256:
+      resColor = Suit.DIAMONDS;
+      break;
+    case 13174792:
+      resColor = Suit.HEARTS;
+      break;
+    case 0:
+      resColor = Suit.SPADES;
+      break;
+    case 16448250:
+      resColor = Suit.CLUBS;
+      break;
+    default:
+      // Logger.warning("unexpected Color in recognizeColor():"
+      // + toRGB(cardColor));
+      resColor = null;
+    }
+    return resColor;
+  }
 
 }

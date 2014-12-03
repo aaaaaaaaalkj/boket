@@ -13,7 +13,7 @@ public enum SuitedType implements ICondition {
 			.allOf(SuitedType.class);
 
 	@Override
-	public boolean eval(ISituation sit) {
+  public boolean eval(final ISituation sit) {
 		return this == sit.getSuit();
 	}
 

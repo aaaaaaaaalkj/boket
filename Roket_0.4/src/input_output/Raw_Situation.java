@@ -3,7 +3,7 @@ package input_output;
 import java.util.ArrayList;
 import java.util.List;
 
-import managementCards.cards.Card;
+import managementcards.cards.Card;
 import old.Hand;
 
 import org.eclipse.jdt.annotation.NonNull;

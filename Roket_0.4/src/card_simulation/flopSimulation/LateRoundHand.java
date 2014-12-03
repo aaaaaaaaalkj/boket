@@ -9,30 +9,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import managementCards.cards.Card;
-import managementCards.cards.Rank;
-import managementCards.cards.Suit;
-import managementCards.cat_rec_new.Cat_Rec;
-import managementCards.cat_rec_new.ResultImpl;
+import managementcards.cards.Card;
+import managementcards.cards.Rank;
+import managementcards.cards.Suit;
+import managementcards.catrecnew.CatRec;
+import managementcards.catrecnew.ResultImpl;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 import tools.Tools;
 
 public class LateRoundHand {
-	List<Card> cards;
+  private List<Card> cards;
 
-	int won = 0;
-	int played = 0;
+  private int won = 0;
+  private int played = 0;
 
-	public LateRoundHand(Card c1, Card c2) {
+  public LateRoundHand(final Card c1, final Card c2) {
 		cards = new ArrayList<>();
 		cards.add(c1);
 		cards.add(c2);
 	}
 
 	@Override
-	public int hashCode() {
+  public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (cards.hashCode());
@@ -40,16 +40,20 @@ public class LateRoundHand {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+  public final boolean equals(@Nullable final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
 		LateRoundHand other = (LateRoundHand) obj;
-		if (!cards.equals(other.cards))
-			return false;
+    if (!cards.equals(other.cards)) {
+      return false;
+    }
 		return true;
 	}
 
@@ -64,7 +68,7 @@ public class LateRoundHand {
 		return cards;
 	}
 
-	public static List<LateRoundHand> createAll(CommunityCardsX community) {
+  public static List<LateRoundHand> createAll(final CommunityCardsX community) {
 		List<Card> cards = createAllCards();
 		cards.removeAll(community.getCards());
 
@@ -79,8 +83,8 @@ public class LateRoundHand {
 
 	}
 
-	public static void simulation(int num_players, List<LateRoundHand> hands,
-			CommunityCardsX communityCards, int count_iter) {
+  public static void simulation(final int num_players, final List<LateRoundHand> hands,
+      final CommunityCardsX communityCards, final int count_iter) {
 
 		List<Card> community = new ArrayList<Card>();
 		community.addAll(communityCards.getCards());
@@ -124,7 +128,7 @@ public class LateRoundHand {
 			Map<LateRoundHand, ResultImpl> results = new HashMap<>();
 
 			for (int i = 0; i < players.size(); i++) {
-				ResultImpl r = new Cat_Rec(players.get(i).getCards(), community)
+				ResultImpl r = new CatRec(players.get(i).getCards(), community)
 						.check();
 				results.put(players.get(i), r);
 			}
@@ -159,7 +163,7 @@ public class LateRoundHand {
 		played++;
 	}
 
-	public List<Card> getCards() {
+  public final List<Card> getCards() {
 		return cards;
 	}
 
@@ -171,7 +175,7 @@ public class LateRoundHand {
 		return cards.get(0);
 	}
 
-	public static void main(String[] args) {
+  public static void main(final String[] args) {
 
 		CommunityCardsX flop = new CommunityCardsX(Tools.asList(Card.Ad, Card._3s, Card._7c));
 
@@ -198,13 +202,13 @@ public class LateRoundHand {
 
 	}
 
-	public void print() {
+  public final void print() {
 		System.out.println(this);
 	}
 
 	private @Nullable Double my_score;
 
-	public double getScore() {
+  public final double getScore() {
 		Double my_score2 = my_score;
 		if (my_score2 == null) {
 			my_score2 = ((double) Math.round(((double) won / played) * 1000)) / 1000;
@@ -214,7 +218,7 @@ public class LateRoundHand {
 	}
 
 	@Override
-	public String toString() {
+  public final String toString() {
 		return cards.get(0) + " " + cards.get(1) + " -> " + played + " "
 				+ getScore();
 	}

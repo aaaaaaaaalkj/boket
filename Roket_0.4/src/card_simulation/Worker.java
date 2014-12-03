@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import managementCards.all_cathegories.AllResults;
-import managementCards.cards.Card;
-import managementCards.cat_rec_new.Cat_Rec;
-import managementCards.cat_rec_new.ResultImpl;
+import managementcards.all_cathegories.AllResults;
+import managementcards.cards.Card;
+import managementcards.catrecnew.CatRec;
+import managementcards.catrecnew.ResultImpl;
 
 public final class Worker extends Thread {
 	private final List<Card> community;
@@ -19,11 +19,11 @@ public final class Worker extends Thread {
 	private List<PossibleHand> hands;
 
 	public Worker(
-			List<Card> community,
-			List<Card> deck,
-			AllResults allRes,
-			int offset,
-			int limit, CountDownLatch latch) {
+      final List<Card> community,
+      final List<Card> deck,
+      final AllResults allRes,
+      final int offset,
+      final int limit, final CountDownLatch latch) {
 		this.community = community;
 		this.deck = deck;
 		this.allRes = allRes;
@@ -48,7 +48,7 @@ public final class Worker extends Thread {
 							communityCards.add(deck.get(i));
 							communityCards.add(deck.get(j));
 
-							ResultImpl res = new Cat_Rec(
+							ResultImpl res = new CatRec(
 									deck.get(first), deck.get(second),
 									communityCards)
 									.check();

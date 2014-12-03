@@ -1,6 +1,6 @@
 package common;
 
-import managementCards.cat_rec_new.IResult;
+import managementcards.catrecnew.IResult;
 
 public interface IOutcome {
 	default boolean betterAs(IPlayer p1, IPlayer p2) {

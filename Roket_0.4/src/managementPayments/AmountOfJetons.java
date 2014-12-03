@@ -10,18 +10,19 @@ public class AmountOfJetons implements Comparable<AmountOfJetons> {
 	public static final AmountOfJetons SB = new AmountOfJetons(1);
 	public static final AmountOfJetons BB = new AmountOfJetons(2);
 
-	public static final AmountOfJetons BB(int num) {
+  public static final AmountOfJetons BB(final int num) {
 		return new AmountOfJetons(2 * num);
 	}
 
-	public AmountOfJetons(int numSB) {
-		if (numSB < 0)
-			throw new IllegalArgumentException("Negative Amount");
+  public AmountOfJetons(final int numSB) {
+    if (numSB < 0) {
+      throw new IllegalArgumentException("Negative Amount");
+    }
 		this.numSmallBlinds = numSB;
 	}
 
 	@Override
-	public int hashCode() {
+  public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + numSmallBlinds;
@@ -29,110 +30,118 @@ public class AmountOfJetons implements Comparable<AmountOfJetons> {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+  public final boolean equals(@Nullable final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
 		AmountOfJetons other = (AmountOfJetons) obj;
-		if (numSmallBlinds != other.numSmallBlinds)
-			return false;
+    if (numSmallBlinds != other.numSmallBlinds) {
+      return false;
+    }
 		return true;
 	}
 
-	public AmountOfJetons plus(AmountOfJetons amount) {
+  public final AmountOfJetons plus(final AmountOfJetons amount) {
 		return new AmountOfJetons(numSmallBlinds + amount.numSmallBlinds);
 	}
 
-	public AmountOfJetons minus(AmountOfJetons amount) {
+  public final AmountOfJetons minus(final AmountOfJetons amount) {
 		return new AmountOfJetons(numSmallBlinds - amount.numSmallBlinds);
 	}
 
-	public boolean greaterOrEqual(AmountOfJetons amount) {
+  public final boolean greaterOrEqual(final AmountOfJetons amount) {
 		return numSmallBlinds >= amount.numSmallBlinds;
 	}
 
-	public boolean greaterAs(AmountOfJetons amount) {
+  public final boolean greaterAs(final AmountOfJetons amount) {
 		return numSmallBlinds > amount.numSmallBlinds;
 	}
 
-	public static AmountOfJetons max(AmountOfJetons amount1,
-			AmountOfJetons amount2) {
-		if (amount1.numSmallBlinds > amount2.numSmallBlinds)
-			return amount1;
-		else
-			return amount2;
+  public static AmountOfJetons max(final AmountOfJetons amount1,
+      final AmountOfJetons amount2) {
+    if (amount1.numSmallBlinds > amount2.numSmallBlinds) {
+      return amount1;
+    } else {
+      return amount2;
+    }
 	}
 
-	public int numSmallBlinds() {
+  public final int numSmallBlinds() {
 		return numSmallBlinds;
 	}
 
-	public String toString() {
-		if (numSmallBlinds == 0)
-			return "-";
-		if (numSmallBlinds % 2 == 0)
-			return numSmallBlinds / 2 + " BB";
+  public final String toString() {
+    if (numSmallBlinds == 0) {
+      return "-";
+    }
+    if (numSmallBlinds % 2 == 0) {
+      return numSmallBlinds / 2 + " BB";
+    }
 		return numSmallBlinds / 2 + ".5 BB";
 	}
 
-	public boolean unequalTo(AmountOfJetons toPost) {
+  public final boolean unequalTo(final AmountOfJetons toPost) {
 		return this.numSmallBlinds != toPost.numSmallBlinds;
 	}
 
-	public AmountOfJetons max(AmountOfJetons post) {
+  public final AmountOfJetons max(final AmountOfJetons post) {
 		return this.greaterAs(post) ? this : post;
 	}
 
-	public AmountOfJetons min(AmountOfJetons post) {
+  public final AmountOfJetons min(final AmountOfJetons post) {
 		return post.greaterAs(this) ? this : post;
 	}
 
-	public boolean isEven() {
+  public final boolean isEven() {
 		return numSmallBlinds % 2 == 0;
 	}
 
-	public static AmountOfJetons min(AmountOfJetons amount1,
-			AmountOfJetons amount2) {
+  public static AmountOfJetons min(final AmountOfJetons amount1,
+      final AmountOfJetons amount2) {
 		return amount1.greaterAs(amount2) ? amount2 : amount1;
 	}
 
-	public boolean positive() {
+  public final boolean positive() {
 		return this.greaterAs(AmountOfJetons.ZERO);
 	}
 
-	public AmountOfJetons divide(int n) {
+  public final AmountOfJetons divide(final int n) {
 		return new AmountOfJetons(numSmallBlinds / n);
 	}
 
-	public AmountOfJetons divideToEven(int n) {
+  public final AmountOfJetons divideToEven(final int n) {
 		assert n > 0;
 		int res = numSmallBlinds / n;
-		if (res % 2 == 1)
-			res--;
+    if (res % 2 == 1) {
+      res--;
+    }
 		return new AmountOfJetons(res);
 	}
 
-	public AmountOfJetons times(int n) {
+  public final AmountOfJetons times(final int n) {
 		return new AmountOfJetons(numSmallBlinds * n);
 	}
 
-	public AmountOfJetons times(double d) {
+  public final AmountOfJetons times(final double d) {
 		return new AmountOfJetons((int) (numSmallBlinds * d));
 	}
 
-	public boolean isZero() {
+  public final boolean isZero() {
 		return this.equals(AmountOfJetons.ZERO);
 	}
 
-	public double divide(AmountOfJetons amount) {
+  public final double divide(final AmountOfJetons amount) {
 		return ((double) numSmallBlinds) / ((double) amount.numSmallBlinds);
 	}
 
 	@Override
-	public int compareTo(AmountOfJetons o) {
+  public final int compareTo(final AmountOfJetons o) {
 		return numSmallBlinds - o.numSmallBlinds;
 	}
 }

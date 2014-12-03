@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import managementCards.cat_rec_new.IResult;
 import managementPaymentsNew.decisions.AllowedDecision;
 import managementPaymentsNew.decisions.Decision;
+import managementcards.catrecnew.IResult;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.eclipse.jdt.annotation.NonNull;
@@ -26,11 +26,11 @@ public final class PayManagementNew implements IPayManagement2 {
 	private List<SidePot> pots;
 
 	private PayManagementNew(
-			List<Wallet> posts,
-			List<Wallet> stacks,
-			int highestBid,
-			int lastRaise,
-			List<SidePot> pots) {
+      final List<Wallet> posts,
+      final List<Wallet> stacks,
+      final int highestBid,
+      final int lastRaise,
+      final List<SidePot> pots) {
 		this.posts = posts;
 		this.stacks = stacks;
 		this.highestBid = highestBid;
@@ -38,7 +38,7 @@ public final class PayManagementNew implements IPayManagement2 {
 		this.pots = new ArrayList<>(pots);
 	}
 
-	public static PayManagementNew newInstance(int numSeats, int stackSizes) {
+  public static PayManagementNew newInstance(final int numSeats, final int stackSizes) {
 		List<Wallet> posts = new ArrayList<>();
 		List<Wallet> stacks = new ArrayList<>();
 		for (int player = 0; player < numSeats; player++) {
@@ -102,7 +102,7 @@ public final class PayManagementNew implements IPayManagement2 {
 		}
 	}
 
-	private void pay(Integer player, int amount) {
+  private void pay(final Integer player, final int amount) {
 		if (amount > getStack(player)) {
 			throw new IllegalArgumentException("player " + player
 					+ " doesnt have " + amount + " smallblinds");
@@ -114,7 +114,7 @@ public final class PayManagementNew implements IPayManagement2 {
 	}
 
 	@Override
-	public AllowedDecision getAllowed(int player) {
+  public AllowedDecision getAllowed(final int player) {
 		if (getToCall(player) == 0 && getStack(player) > 2 /* bb=2 */) {
 			return AllowedDecision.checkBet(getStack(player) - 2);
 		}
@@ -131,7 +131,7 @@ public final class PayManagementNew implements IPayManagement2 {
 	}
 
 	@Override
-	public void action(int player, Decision decision) {
+  public void action(final int player, final Decision decision) {
 		if (getAllowed(player).isAllowed(decision)) {
 			Integer value = decision.getValue();
 			switch (decision.getDecisionType()) {
@@ -170,7 +170,7 @@ public final class PayManagementNew implements IPayManagement2 {
 	}
 
 	@Override
-	public PotType getPotType(int currentPlayer) {
+  public PotType getPotType(final int currentPlayer) {
 		return PotType.of(
 				((double) getPotSize())
 						/
@@ -192,21 +192,21 @@ public final class PayManagementNew implements IPayManagement2 {
 	}
 
 	@Override
-	public int getToCall(int player) {
+  public int getToCall(final int player) {
 		return highestBid - getPost(player);
 	}
 
 	@Override
-	public int getStack(int player) {
+  public int getStack(final int player) {
 		return stacks.get(player).getAmount();
 	}
 
-	private int getPost(int player) {
+  private int getPost(final int player) {
 		return posts.get(player).getAmount();
 	}
 
 	@Override
-	public List<Integer> payOut(Set<Integer> notFolded, List<IResult> results) {
+  public List<Integer> payOut(final Set<Integer> notFolded, final List<IResult> results) {
 		collectPostsToSidePots();
 
 		throw new NotImplementedException("todo");

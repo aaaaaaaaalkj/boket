@@ -2,18 +2,18 @@ package common;
 
 import managementPayments.AmountOfJetons;
 
-public class Stack {
+public final class Stack {
 	private AmountOfJetons value;
 
-	private Stack(AmountOfJetons amount) {
+  private Stack(final AmountOfJetons amount) {
 		this.value = amount;
 	}
 
-	public static Stack create(int bb) {
+  public static Stack create(final int bb) {
 		return new Stack(AmountOfJetons.BB(bb));
 	}
 
-	public static Stack create(AmountOfJetons amount) {
+  public static Stack create(final AmountOfJetons amount) {
 		return new Stack(amount);
 	}
 
@@ -21,11 +21,11 @@ public class Stack {
 		return value;
 	}
 
-	public void removeFromStack(AmountOfJetons amount) {
+  public void removeFromStack(final AmountOfJetons amount) {
 		value = value.minus(amount);
 	}
 
-	public void addToStack(AmountOfJetons amount) {
+  public void addToStack(final AmountOfJetons amount) {
 		value = value.plus(amount);
 	}
 

@@ -24,8 +24,8 @@ public final class PreflopSelector implements ISelector {
 
 	public static final int size = n5;
 
-	public PreflopSelector(ContributionType contr, NumActiveType numAct,
-			PotType pot, ConnectorType conn, SuitedType suit) {
+  public PreflopSelector(final ContributionType contr, final NumActiveType numAct,
+      final PotType pot, final ConnectorType conn, final SuitedType suit) {
 		this.contribution = contr;
 		this.numActive = numAct;
 		this.pot = pot;
@@ -57,24 +57,32 @@ public final class PreflopSelector implements ISelector {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+  public boolean equals(@Nullable final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
 		PreflopSelector other = (PreflopSelector) obj;
-		if (connector != other.connector)
-			return false;
-		if (contribution != other.contribution)
-			return false;
-		if (numActive != other.numActive)
-			return false;
-		if (pot != other.pot)
-			return false;
-		if (suited != other.suited)
-			return false;
+    if (connector != other.connector) {
+      return false;
+    }
+    if (contribution != other.contribution) {
+      return false;
+    }
+    if (numActive != other.numActive) {
+      return false;
+    }
+    if (pot != other.pot) {
+      return false;
+    }
+    if (suited != other.suited) {
+      return false;
+    }
 		return true;
 	}
 

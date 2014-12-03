@@ -1,26 +1,26 @@
 package common;
 
-import managementCards.cat_rec_new.IResult;
 import managementPayments.AmountOfJetons;
+import managementcards.catrecnew.IResult;
 import strategy.IStrategy;
 
-public class PlayerResult {
+public final class PlayerResult {
 	private final IStrategy strategy;
 	private final IResult result;
 	private final AmountOfJetons payed;
 	private final AmountOfJetons received;
 
-	private PlayerResult(IStrategy player, IResult result,
-			AmountOfJetons payed,
-			AmountOfJetons received) {
+  private PlayerResult(final IStrategy player, final IResult result,
+      final AmountOfJetons payed,
+      final AmountOfJetons received) {
 		this.strategy = player;
 		this.result = result;
 		this.payed = payed;
 		this.received = received;
 	}
 
-	public static PlayerResult create(IStrategy player, IResult result,
-			AmountOfJetons payed, AmountOfJetons received) {
+  public static PlayerResult create(final IStrategy player, final IResult result,
+      final AmountOfJetons payed, final AmountOfJetons received) {
 		return new PlayerResult(player, result, payed, received);
 	}
 

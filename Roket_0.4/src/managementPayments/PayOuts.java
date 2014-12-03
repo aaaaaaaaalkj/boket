@@ -11,17 +11,18 @@ import common.IPlayer;
 public class PayOuts {
 	private final Map<IPlayer, AmountOfJetons> map = new HashMap<>();
 
-	public void add(IPlayer player, AmountOfJetons amount) {
-		if (map.containsKey(player))
-			amount = amount.plus(map.get(player));
+  public final void add(final IPlayer player, final AmountOfJetons amount) {
+    if (map.containsKey(player)) {
+      amount = amount.plus(map.get(player));
+    }
 		map.put(player, amount);
 	}
 
-	public Set<IPlayer> keySet() {
+  public final Set<IPlayer> keySet() {
 		return Tools.keySet(map);
 	}
 
-	public AmountOfJetons get(IPlayer player) {
+  public final AmountOfJetons get(final IPlayer player) {
 		return map.get(player);
 	}
 

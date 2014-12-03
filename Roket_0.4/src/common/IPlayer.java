@@ -2,9 +2,9 @@ package common;
 
 import java.util.List;
 
-import managementCards.cards.Card;
 import managementPayments.AmountOfJetons;
 import managementState.PlayerState;
+import managementcards.cards.Card;
 import strategy.IStrategy;
 
 /**

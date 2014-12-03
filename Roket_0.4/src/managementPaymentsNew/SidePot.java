@@ -12,15 +12,15 @@ public class SidePot {
 		this.participants = new HashSet<>();
 	}
 
-	public int getValue() {
+  public final int getValue() {
 		return value;
 	}
 
-	public Set<Integer> getParticipants() {
+  public final Set<Integer> getParticipants() {
 		return participants;
 	}
 
-	public void add(Integer player, int amount) {
+  public final void add(final Integer player, final int amount) {
 		this.participants.add(player);
 		this.value += amount;
 	}

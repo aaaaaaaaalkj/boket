@@ -3,11 +3,11 @@ package simulation;
 import managementPayments.AmountOfJetons;
 import strategy.IStrategy;
 
-public class StrategyResult {
+public final class StrategyResult {
 	private final IStrategy strategy;
 	private final AmountOfJetons balance;
 
-	private StrategyResult(IStrategy strategy, AmountOfJetons balance) {
+  private StrategyResult(final IStrategy strategy, final AmountOfJetons balance) {
 		this.strategy = strategy;
 		this.balance = balance;
 	}
@@ -20,8 +20,8 @@ public class StrategyResult {
 		return balance;
 	}
 
-	public static StrategyResult create(IStrategy strategy2,
-			AmountOfJetons balance) {
+  public static StrategyResult create(final IStrategy strategy2,
+      final AmountOfJetons balance) {
 		return new StrategyResult(strategy2, balance);
 	}
 

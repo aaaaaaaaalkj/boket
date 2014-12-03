@@ -7,13 +7,13 @@ import static managementPaymentsNew.decisions.DecisionType.CHECK;
 import static managementPaymentsNew.decisions.DecisionType.FOLD;
 import static managementPaymentsNew.decisions.DecisionType.RAISE;
 
-public class Decision {
+public final class Decision {
 	private final DecisionType decisionType;
 	private final int value; // in small-blinds
 
 	private static final int ILLEGAL_VALUE = -1;
 
-	private Decision(DecisionType decisionType, int value) {
+  private Decision(final DecisionType decisionType, final int value) {
 		this.decisionType = decisionType;
 		this.value = value;
 		if (value != ILLEGAL_VALUE && (value < 0 || value % 2 == 1)) {
@@ -22,11 +22,11 @@ public class Decision {
 		}
 	}
 
-	public static Decision bet(int value) {
+  public static Decision bet(final int value) {
 		return new Decision(BET, value);
 	}
 
-	public static Decision raise(int value) {
+  public static Decision raise(final int value) {
 		return new Decision(RAISE, value);
 	}
 

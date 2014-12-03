@@ -2,7 +2,7 @@ package old;
 
 public interface HasStatus {
 
-	public boolean isActive();
+  boolean isActive();
 
-	public boolean sittingOut();
+  boolean sittingOut();
 }

@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 
 public class TestParkour {
 	@SuppressWarnings("null")
-	final static org.slf4j.Logger logger = LoggerFactory
+  static final org.slf4j.Logger logger = LoggerFactory
 			.getLogger(TestParkour.class);
 
-	public void test() throws AWTException {
+  public final void test() throws AWTException {
 		ScreenScraper scraper = new ScreenScraper();
 		Raw_Situation raw = scraper.getSituation();
 		logger.info(raw.toString2());
 	}
 
-	public static void main(String[] args) throws AWTException {
+  public static void main(final String[] args) throws AWTException {
 		new TestParkour().test();
 	}
 }

@@ -1,6 +1,6 @@
 package strategy;
 
-import managementCards.cat_rec_new.Cathegory;
+import managementcards.catrecnew.Cathegory;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -34,9 +34,9 @@ public class PostflopSelector implements ISelector {
 
 	public static final int size = n6;
 
-	public PostflopSelector(ContributionType contr, NumActiveType numAct,
-			PotType pot, Cathegory combo, PairBasedDanger pairb,
-			FlushDanger flush, StraightDanger straight, DrawType draw) {
+  public PostflopSelector(final ContributionType contr, final NumActiveType numAct,
+      final PotType pot, final Cathegory combo, final PairBasedDanger pairb,
+      final FlushDanger flush, final StraightDanger straight, final DrawType draw) {
 		this.contribution = contr;
 		this.numActive = numAct;
 		this.pot = pot;
@@ -47,7 +47,7 @@ public class PostflopSelector implements ISelector {
 		this.draw = draw;
 	}
 
-	public int getPosition() {
+  public final int getPosition() {
 		return n8 * contribution.ordinal()
 				+ n7 * numActive.ordinal()
 				+ n6 * pot.ordinal()
@@ -59,7 +59,7 @@ public class PostflopSelector implements ISelector {
 	}
 
 	@Override
-	public int hashCode() {
+  public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (combo.hashCode());
@@ -79,30 +79,41 @@ public class PostflopSelector implements ISelector {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+  public final boolean equals(@Nullable final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
 		PostflopSelector other = (PostflopSelector) obj;
-		if (combo != other.combo)
-			return false;
-		if (contribution != other.contribution)
-			return false;
-		if (draw != other.draw)
-			return false;
-		if (flushDanger != other.flushDanger)
-			return false;
-		if (numActive != other.numActive)
-			return false;
-		if (pairBasedDanger != other.pairBasedDanger)
-			return false;
-		if (pot != other.pot)
-			return false;
-		if (straightDanger != other.straightDanger)
-			return false;
+    if (combo != other.combo) {
+      return false;
+    }
+    if (contribution != other.contribution) {
+      return false;
+    }
+    if (draw != other.draw) {
+      return false;
+    }
+    if (flushDanger != other.flushDanger) {
+      return false;
+    }
+    if (numActive != other.numActive) {
+      return false;
+    }
+    if (pairBasedDanger != other.pairBasedDanger) {
+      return false;
+    }
+    if (pot != other.pot) {
+      return false;
+    }
+    if (straightDanger != other.straightDanger) {
+      return false;
+    }
 		return true;
 	}
 }

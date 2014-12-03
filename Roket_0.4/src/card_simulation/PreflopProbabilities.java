@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
-import managementCards.cards.Card;
-import managementCards.cards.Rank;
-import managementCards.cards.Suit;
+import managementcards.cards.Card;
+import managementcards.cards.Rank;
+import managementcards.cards.Suit;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -20,7 +20,7 @@ import tools.Tools;
 
 public class PreflopProbabilities implements HandGenerator {
 	// List<PossiblePreflopHand> hands;
-	Map<Integer, Map<Integer, List<PossiblePreflopHand>>> map;
+  private Map<Integer, Map<Integer, List<PossiblePreflopHand>>> map;
 
 	public PreflopProbabilities() {
 		// hands = new ArrayList<>();
@@ -43,9 +43,9 @@ public class PreflopProbabilities implements HandGenerator {
 	//
 	// p.print();
 	// }
-	Random r = new Random();
+  private Random r = new Random();
 
-	private double rand(double contribution, double variance) {
+  private double rand(final double contribution, final double variance) {
 		double randNumber = (r.nextGaussian() * variance) + contribution;
 
 		if (randNumber > 1) {
@@ -56,8 +56,8 @@ public class PreflopProbabilities implements HandGenerator {
 		return randNumber;
 	}
 
-	public PossiblePreflopHand get(int countPlayers, double contribution,
-			double stdDev) {
+  public final PossiblePreflopHand get(final int countPlayers, final double contribution,
+      final double stdDev) {
 		if (contribution > 1) {
 			contribution = 1;
 		}
@@ -120,19 +120,19 @@ public class PreflopProbabilities implements HandGenerator {
 
 	}
 
-	public void print() {
+  public final void print() {
 		System.out.println(this);
 	}
 
 	@Override
-	public String toString() {
+  public final String toString() {
 		return "no toString implemented for PrefolopProbabilities";
 		// return hands.stream()
 		// .map(PossiblePreflopHand::toString)
 		// .collect(joining("\n"));
 	}
 
-	private void add(PossiblePreflopHand hand) {
+  private void add(final PossiblePreflopHand hand) {
 		// hands.add(hand);
 		for (int count_players = 2; count_players <= 10; count_players++) {
 			double score = hand.getScore(count_players);
@@ -185,7 +185,8 @@ public class PreflopProbabilities implements HandGenerator {
 	}
 
 	@Override
-	public List<Card> getHand(int numPlayers, double contribution, double stdDev) {
+  public final List<Card> getHand(final int numPlayers, final double contribution,
+      final double stdDev) {
 		return get(numPlayers, contribution, stdDev).getHand();
 	}
 

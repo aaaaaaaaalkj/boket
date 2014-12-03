@@ -5,8 +5,8 @@ import strategy.IStrategy;
 
 public interface IStrategyResult {
 
-	public IStrategy getStrategy();
+  IStrategy getStrategy();
 
-	public AmountOfJetons getBalance();
+  AmountOfJetons getBalance();
 
 }

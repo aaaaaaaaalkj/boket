@@ -12,20 +12,20 @@ import common.IPlayer;
 public enum PlayerState {
 	ACTIVE, ALL_IN, FOLDED, SITTING_OUT;
 
-	public static boolean inGame(PlayerState state) {
+  public static boolean inGame(final PlayerState state) {
 		return state == ALL_IN || state == ACTIVE;
 	}
 
-	public static boolean inGame(IPlayer player) {
+  public static boolean inGame(final IPlayer player) {
 		return player.getState() == ALL_IN ||
 				player.getState() == ACTIVE;
 	}
 
-	public static boolean isActive(PlayerState state) {
+  public static boolean isActive(final PlayerState state) {
 		return state == ACTIVE;
 	}
 
-	public static boolean isActive(IPlayer player) {
+  public static boolean isActive(final IPlayer player) {
 		return player.getState() == ACTIVE;
 	}
 

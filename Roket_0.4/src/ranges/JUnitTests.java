@@ -8,7 +8,7 @@ import org.junit.Test;
 public class JUnitTests {
 
 	@Test
-	public void testUngroup() {
+  public final void testUngroup() {
 		SimpleRange r;
 		r = GroupedRange._22.ungroup();
 
@@ -47,7 +47,7 @@ public class JUnitTests {
 	}
 
 	@Test
-	public void testUngroupPlus() {
+  public final void testUngroupPlus() {
 		GroupedPlusRange range;
 		SimpleRange res;
 
@@ -146,14 +146,14 @@ public class JUnitTests {
 	}
 
 	@Test
-	public void testGrouped() {
+  public final void testGrouped() {
 		assertTrue(ElementRange._3h_2s.grouped() == GroupedRange._32o);
 		assertTrue(ElementRange._3h_2h.grouped() == GroupedRange._32);
 		assertTrue(ElementRange._3s_3h.grouped() == GroupedRange._33);
 	}
 
 	@Test
-	public void testGrouptedPlus() {
+  public final void testGrouptedPlus() {
 		GroupedPlusRange r;
 
 		r = new GroupedPlusRange(GroupedRange._22);

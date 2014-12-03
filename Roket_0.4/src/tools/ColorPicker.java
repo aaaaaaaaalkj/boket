@@ -1,10 +1,5 @@
 package tools;
 
-import static managementCards.cards.Rank.Ace;
-import static managementCards.cards.Rank.Five;
-import static managementCards.cards.Rank.Four;
-import static managementCards.cards.Rank.Three;
-import static managementCards.cards.Rank.Two;
 import input_output.MyRobot;
 import input_output.Raw_Situation;
 import input_output.ScreenScraper;
@@ -16,12 +11,12 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.util.List;
 
-import managementCards.all_cathegories.AllResults;
-import managementCards.cards.Card;
-import managementCards.cards.Rank;
-import managementCards.cards.Suit;
-import managementCards.cat_rec_new.Cat_Rec;
-import managementCards.cat_rec_new.ResultImpl;
+import managementcards.all_cathegories.AllResults;
+import managementcards.cards.Card;
+import managementcards.cards.Rank;
+import managementcards.cards.Suit;
+import managementcards.catrecnew.CatRec;
+import managementcards.catrecnew.ResultImpl;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.LoggerFactory;
@@ -31,14 +26,14 @@ import pot_odds_strategy.PotOddsStrategy;
 
 public class ColorPicker {
 	@SuppressWarnings("null")
-	final static org.slf4j.Logger logger = LoggerFactory
+  static final org.slf4j.Logger logger = LoggerFactory
 			.getLogger(ColorPicker.class);
 
 	public ColorPicker() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void test2() throws AWTException {
+  public final void test2() throws AWTException {
 		ScreenScraper scraper = new ScreenScraper();
 		Raw_Situation raw = scraper.getSituation();
 		raw.print();
@@ -52,15 +47,15 @@ public class ColorPicker {
 
 	}
 
-	static List<Card> all = Tools.asList(Card._3s, Card._7c, Card.Ac, Card.Ad,
-			Card.Ah, Card.Kc, Card.Qc);
-	static List<Rank> window = Tools.asList(Five, Four, Three, Two, Ace);
-	static List<Rank> ranks = Tools.asList(Rank.Five, Rank.King, Rank.Three,
-			Rank.Seven, Rank.Four,
-			Rank.Two, Rank.Two);
+  // static List<Card> all = Tools.asList(Card._3s, Card._7c, Card.Ac, Card.Ad,
+  // Card.Ah, Card.Kc, Card.Qc);
+  // static List<Rank> window = Tools.asList(Five, Four, Three, Two, Ace);
+  // static List<Rank> ranks = Tools.asList(Rank.Five, Rank.King, Rank.Three,
+  // Rank.Seven, Rank.Four,
+  // Rank.Two, Rank.Two);
 
 	public static void test1() {
-		ResultImpl res = new Cat_Rec(
+		new CatRec(
 				Card._3s, Card.Ad, Tools.asList(Card.Kc, Card.Qc, Card.Qd,
 						Card.Kd, Card.Ah))
 				.check();
@@ -101,6 +96,7 @@ public class ColorPicker {
 		logger.info("{}\n{}\n{}", sum1, sum2, sum3);
 	}
 
+	@SuppressWarnings("unused")
 	private void generateCodeForCards() {
 		for (Suit s : Suit.VALUES) {
 			for (Rank r : Rank.VALUES) {
@@ -115,11 +111,9 @@ public class ColorPicker {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+  public static void main(final String[] args) throws Exception {
 		logger.info("Entering application.");
 		// new ColorPicker().test2();
-
-
 
 		// for (int i = 0; i < 1000000; i++) {
 		// ResultImpl res = new Cat_Rec(
@@ -148,7 +142,7 @@ public class ColorPicker {
 		// System.out.println(cards.stream().map(Card::ordinal)
 		// .collect(Tools.toList()));
 
-		ResultImpl res = new Cat_Rec(
+		ResultImpl res = new CatRec(
 				cards.get(0), cards.get(1), Tools.asList(
 						cards.get(2),
 						cards.get(3),
@@ -163,10 +157,9 @@ public class ColorPicker {
 
 		// Tools.serialize(map, fileName);
 
-
 	}
 
-	public void findColorAtMousePosition() {
+  public final void findColorAtMousePosition() {
 		try {
 			Robot r = new Robot();
 			Point p = MouseInfo.getPointerInfo().getLocation();
@@ -185,7 +178,7 @@ public class ColorPicker {
 
 	}
 
-	private @Nullable Pos recognizeLogo(MyRobot robot) {
+  private @Nullable Pos recognizeLogo(final MyRobot robot) {
 		// Farbe im Logo von Pokerstars
 		Color c = new Color(0x00FFCAC5);
 		Pos logo = robot.pixelSearch(0, 0, 100, 250, c);
@@ -196,7 +189,7 @@ public class ColorPicker {
 		// Color cardColor = getPixelColor(new Pos().plus(9, 25));
 	}
 
-	public void start(MyRobot robot) {
+  public final void start(final MyRobot robot) {
 		Pos logo = recognizeLogo(robot);
 		// Color refColor = new Color(12010269);
 		// logger.info(refColor);
@@ -214,7 +207,7 @@ public class ColorPicker {
 		// 38,231
 	}
 
-	public static Pos pos(int x, int y) {
+  public static Pos pos(final int x, final int y) {
 		return new Pos(x, y);
 	}
 }

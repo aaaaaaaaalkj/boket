@@ -4,8 +4,8 @@ import input_output.Raw_Situation;
 
 import java.util.Arrays;
 
-import managementCards.cat_rec_new.Cat_Rec;
-import managementCards.cat_rec_new.Cathegory;
+import managementcards.catrecnew.CatRec;
+import managementcards.catrecnew.Cathegory;
 import old.Hand;
 import strategy.conditions.common.ContributionType;
 import strategy.conditions.common.NumActiveType;
@@ -34,7 +34,7 @@ public class BoketSituation implements ISituation {
 	private final StraightDanger straightDanger;
 	private final DrawType draw;
 
-	public BoketSituation(Raw_Situation s) {
+  public BoketSituation(final Raw_Situation s) {
 		switch (s.getCommunityCards().size()) {
 		case 0:
 			this.round = Round.PREFLOP;
@@ -55,8 +55,9 @@ public class BoketSituation implements ISituation {
 		}
 		int count = 0;
 		for (boolean b : s.getActiveStatus()) {
-			if (b)
-				count++;
+      if (b) {
+        count++;
+      }
 		}
 		this.numActive = NumActiveType.fromInt(count);
 
@@ -92,8 +93,7 @@ public class BoketSituation implements ISituation {
 					? SuitedType.SUITED
 					: SuitedType.OFF_SUIT;
 
-			;
-			Cat_Rec catRec = new Cat_Rec(
+			CatRec catRec = new CatRec(
 					hand.getCards(),
 					s.getCommunityCards()
 					);
@@ -108,61 +108,61 @@ public class BoketSituation implements ISituation {
 	}
 
 	@Override
-	public Round getRound() {
+  public final Round getRound() {
 		return round;
 	}
 
 	@Override
-	public NumActiveType getNumActive() {
+  public final NumActiveType getNumActive() {
 		return numActive;
 	}
 
 	@Override
-	public ContributionType getContribution() {
+  public final ContributionType getContribution() {
 		return contribution;
 	}
 
 	@Override
-	public PotType getPot() {
+  public final PotType getPot() {
 		return pot;
 	}
 
 	@Override
-	public ConnectorType getConnector() {
+  public final ConnectorType getConnector() {
 		return connector;
 	}
 
 	@Override
-	public SuitedType getSuit() {
+  public final SuitedType getSuit() {
 		return suited;
 	}
 
 	@Override
-	public Cathegory getCathegory() {
+  public final Cathegory getCathegory() {
 		return cathegory;
 	}
 
 	@Override
-	public PairBasedDanger getPairBasedDanger() {
+  public final PairBasedDanger getPairBasedDanger() {
 		return pairBasedDanger;
 	}
 
-	public FlushDanger getFlushDanger() {
+  public final FlushDanger getFlushDanger() {
 		return flushDanger;
 	}
 
 	@Override
-	public StraightDanger getStraightDanger() {
+  public final StraightDanger getStraightDanger() {
 		return straightDanger;
 	}
 
 	@Override
-	public DrawType getDraw() {
+  public final DrawType getDraw() {
 		return draw;
 	}
 
 	@Override
-	public String toString() {
+  public final String toString() {
 		if (round == Round.PREFLOP) {
 			return "BoketSituation [round=" + round + ", numActive="
 					+ numActive

@@ -2,7 +2,7 @@ package strategy;
 
 
 public interface IStrategy {
-	public TypeOfDecision decide(ISituation situation);
+  TypeOfDecision decide(ISituation situation);
 
 	// /**
 	// * Creates a new Strategy, which maps the condition "cond" to the decision

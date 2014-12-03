@@ -7,7 +7,7 @@ import managementPayments.AmountOfJetons;
 
 import common.IPlayer;
 
-public class Stat {
+public final class Stat {
 	private int numPaid = 0;
 
 	private AmountOfJetons payed = AmountOfJetons.ZERO;
@@ -18,24 +18,27 @@ public class Stat {
 	public Stat() {
 	}
 
-	public String toString() {
+  public String toString() {
 		String s = "";
 
 		if (numPaid > 0) {
 			s += "((((((((";
 		}
 
-		if (payed.positive())
-			s += " payed: " + payed + ", ";
-		if (won.positive())
-			s += "won: " + won + ", ";
-		if (numPaid > 0)
-			s += +numPaid + " ))))))))";
+    if (payed.positive()) {
+      s += " payed: " + payed + ", ";
+    }
+    if (won.positive()) {
+      s += "won: " + won + ", ";
+    }
+    if (numPaid > 0) {
+      s += +numPaid + " ))))))))";
+    }
 
 		return s;
 	}
 
-	public void payed(IPlayer player, AmountOfJetons amount) {
+  public void payed(final IPlayer player, final AmountOfJetons amount) {
 		if (!payedInThisGame.containsKey(player)) {
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
 		}
@@ -44,8 +47,8 @@ public class Stat {
 		numPaid++;
 	}
 
-	public void won(IPlayer player, AmountOfJetons wonAmount,
-			AmountOfJetons sumPaid) {
+  public void won(final IPlayer player, final AmountOfJetons wonAmount,
+      final AmountOfJetons sumPaid) {
 		if (payedInThisGame.containsKey(player)) {
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
 		}
@@ -56,7 +59,7 @@ public class Stat {
 		payedInThisGame.put(player, AmountOfJetons.ZERO);
 	}
 
-	public void lost(IPlayer player) {
+  public void lost(final IPlayer player) {
 		if (payedInThisGame.containsKey(player)) {
 			payedInThisGame.put(player, AmountOfJetons.ZERO);
 		}
@@ -64,15 +67,15 @@ public class Stat {
 		payedInThisGame.put(player, AmountOfJetons.ZERO);
 	}
 
-	public AmountOfJetons getPaid() {
+  public AmountOfJetons getPaid() {
 		return payed;
 	}
 
-	public AmountOfJetons getWon() {
+  public AmountOfJetons getWon() {
 		return won;
 	}
 
-	public int getNumPaid() {
+  public int getNumPaid() {
 		return numPaid;
 	}
 }
