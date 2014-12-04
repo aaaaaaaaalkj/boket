@@ -3,8 +3,7 @@ package strategy.manualStrategy;
 import java.util.HashMap;
 import java.util.Map;
 
-import managementPayments.AmountOfJetons;
-
+import managementpaymentstmp.AmountOfJetons;
 import common.IPlayer;
 
 public final class Stat {

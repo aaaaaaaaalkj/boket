@@ -1,44 +1,44 @@
 package managementcards.catrecnew;
 
-import static managementcards.cards.Card.Ac;
-import static managementcards.cards.Card.Ah;
-import static managementcards.cards.Card.As;
-import static managementcards.cards.Card.Jh;
-import static managementcards.cards.Card.Js;
-import static managementcards.cards.Card.Kc;
-import static managementcards.cards.Card.Kd;
-import static managementcards.cards.Card.Kh;
-import static managementcards.cards.Card.Ks;
-import static managementcards.cards.Card.Qc;
-import static managementcards.cards.Card.Qd;
-import static managementcards.cards.Card.Qh;
-import static managementcards.cards.Card.Qs;
-import static managementcards.cards.Card.Tc;
-import static managementcards.cards.Card.Td;
-import static managementcards.cards.Card.Th;
-import static managementcards.cards.Card.Ts;
-import static managementcards.cards.Card._2c;
-import static managementcards.cards.Card._2d;
-import static managementcards.cards.Card._2h;
-import static managementcards.cards.Card._2s;
-import static managementcards.cards.Card._3c;
-import static managementcards.cards.Card._3d;
-import static managementcards.cards.Card._3h;
-import static managementcards.cards.Card._3s;
-import static managementcards.cards.Card._4d;
-import static managementcards.cards.Card._4s;
-import static managementcards.cards.Card._5h;
-import static managementcards.cards.Card._5s;
-import static managementcards.cards.Card._6h;
-import static managementcards.cards.Card._6s;
-import static managementcards.cards.Card._7d;
-import static managementcards.cards.Card._7s;
-import static managementcards.cards.Card._8d;
-import static managementcards.cards.Card._8h;
-import static managementcards.cards.Card._8s;
-import static managementcards.cards.Card._9d;
-import static managementcards.cards.Card._9h;
-import static managementcards.cards.Card._9s;
+import static managementcards.cards.Card.AC;
+import static managementcards.cards.Card.AH;
+import static managementcards.cards.Card.AS;
+import static managementcards.cards.Card.JH;
+import static managementcards.cards.Card.JS;
+import static managementcards.cards.Card.KC;
+import static managementcards.cards.Card.KD;
+import static managementcards.cards.Card.KH;
+import static managementcards.cards.Card.KS;
+import static managementcards.cards.Card.QC;
+import static managementcards.cards.Card.QD;
+import static managementcards.cards.Card.QH;
+import static managementcards.cards.Card.QS;
+import static managementcards.cards.Card.TC;
+import static managementcards.cards.Card.TD;
+import static managementcards.cards.Card.TH;
+import static managementcards.cards.Card.TS;
+import static managementcards.cards.Card.C2;
+import static managementcards.cards.Card.D2;
+import static managementcards.cards.Card.H2;
+import static managementcards.cards.Card.S2;
+import static managementcards.cards.Card.C3;
+import static managementcards.cards.Card.D3;
+import static managementcards.cards.Card.H3;
+import static managementcards.cards.Card.S3;
+import static managementcards.cards.Card.D4;
+import static managementcards.cards.Card.S4;
+import static managementcards.cards.Card.H5;
+import static managementcards.cards.Card.S5;
+import static managementcards.cards.Card.H6;
+import static managementcards.cards.Card.S6;
+import static managementcards.cards.Card.D7;
+import static managementcards.cards.Card.S7;
+import static managementcards.cards.Card.D8;
+import static managementcards.cards.Card.H8;
+import static managementcards.cards.Card.S8;
+import static managementcards.cards.Card.D9;
+import static managementcards.cards.Card.H9;
+import static managementcards.cards.Card.S9;
 import static managementcards.cards.Rank.Ace;
 import static managementcards.cards.Rank.Eight;
 import static managementcards.cards.Rank.Five;
@@ -79,8 +79,8 @@ public class TestCarRec {
   }
 
   @SuppressWarnings("null")
-  private ICatRec create(final Card hand1, final Card han_2d, final Card... community) {
-    return new CatRec(Arrays.asList(hand1, han_2d),
+  private ICatRec create(final Card hand1, final Card hand2d, final Card... community) {
+    return new CatRec(Arrays.asList(hand1, hand2d),
         Arrays.asList(community));
   }
 
@@ -125,28 +125,28 @@ public class TestCarRec {
     ICatRec rec;
     IResult res;
 
-    rec = create(Ah, Kh, Qh, Jh, Th);
+    rec = create(AH, KH, QH, JH, TH);
     res = straightFlush(Ace, King, Queen, Jack, Ten);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Qs, Ts, Ks, As, Js, _9s);
+    rec = create(QS, TS, KS, AS, JS, S9);
     res = straightFlush(Ace, King, Queen, Jack, Ten);
     System.out.println(rec.check());
     assertTrue(rec.toString(), rec.check().equals(res));
 
-    rec = create(_2s, _5s, _3s, As, _4s, Tc, _3c);
+    rec = create(S2, S5, S3, AS, S4, TC, C3);
     res = straightFlush(Five, Four, Three, Two, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2s, _5s, _3s, As, _4s, Tc, _3c, Ts, Th, Td);
+    rec = create(S2, S5, S3, AS, S4, TC, C3, TS, TH, TD);
     res = straightFlush(Five, Four, Three, Two, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2s, _5s, _3s, As, _4s);
+    rec = create(S2, S5, S3, AS, S4);
     res = straightFlush(Five, Four, Three, Two, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2s, _5s);
+    rec = create(S2, S5);
     res = highCard(Five, Two);
     assertTrue(rec.check().equals(res));
 
@@ -154,11 +154,11 @@ public class TestCarRec {
     res = highCard();
     assertTrue(rec.check().equals(res));
 
-    rec = create(Qs, Ts, Ks, Ah, Js, Th, _9s);
+    rec = create(QS, TS, KS, AH, JS, TH, S9);
     res = straightFlush(King, Queen, Jack, Ten, Nine);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Qs, Td, Ks, Ah, Js, Th, _9s);
+    rec = create(QS, TD, KS, AH, JS, TH, S9);
     res = straight(Ace, King, Queen, Jack, Ten);
     assertTrue(rec.check().equals(res));
   }
@@ -167,35 +167,35 @@ public class TestCarRec {
   public final void testFourOfAKind() {
     ICatRec rec;
     IResult res;
-    rec = create(Ah, Kh, Qs, Jh, Th, Kd, Kh, Ks);
+    rec = create(AH, KH, QS, JH, TH, KD, KH, KS);
     res = fourOfAKind(King, King, King, King, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Qs, Qh, Qd, Qc); // simple
+    rec = create(QS, QH, QD, QC); // simple
     res = fourOfAKind(Queen, Queen, Queen, Queen);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Qs, Qh); // too few cards
+    rec = create(QS, QH); // too few cards
     res = pair(Queen, Queen);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Ks, Qs, _2s, Qh, Qd, _3h, Qc); // cards + 4of_a_kind
+    rec = create(KS, QS, S2, QH, QD, H3, QC); // cards + 4of_a_kind
     res = fourOfAKind(Queen, Queen, Queen, Queen, King);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Ks, Qs, Js, Qh, Qd, As, Qc, Th); // straight + 4of_a_kind
+    rec = create(KS, QS, JS, QH, QD, AS, QC, TH); // straight + 4of_a_kind
     res = fourOfAKind(Queen, Queen, Queen, Queen, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Ks, Qs, Js, Qh, Qd, As, Qc, _9s); // flush + 4of_a_kind
+    rec = create(KS, QS, JS, QH, QD, AS, QC, S9); // flush + 4of_a_kind
     res = fourOfAKind(Queen, Queen, Queen, Queen, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Ks, Qs, Ks, Qh, Qd, Ks, Qc); // full-house + 4of_a_kind
+    rec = create(KS, QS, KS, QH, QD, KS, QC); // full-house + 4of_a_kind
     res = fourOfAKind(Queen, Queen, Queen, Queen, King);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2s, _2c, _2h, _2d, _4d, _3c, _3h);
+    rec = create(S2, C2, H2, D2, D4, C3, H3);
     res = fourOfAKind(Two, Two, Two, Two, Four);
     IResult x = rec.check();
     assertTrue(x + "", x.equals(res));
@@ -205,19 +205,19 @@ public class TestCarRec {
   public final void testFullHouse() {
     ICatRec rec;
     IResult res;
-    rec = create(Ah, Kh, Qs, Jh, Th, Kd, Ks, Ts);
+    rec = create(AH, KH, QS, JH, TH, KD, KS, TS);
     res = fullHouse(King, King, King, Ten, Ten);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Qs, Qh, Qd, Ks, Kh); // simple
+    rec = create(QS, QH, QD, KS, KH); // simple
     res = fullHouse(Queen, Queen, Queen, King, King);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Jh, Tc, _9d, Qs, Qh, Qd, Ks, Kh); // straight
+    rec = create(JH, TC, D9, QS, QH, QD, KS, KH); // straight
     res = fullHouse(Queen, Queen, Queen, King, King);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Jh, Th, _8h, Qs, Qh, Qd, Ks, Kh); // flush
+    rec = create(JH, TH, H8, QS, QH, QD, KS, KH); // flush
     res = fullHouse(Queen, Queen, Queen, King, King);
     assertTrue(rec.check().equals(res));
   }
@@ -226,23 +226,23 @@ public class TestCarRec {
   public final void testFlush() {
     ICatRec rec;
     IResult res;
-    rec = create(Ah, Kh, Qs, Jh, Th, Ks, _5h); // straight
+    rec = create(AH, KH, QS, JH, TH, KS, H5); // straight
     res = flush(Ace, King, Jack, Ten, Five);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Ah, Kh, Qs, Jh, Th, Ks, Kc, _8h); // three-of-a-kind
+    rec = create(AH, KH, QS, JH, TH, KS, KC, H8); // three-of-a-kind
     res = flush(Ace, King, Jack, Ten, Eight);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2h, Kh, Qh, Jh, Th); // 5 cards
+    rec = create(H2, KH, QH, JH, TH); // 5 cards
     res = flush(King, Queen, Jack, Ten, Two);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2h, Kh); // too few cards
+    rec = create(H2, KH); // too few cards
     res = highCard(King, Two);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_6s, _8s, _2c, _7s, Ac, Jh, Kc);
+    rec = create(S6, S8, C2, S7, AC, JH, KC);
     res = highCard(Ace, King, Jack, Eight, Seven);
     assertTrue(rec.check().equals(res));
   }
@@ -251,23 +251,23 @@ public class TestCarRec {
   public final void testStraight() {
     ICatRec rec;
     IResult res;
-    rec = create(Ah, Ks, Qs, Jh, Th, Ks, _5h);
+    rec = create(AH, KS, QS, JH, TH, KS, H5);
     res = straight(Ace, King, Queen, Jack, Ten);
     assertTrue(rec.check().equals(res));
 
-    rec = create(Ah, _5h, _4s, _3s, _2h); // round-a-corner
+    rec = create(AH, H5, S4, S3, H2); // round-a-corner
     res = straight(Five, Four, Three, Two, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(As, _5h, _4s, _3s, _2h, _3h, _3d); // three-of-a-kind
+    rec = create(AS, H5, S4, S3, H2, H3, D3); // three-of-a-kind
     res = straight(Five, Four, Three, Two, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_9h, _6h, _5h, _8h, _7s); // 5 cards
+    rec = create(H9, H6, H5, H8, S7); // 5 cards
     res = straight(Nine, Eight, Seven, Six, Five);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2h, Kh); // too few cards
+    rec = create(H2, KH); // too few cards
     res = highCard(King, Two);
     assertTrue(rec.check().equals(res));
   }
@@ -276,11 +276,11 @@ public class TestCarRec {
   public final void testThreeOfAKind() {
     ICatRec rec;
     IResult res;
-    rec = create(Ah, Ks, Js, Jh, Th, Js, _5h);
+    rec = create(AH, KS, JS, JH, TH, JS, H5);
     res = threeOfAKind(Jack, Jack, Jack, Ace, King);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_9h, _9d, As, _8h, _9s); // 5 cards
+    rec = create(H9, D9, AS, H8, S9); // 5 cards
     res = threeOfAKind(Nine, Nine, Nine, Ace, Eight);
     assertTrue(rec.check().equals(res));
 
@@ -290,11 +290,11 @@ public class TestCarRec {
   public final void testTwoPair() {
     ICatRec rec;
     IResult res;
-    rec = create(Ah, Ks, Js, Jh, Th, Kd, _5h);
+    rec = create(AH, KS, JS, JH, TH, KD, H5);
     res = twoPair(King, King, Jack, Jack, Ace);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_9h, _9d, As, _8h, _8s); // 5 cards
+    rec = create(H9, D9, AS, H8, S8); // 5 cards
     res = twoPair(Nine, Nine, Eight, Eight, Ace);
     assertTrue(rec.check().equals(res));
   }
@@ -303,15 +303,15 @@ public class TestCarRec {
   public final void testPair() {
     ICatRec rec;
     IResult res;
-    rec = create(Ah, Ks, _4s, Jh, Th, Kd, _5h);
+    rec = create(AH, KS, S4, JH, TH, KD, H5);
     res = pair(King, King, Ace, Jack, Ten);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_9h, _9d, As, _2h, _8s); // 5 cards
+    rec = create(H9, D9, AS, H2, S8); // 5 cards
     res = pair(Nine, Nine, Ace, Eight, Two);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2h, _2d); // poket-pair
+    rec = create(H2, D2); // poket-pair
     res = pair(Two, Two);
     assertTrue(rec.check().equals(res));
 
@@ -324,15 +324,15 @@ public class TestCarRec {
   public final void testHighCard() {
     ICatRec rec;
     IResult res;
-    rec = create(Ah, Ks, _4s, Jh, Th, _8d, _5h);
+    rec = create(AH, KS, S4, JH, TH, D8, H5);
     res = highCard(Ace, King, Jack, Ten, Eight);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_9h, _7d, Js, _2h, _8s); // 5 cards
+    rec = create(H9, D7, JS, H2, S8); // 5 cards
     res = highCard(Jack, Nine, Eight, Seven, Two);
     assertTrue(rec.check().equals(res));
 
-    rec = create(_2h, _7d); // hand
+    rec = create(H2, D7); // hand
     res = highCard(Seven, Two);
     assertTrue(rec.check().equals(res));
   }

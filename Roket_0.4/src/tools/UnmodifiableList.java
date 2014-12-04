@@ -54,7 +54,8 @@ public final class UnmodifiableList<E> {
 		return list.containsAll(c);
 	}
 
-  public @Nullable E get(final int index) {
+  @Nullable
+  public E get(final int index) {
 		return list.get(index);
 	}
 

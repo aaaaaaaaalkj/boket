@@ -6,7 +6,7 @@ public final class Constants {
   private Constants() {
   }
 
-  public static final double[][][] probs = {
+  public static final double[][][] PROBS = {
       { { 49.0, 30.1, 21.5, 17.6, 15.1, 13.8, 12.8, 12.6, 11.8 },
       { 33.2, 22.5, 17.3, 14.2, 12.3, 11.0, 10.0, 9.2, 8.5 },
       { 34.1, 23.1, 17.9, 14.5, 12.7, 11.5, 10.4, 9.6, 9.0 },

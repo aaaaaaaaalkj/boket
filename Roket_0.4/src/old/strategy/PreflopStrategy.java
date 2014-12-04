@@ -2,9 +2,9 @@ package old.strategy;
 
 import java.util.HashMap;
 
-import old.Decision_old;
+import old.DecisionOld;
 
-public class PreflopStrategy extends HashMap<PreflopSelector, Decision_old> {
+public class PreflopStrategy extends HashMap<PreflopSelector, DecisionOld> {
 
 	/**
 	 * 

@@ -1,7 +1,7 @@
 package common;
 
-import managementPayments.AmountOfJetons;
 import managementcards.catrecnew.IResult;
+import managementpaymentstmp.AmountOfJetons;
 import strategy.IStrategy;
 
 public final class PlayerResult {

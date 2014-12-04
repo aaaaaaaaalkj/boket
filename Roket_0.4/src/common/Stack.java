@@ -1,6 +1,6 @@
 package common;
 
-import managementPayments.AmountOfJetons;
+import managementpaymentstmp.AmountOfJetons;
 
 public final class Stack {
 	private AmountOfJetons value;
@@ -10,7 +10,7 @@ public final class Stack {
 	}
 
   public static Stack create(final int bb) {
-		return new Stack(AmountOfJetons.BB(bb));
+		return new Stack(AmountOfJetons.bb(bb));
 	}
 
   public static Stack create(final AmountOfJetons amount) {

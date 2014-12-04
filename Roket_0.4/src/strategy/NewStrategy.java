@@ -5,8 +5,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import common.Round;
 
 public class NewStrategy implements IStrategy {
-	private TypeOfDecision @NonNull [] preflop = new TypeOfDecision @NonNull [PreflopSelector.size];
-	private TypeOfDecision @NonNull [] postflop = new TypeOfDecision @NonNull [PostflopSelector.size];
+	private TypeOfDecision @NonNull [] preflop = new TypeOfDecision @NonNull [PreflopSelector.SIZE];
+	private TypeOfDecision @NonNull [] postflop = new TypeOfDecision @NonNull [PostflopSelector.SIZE];
 
 	private NewStrategy() {
 

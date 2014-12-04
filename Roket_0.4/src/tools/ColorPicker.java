@@ -1,8 +1,8 @@
 package tools;
 
-import input_output.MyRobot;
-import input_output.Raw_Situation;
-import input_output.ScreenScraper;
+import inputoutput.MyRobot;
+import inputoutput.Raw_Situation;
+import inputoutput.ScreenScraper;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -21,12 +21,12 @@ import managementcards.catrecnew.ResultImpl;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.LoggerFactory;
 
-import pot_odds_strategy.PotOddsDecision;
-import pot_odds_strategy.PotOddsStrategy;
+import potoddsstrategy.PotOddsDecision;
+import potoddsstrategy.PotOddsStrategy;
 
 public class ColorPicker {
 	@SuppressWarnings("null")
-  static final org.slf4j.Logger logger = LoggerFactory
+  static final org.slf4j.Logger LOG = LoggerFactory
 			.getLogger(ColorPicker.class);
 
 	public ColorPicker() {
@@ -38,12 +38,12 @@ public class ColorPicker {
 		Raw_Situation raw = scraper.getSituation();
 		raw.print();
 		PotOddsStrategy strategy = new PotOddsStrategy(raw);
-		logger.info("{}", strategy);
+		LOG.info("{}", strategy);
 		PotOddsDecision d = strategy.decide();
 		// ISituation sit = new BoketSituation(raw);
 		// logger.info(sit);
 
-		logger.info("{}", d);
+		LOG.info("{}", d);
 
 	}
 
@@ -56,8 +56,8 @@ public class ColorPicker {
 
 	public static void test1() {
 		new CatRec(
-				Card._3s, Card.Ad, Tools.asList(Card.Kc, Card.Qc, Card.Qd,
-						Card.Kd, Card.Ah))
+				Card.S3, Card.AD, Tools.asList(Card.KC, Card.QC, Card.QD,
+						Card.KD, Card.AH))
 				.check();
 
 	}
@@ -93,7 +93,7 @@ public class ColorPicker {
 			sum3 += l;
 		}
 
-		logger.info("{}\n{}\n{}", sum1, sum2, sum3);
+		LOG.info("{}\n{}\n{}", sum1, sum2, sum3);
 	}
 
 	@SuppressWarnings("unused")
@@ -106,13 +106,13 @@ public class ColorPicker {
 						+ s.shortString()
 						+ " = new Card(Rank." + r + ", Suit." + s + ");";
 
-				logger.info(str);
+				LOG.info(str);
 			}
 		}
 	}
 
   public static void main(final String[] args) throws Exception {
-		logger.info("Entering application.");
+		LOG.info("Entering application.");
 		// new ColorPicker().test2();
 
 		// for (int i = 0; i < 1000000; i++) {
@@ -127,13 +127,13 @@ public class ColorPicker {
 		// short[] map = createAll7Cards(allRes);
 
 		List<Card> cards = Tools.asList(
-				Card._2d,
-				Card._4h,
-				Card.Qd,
-				Card._9d,
-				Card._2h,
-				Card._9h,
-				Card.Js
+				Card.D2,
+				Card.H4,
+				Card.QD,
+				Card.D9,
+				Card.H2,
+				Card.H9,
+				Card.JS
 				);
 
 		HandEvaluator ev = new HandEvaluator();
@@ -170,7 +170,7 @@ public class ColorPicker {
 
 			Color c = r.getPixelColor(p.x, p.y);
 
-			logger.debug("{}", c);
+			LOG.debug("{}", c);
 		} catch (AWTException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -178,7 +178,8 @@ public class ColorPicker {
 
 	}
 
-  private @Nullable Pos recognizeLogo(final MyRobot robot) {
+  @Nullable
+  private Pos recognizeLogo(final MyRobot robot) {
 		// Farbe im Logo von Pokerstars
 		Color c = new Color(0x00FFCAC5);
 		Pos logo = robot.pixelSearch(0, 0, 100, 250, c);
@@ -195,12 +196,12 @@ public class ColorPicker {
 		// logger.info(refColor);
 
 		if (logo == null) {
-			logger.warn("logo is null");
+			LOG.warn("logo is null");
 		} else {
 
 			Pos p = new Pos(40, 314).plus(logo);
 			Color c = robot.getPixelColor(p);
-			logger.debug("[}", c);
+			LOG.debug("[}", c);
 
 			robot.mouseMove(p);
 		}

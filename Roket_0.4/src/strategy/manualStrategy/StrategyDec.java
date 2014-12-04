@@ -1,8 +1,7 @@
 package strategy.manualStrategy;
 
-import managementPayments.AmountOfJetons;
+import managementpaymentstmp.AmountOfJetons;
 import strategy.TypeOfDecision;
-
 import common.IPlayer;
 
 public class StrategyDec {

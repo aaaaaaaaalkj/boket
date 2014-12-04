@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
 
-import managementPaymentsNew.IPayManagement2;
-import managementState.IGameState;
 import managementcards.CardManagement;
 import managementcards.cards.Card;
 import managementcards.cards.Rank;
 import managementcards.catrecnew.CatRec;
 import managementcards.catrecnew.Cathegory;
+import managementpaymentsnewtmp.IPayManagement2;
+import managementstate.IGameState;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -123,10 +123,10 @@ public final class SituationImpl implements ISituation {
 
     double contribution2 = ((double) toPay)
         / (payManagement.getPotSize() + toPay);
-    contribution = contribution2 < .15 ?
-        ContributionType.LOW : (contribution2 < .3 ?
-            ContributionType.MIDDLE :
-            ContributionType.HIGH);
+    contribution = contribution2 < .15
+        ? ContributionType.LOW : (contribution2 < .3
+            ? ContributionType.MIDDLE
+            : ContributionType.HIGH);
 
   }
 

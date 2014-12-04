@@ -6,19 +6,18 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import managementPaymentsNew.IPayManagement2;
-import managementPaymentsNew.PayManagementNew;
-import managementPaymentsNew.decisions.Decision;
-import managementState.Carousel;
-import managementState.IGameState;
-import managementState.IStateManagement;
 import managementcards.CardManagement;
 import managementcards.catrecnew.IResult;
+import managementpaymentsnewtmp.IPayManagement2;
+import managementpaymentsnewtmp.PayManagementNew;
+import managementpaymentsnewtmp.decisions.Decision;
+import managementstate.Carousel;
+import managementstate.IGameState;
+import managementstate.IStateManagement;
 import strategy.ISituation;
 import strategy.IStrategy;
 import strategy.SituationImpl;
 import strategy.TypeOfDecision;
-
 import common.Round;
 
 public class NewSimulation {
@@ -28,7 +27,7 @@ public class NewSimulation {
   private List<IStrategy> strategies;
 
   @SuppressWarnings("null")
-  private static final Logger log = Logger.getLogger(NewSimulation.class
+  private static final Logger LOG = Logger.getLogger(NewSimulation.class
       .getName());
 
   public NewSimulation() {
@@ -42,11 +41,11 @@ public class NewSimulation {
   public final void start() {
     IGameState state;
 
-    while (!(state = stateManagement.step()).gameEnded()) {
+    for (state = stateManagement.step(); !state.gameEnded(); state = stateManagement.step()) {
       if (state.newRound()) {
         payManagement.collectPostsToSidePots();
         cardMandagement.openCards(state.getRound());
-        log.info("== " + state.getRound() + "== "
+        LOG.info("== " + state.getRound() + "== "
             + cardMandagement.getCommunityCards());
       }
       playerAction(state);
@@ -71,7 +70,7 @@ public class NewSimulation {
 
     // strategies.get(player).payed(player, sit, a);
 
-    log.info(player + " " + t + " (" + cardMandagement.getHand(player)
+    LOG.info(player + " " + t + " (" + cardMandagement.getHand(player)
         + ")");
 
     // rewards.saveStat(sit, decision.getAmount());
@@ -84,7 +83,7 @@ public class NewSimulation {
   }
 
   public final void showDown(final IGameState state) {
-    log.info("showdown");
+    LOG.info("showdown");
 
     Set<Integer> notFolded = state.getNotFoledePlayers();
 

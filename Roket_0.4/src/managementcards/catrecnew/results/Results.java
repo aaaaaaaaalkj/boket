@@ -47,7 +47,7 @@ public final class Results {
     List<ResultImpl> list = new ArrayList<>();
 
     try {
-      while (!(line = in.nextLine()).equals("")) {
+      for (line = in.nextLine(); !line.equals(""); line = in.nextLine()) {
         String[] numbers = line.split(",");
 
         ResultImpl r = new ResultImpl(

@@ -1,6 +1,6 @@
 package simulation;
 
-import managementPayments.AmountOfJetons;
+import managementpaymentstmp.AmountOfJetons;
 import strategy.IStrategy;
 
 public final class StrategyResult {

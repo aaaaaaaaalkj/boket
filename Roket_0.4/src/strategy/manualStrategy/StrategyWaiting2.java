@@ -5,14 +5,14 @@ import strategy.conditions.ICondition;
 
 public class StrategyWaiting2 {
 	private StrategyWaiting waiting;
-	private ICondition if_;
+	private ICondition ifCond;
 
-  public StrategyWaiting2(final StrategyWaiting waiting, final ICondition if_) {
+  public StrategyWaiting2(final StrategyWaiting waiting, final ICondition ifCond) {
 		this.waiting = waiting;
-		this.if_ = if_;
+		this.ifCond = ifCond;
 	}
 
   public final StrategyWaiting then(final TypeOfDecision dec) {
-		return waiting.extend(if_, dec);
+		return waiting.extend(ifCond, dec);
 	}
 }

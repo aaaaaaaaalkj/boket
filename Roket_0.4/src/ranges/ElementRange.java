@@ -1416,16 +1416,16 @@ public enum ElementRange implements Range {
     }
   }
 
-  private static final Map<Finder, ElementRange> map = new HashMap<>();
-  private static final Map<Card, EnumSet<ElementRange>> map2 = new HashMap<>();
+  private static final Map<Finder, ElementRange> MAP = new HashMap<>();
+  private static final Map<Card, EnumSet<ElementRange>> MAP2 = new HashMap<>();
   static {
     for (ElementRange r : ElementRange.VALUES) {
-      map.put(new Finder(r.r1, r.s1, r.r2, r.s2), r);
-      map.put(new Finder(r.r2, r.s2, r.r1, r.s1), r);
+      MAP.put(new Finder(r.r1, r.s1, r.r2, r.s2), r);
+      MAP.put(new Finder(r.r2, r.s2, r.r1, r.s1), r);
     }
 
     for (Card c1 : Card.getAllCards()) {
-      map2.put(c1, find(c1.getRank(), c1.getSuit()));
+      MAP2.put(c1, find(c1.getRank(), c1.getSuit()));
     }
   }
 
@@ -1459,16 +1459,16 @@ public enum ElementRange implements Range {
   }
 
   public static ElementRange find(final Rank r1, final Suit s1, final Rank r2, final Suit s2) {
-    return map.get(new Finder(r1, s1, r2, s2));
+    return MAP.get(new Finder(r1, s1, r2, s2));
   }
 
   public static EnumSet<ElementRange> find(final Card c) {
-    return map2.get(c);
+    return MAP2.get(c);
   }
 
   public static EnumSet<ElementRange> find(final ElementRange e) {
-    EnumSet<ElementRange> set1 = map2.get(new Card(e.r1, e.s1));
-    EnumSet<ElementRange> set2 = map2.get(new Card(e.r2, e.s2));
+    EnumSet<ElementRange> set1 = MAP2.get(new Card(e.r1, e.s1));
+    EnumSet<ElementRange> set2 = MAP2.get(new Card(e.r2, e.s2));
     set1.addAll(set2);
     return set1;
   }

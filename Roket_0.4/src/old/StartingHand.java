@@ -23,33 +23,33 @@ public enum StartingHand {
   oK9, oKT, oKJ, oKQ, oKK, sAK, oA2, oA3, oA4, oA5,
   oA6, oA7, oA8, oA9, oAT, oAJ, oAQ, oAK, oAA;
 
-  static final Set<StartingHand> pairOfJacksOrBetter = create(oJJ, oQQ, oKK,
+  static final Set<StartingHand> PAIR_OF_JACKS_OR_BETTER = create(oJJ, oQQ, oKK,
       oAA);
-  static final Set<StartingHand> pairOfQuensOrBetter = create(oQQ, oKK, oAA);
-  static final Set<StartingHand> pairOfNinesOrBetter = create(o99, oTT, oJJ,
+  static final Set<StartingHand> PAIR_OF_QUENS_OR_BETTER = create(oQQ, oKK, oAA);
+  static final Set<StartingHand> PAIR_OF_NINES_OR_BETTER = create(o99, oTT, oJJ,
       oQQ, oKK, oAA);
-  static final Set<StartingHand> pairOfTensOrBetter = create(oTT, oJJ, oQQ,
+  static final Set<StartingHand> PAIR_OF_TENS_OR_BETTER = create(oTT, oJJ, oQQ,
       oKK, oAA);
-  static final Set<StartingHand> pairOfSevensOrBetter = create(o77, o88, o99,
+  static final Set<StartingHand> PAIR_OF_SEVENS_OR_BETTER = create(o77, o88, o99,
       oTT, oJJ, oQQ, oKK, oAA);
 
-  static final Set<StartingHand> middleAces = create(oAQ, oAJ, oAT, sAQ, sAJ,
+  static final Set<StartingHand> MIDDLE_ACES = create(oAQ, oAJ, oAT, sAQ, sAJ,
       sAT);
-  static final Set<StartingHand> offSuiteMiddleAces = create(oAQ, oAJ, oAT);
-  static final Set<StartingHand> suitedMiddleAces = create(sAQ, sAJ, sAT);
-  static final Set<StartingHand> lowSuitedAces = create(sA9, sA8, sA7, sA6,
+  static final Set<StartingHand> OFF_SUITE_MIDDLE_ACES = create(oAQ, oAJ, oAT);
+  static final Set<StartingHand> SUITED_MIDDLE_ACES = create(sAQ, sAJ, sAT);
+  static final Set<StartingHand> LOW_SUITED_ACES = create(sA9, sA8, sA7, sA6,
       sA5, sA4, sA3, sA2);
-  static final Set<StartingHand> lowOffSuiteAces = create(oA9, oA8, oA7, oA6,
+  static final Set<StartingHand> LOW_OFFSUITE_ACES = create(oA9, oA8, oA7, oA6,
       oA5, oA4, oA3, oA2);
-  static final Set<StartingHand> highPairs = create(oAA, oKK, oQQ);
-  static final Set<StartingHand> middlePairs = create(oJJ, oTT);
-  static final Set<StartingHand> lowPairs = create(o99, o88, o77, o66, o55,
+  static final Set<StartingHand> HIGH_PAIRS = create(oAA, oKK, oQQ);
+  static final Set<StartingHand> MIDDLE_PAIRS = create(oJJ, oTT);
+  static final Set<StartingHand> LOW_PAIRS = create(o99, o88, o77, o66, o55,
       o44, o33, o22);
-  static final Set<StartingHand> suitedFaces = create(sKQ, sKJ, sKT, sQJ,
+  static final Set<StartingHand> SUITED_FACES = create(sKQ, sKJ, sKT, sQJ,
       sQT, sJT);
-  static final Set<StartingHand> offsuiteFaces = create(oKQ, oKJ, oKT, oQJ,
+  static final Set<StartingHand> OFFSUITE_FACES = create(oKQ, oKJ, oKT, oQJ,
       oQT, oJT);
-  static final Set<StartingHand> suitedConnectors = create(sT9, s98, s87,
+  static final Set<StartingHand> SUITED_CONNECTORS = create(sT9, s98, s87,
       s76, s65, s54);
 
   @SafeVarargs

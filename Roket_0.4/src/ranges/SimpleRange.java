@@ -98,15 +98,15 @@ public class SimpleRange implements Range, Cloneable {
 
 		for (int i = 0; i < ranks.size(); i++) {
 			Rank r1 = ranks.get(i);
-			String s1 = r1.shortString2();
-			String s1_ = r1.shortString();
-			s += s1 + s1_ + "(" + r1 + "," + r1 + ",false),\n";
+			String s1WithUnderscore = r1.shortString2();
+			String s1Simple = r1.shortString();
+			s += s1WithUnderscore + s1Simple + "(" + r1 + "," + r1 + ",false),\n";
 
 			for (int j = i + 1; j < ranks.size(); j++) {
 				Rank r2 = ranks.get(j);
 				String s2 = r2.shortString();
-				s += s1 + s2 + "(" + r1 + "," + r2 + ",true),\n";
-				s += s1 + s2 + "o(" + r1 + "," + r2 + ",false),\n";
+				s += s1WithUnderscore + s2 + "(" + r1 + "," + r2 + ",true),\n";
+				s += s1WithUnderscore + s2 + "o(" + r1 + "," + r2 + ",false),\n";
 			}
 
 		}

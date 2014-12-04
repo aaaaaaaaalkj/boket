@@ -49,7 +49,7 @@ import tools.Tools;
 
 public final class CatRec implements ICatRec {
   @SuppressWarnings("null")
-  static final org.slf4j.Logger logger = LoggerFactory
+  static final org.slf4j.Logger LOG = LoggerFactory
       .getLogger(CatRec.class);
   private List<Card> all;
   private List<Card> community;

@@ -1,8 +1,8 @@
 package start;
 
-import input_output.MyOutput;
-import input_output.Raw_Situation;
-import input_output.ScreenScraper;
+import inputoutput.MyOutput;
+import inputoutput.Raw_Situation;
+import inputoutput.ScreenScraper;
 
 import java.awt.AWTException;
 import java.awt.image.BufferedImage;
@@ -11,9 +11,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import managementPaymentsNew.decisions.DecisionType;
-import pot_odds_strategy.PotOddsDecision;
-import pot_odds_strategy.PotOddsStrategy;
+import managementpaymentsnewtmp.decisions.DecisionType;
+import potoddsstrategy.PotOddsDecision;
+import potoddsstrategy.PotOddsStrategy;
 import tools.Pos;
 
 public class PotOddsStart {

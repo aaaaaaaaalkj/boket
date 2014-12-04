@@ -257,16 +257,16 @@ public enum GroupedRange implements Range {
   public static final List<@NonNull GroupedRange> VALUES = Collections
       .unmodifiableList(Arrays.asList(values()));
 
-  private static final Map<Finder, GroupedRange> map = new HashMap<>();
+  private static final Map<Finder, GroupedRange> MAP = new HashMap<>();
   static {
     for (GroupedRange r : GroupedRange.VALUES) {
-      map.put(new Finder(r.r1, r.r2, r.suited), r);
-      map.put(new Finder(r.r2, r.r1, r.suited), r);
+      MAP.put(new Finder(r.r1, r.r2, r.suited), r);
+      MAP.put(new Finder(r.r2, r.r1, r.suited), r);
     }
   }
 
   public static GroupedRange find(final Rank r1, final Rank r2, final boolean suited) {
-    return map.get(new Finder(r1, r2, suited));
+    return MAP.get(new Finder(r1, r2, suited));
   }
 
   public SimpleRange ungroup() {
@@ -298,8 +298,8 @@ public enum GroupedRange implements Range {
 
   @Override
   public boolean contains(final ElementRange r) {
-    if ((r1 == r.getRank1() && r2 == r.getRank2()) ||
-        (r1 == r.getRank2() && r2 == r.getRank1())) {
+    if ((r1 == r.getRank1() && r2 == r.getRank2())
+        || (r1 == r.getRank2() && r2 == r.getRank1())) {
       return r.isSuited() == this.isSuited();
     } else {
       return false;

@@ -94,10 +94,10 @@ public final class Hand {
 		}
 
 		if (isSuited())
-			return Constants.probs[higher.getRank().ordinal()][lower.getRank()
+			return Constants.PROBS[higher.getRank().ordinal()][lower.getRank()
 					.ordinal()][numPlayers - 2] < 100.0 / numPlayers;
 		else
-			return Constants.probs[lower.getRank().ordinal()][higher.getRank()
+			return Constants.PROBS[lower.getRank().ordinal()][higher.getRank()
 					.ordinal()][numPlayers - 2] < 100.0 / numPlayers;
 	}
 
@@ -160,51 +160,51 @@ public final class Hand {
 	}
 
 	public boolean pairOfJacksOrBetter() {
-		return StartingHand.pairOfJacksOrBetter.contains(h);
+		return StartingHand.PAIR_OF_JACKS_OR_BETTER.contains(h);
 	}
 
 	public boolean pairOfNinesOrBetter() {
-		return StartingHand.pairOfNinesOrBetter.contains(h);
+		return StartingHand.PAIR_OF_NINES_OR_BETTER.contains(h);
 	}
 
 	public boolean pairOfTensOrBetter() {
-		return StartingHand.pairOfTensOrBetter.contains(h);
+		return StartingHand.PAIR_OF_TENS_OR_BETTER.contains(h);
 	}
 
 	public boolean pairOfSevensOrBetter() {
-		return StartingHand.pairOfSevensOrBetter.contains(h);
+		return StartingHand.PAIR_OF_SEVENS_OR_BETTER.contains(h);
 	}
 
 	public boolean suitedConnector() {
-		return StartingHand.suitedConnectors.contains(h);
+		return StartingHand.SUITED_CONNECTORS.contains(h);
 	}
 
 	public boolean middleAce() {
-		return StartingHand.middleAces.contains(h);
+		return StartingHand.MIDDLE_ACES.contains(h);
 	}
 
 	public boolean lowSuitedAce() {
-		return StartingHand.lowSuitedAces.contains(h);
+		return StartingHand.LOW_SUITED_ACES.contains(h);
 	}
 
 	public boolean highPair() {
-		return StartingHand.highPairs.contains(h);
+		return StartingHand.HIGH_PAIRS.contains(h);
 	}
 
 	public boolean middlePair() {
-		return StartingHand.middlePairs.contains(h);
+		return StartingHand.MIDDLE_PAIRS.contains(h);
 	}
 
 	public boolean lowPair() {
-		return StartingHand.lowPairs.contains(h);
+		return StartingHand.LOW_PAIRS.contains(h);
 	}
 
 	public boolean suitedFace() {
-		return StartingHand.suitedFaces.contains(h);
+		return StartingHand.SUITED_FACES.contains(h);
 	}
 
 	public boolean offsuiteFace() {
-		return StartingHand.offsuiteFaces.contains(h);
+		return StartingHand.OFFSUITE_FACES.contains(h);
 	}
 
 	public boolean isAK() {
@@ -248,25 +248,25 @@ public final class Hand {
 			return 3;
 		if (h == StartingHand.oTT)
 			return 4;
-		if (StartingHand.lowPairs.contains(h))
+		if (StartingHand.LOW_PAIRS.contains(h))
 			return 5;
 		if (h == StartingHand.sAK)
 			return 6;
 		if (h == StartingHand.oAK)
 			return 7;
-		if (StartingHand.suitedMiddleAces.contains(h))
+		if (StartingHand.SUITED_MIDDLE_ACES.contains(h))
 			return 8;
-		if (StartingHand.offSuiteMiddleAces.contains(h))
+		if (StartingHand.OFF_SUITE_MIDDLE_ACES.contains(h))
 			return 9;
-		if (StartingHand.lowSuitedAces.contains(h))
+		if (StartingHand.LOW_SUITED_ACES.contains(h))
 			return 10;
-		if (StartingHand.lowOffSuiteAces.contains(h))
+		if (StartingHand.LOW_OFFSUITE_ACES.contains(h))
 			return 11;
-		if (StartingHand.suitedFaces.contains(h))
+		if (StartingHand.SUITED_FACES.contains(h))
 			return 12;
-		if (StartingHand.offsuiteFaces.contains(h))
+		if (StartingHand.OFFSUITE_FACES.contains(h))
 			return 13;
-		if (StartingHand.suitedConnectors.contains(h))
+		if (StartingHand.SUITED_CONNECTORS.contains(h))
 			return 14;
 		if (isSuited())
 			return 15;

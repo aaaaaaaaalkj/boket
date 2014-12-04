@@ -10,68 +10,72 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.base.Supplier;
 
 public final class ImmutableRange implements Range {
-	private final Set<ElementRange> elements;
+  private final Set<ElementRange> elements;
 
   private ImmutableRange(final EnumSet<ElementRange> elements) {
-		this.elements = elements;
-	}
+    this.elements = elements;
+  }
 
-	private static @Nullable ImmutableRange FULL_RANGE;
-	private static @Nullable ImmutableRange PAIRS;
-	private static @Nullable ImmutableRange SUITED;
-	private static @Nullable ImmutableRange OFF_SUIT;
+  @Nullable
+  private static ImmutableRange fullRange;
+  @Nullable
+  private static ImmutableRange pairs;
+  @Nullable
+  private static ImmutableRange suited;
+  @Nullable
+  private static ImmutableRange offSuit;
 
-	public static ImmutableRange fulRange() {
-		FULL_RANGE = create(FULL_RANGE, () -> create(r -> true));
-		return FULL_RANGE;
-	}
+  public static ImmutableRange fulRange() {
+    fullRange = create(fullRange, () -> create(r -> true));
+    return fullRange;
+  }
 
-	public static ImmutableRange pairs() {
-		PAIRS = create(PAIRS, () -> create(ElementRange::isPair));
-		return PAIRS;
-	}
+  public static ImmutableRange pairs() {
+    pairs = create(pairs, () -> create(ElementRange::isPair));
+    return pairs;
+  }
 
-	public static ImmutableRange offSuit() {
-		OFF_SUIT = create(OFF_SUIT, () -> create(ElementRange::isOffsuit));
-		return OFF_SUIT;
-	}
+  public static ImmutableRange offSuit() {
+    offSuit = create(offSuit, () -> create(ElementRange::isOffsuit));
+    return offSuit;
+  }
 
-	public static ImmutableRange suited() {
-		SUITED = create(SUITED, () -> create(ElementRange::isSuited));
-		return SUITED;
-	}
+  public static ImmutableRange suited() {
+    suited = create(suited, () -> create(ElementRange::isSuited));
+    return suited;
+  }
 
   public boolean contains(final ElementRange r) {
-		return elements.contains(r);
-	}
+    return elements.contains(r);
+  }
 
   private static ImmutableRange create(@Nullable final ImmutableRange defaultVar,
       final Supplier<EnumSet<ElementRange>> supplier) {
-		ImmutableRange res;
-		if (null != defaultVar) {
-			res = defaultVar;
-		} else {
-			res = new ImmutableRange(supplier.get());
-		}
-		return res;
-	}
+    ImmutableRange res;
+    if (null != defaultVar) {
+      res = defaultVar;
+    } else {
+      res = new ImmutableRange(supplier.get());
+    }
+    return res;
+  }
 
   private static EnumSet<ElementRange> create(final Predicate<ElementRange> pred) {
-		@SuppressWarnings("null")
-		@NonNull
-		EnumSet<ElementRange> set = EnumSet.noneOf(ElementRange.class);
+    @SuppressWarnings("null")
+    @NonNull
+    EnumSet<ElementRange> set = EnumSet.noneOf(ElementRange.class);
 
-		for (ElementRange r : ElementRange.VALUES) {
-			if (pred.test(r)) {
-				set.add(r);
-			}
-		}
-		return set;
-	}
+    for (ElementRange r : ElementRange.VALUES) {
+      if (pred.test(r)) {
+        set.add(r);
+      }
+    }
+    return set;
+  }
 
-	@Override
-	public int size() {
-		return elements.size();
-	}
+  @Override
+  public int size() {
+    return elements.size();
+  }
 
 }

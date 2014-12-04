@@ -2,10 +2,10 @@ package common;
 
 import java.util.List;
 
-import managementPayments.AmountOfJetons;
-import managementState.PlayerState;
 import managementcards.cards.Card;
 import managementcards.cards.Hand;
+import managementpaymentstmp.AmountOfJetons;
+import managementstate.PlayerState;
 import strategy.IStrategy;
 
 public final class PlayerImpl implements IPlayer {

@@ -15,14 +15,14 @@ public final class PreflopSelector implements ISelector {
 	private final ConnectorType connector;
 	private final SuitedType suited;
 
-	private static final int n0 = 1;
-	private static final int n1 = SuitedType.VALUES.size();
-	private static final int n2 = n1 * ConnectorType.VALUES.size();
-	private static final int n3 = n2 * PotType.getCount();
-	private static final int n4 = n3 * NumActiveType.getCount();
-	private static final int n5 = n4 * ContributionType.getCount();
+	private static final int N0 = 1;
+	private static final int N1 = SuitedType.VALUES.size();
+	private static final int N2 = N1 * ConnectorType.VALUES.size();
+	private static final int N3 = N2 * PotType.getCount();
+	private static final int N4 = N3 * NumActiveType.getCount();
+	private static final int N5 = N4 * ContributionType.getCount();
 
-	public static final int size = n5;
+	public static final int SIZE = N5;
 
   public PreflopSelector(final ContributionType contr, final NumActiveType numAct,
       final PotType pot, final ConnectorType conn, final SuitedType suit) {
@@ -34,11 +34,11 @@ public final class PreflopSelector implements ISelector {
 	}
 
 	public int getPosition() {
-		return n4 * contribution.ordinal()
-				+ n3 * numActive.ordinal()
-				+ n2 * pot.ordinal()
-				+ n1 * connector.ordinal()
-				+ n0 * suited.ordinal();
+		return N4 * contribution.ordinal()
+				+ N3 * numActive.ordinal()
+				+ N2 * pot.ordinal()
+				+ N1 * connector.ordinal()
+				+ N0 * suited.ordinal();
 	}
 
 	@Override

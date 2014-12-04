@@ -6,20 +6,19 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import managementPayments.PayOuts;
-import managementPayments.PaymentManagement;
-import managementRewards.RewardsManagement;
-import managementState.Carousel;
-import managementState.IGameState;
-import managementState.IStateManagement;
 import managementcards.CardManagement;
 import managementcards.ICardManagement;
 import managementcards.OutcomeImpl;
 import managementcards.cards.Card;
 import managementcards.cards.Hand;
+import managementpaymentstmp.PayOuts;
+import managementpaymentstmp.PaymentManagement;
+import managementrewards.RewardsManagement;
+import managementstate.Carousel;
+import managementstate.IGameState;
+import managementstate.IStateManagement;
 import start.StrategyDefinitions;
 import tools.Tools;
-
 import common.IOutcome;
 import common.IPlayer;
 import common.PlayerImpl;
@@ -57,8 +56,8 @@ public class SimulationImpl implements ISimulation {
     for (String name : Tools.asList("Alex", "Maria",
         "Natascha",
         "Penelope", "Christine", "Lena", "Anna", "Karina")) {
-      addPlayer(new PlayerImpl(name, i++, new Hand(Card._3s, Card._7c),
-          StrategyDefinitions.s, 100));
+      addPlayer(new PlayerImpl(name, i++, new Hand(Card.S3, Card.C7),
+          StrategyDefinitions.STR, 100));
     }
   }
 
@@ -113,7 +112,7 @@ public class SimulationImpl implements ISimulation {
   public final void start() {
     IGameState state;
 
-    while (!(state = stateManagement.step()).gameEnded()) {
+    for (state = stateManagement.step(); !state.gameEnded(); state = stateManagement.step()) {
       round = state.getRound();
       if (state.newRound()) {
         payManagement.roundEnd();
