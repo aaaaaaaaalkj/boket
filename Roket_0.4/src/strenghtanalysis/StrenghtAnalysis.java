@@ -25,8 +25,6 @@ public class StrenghtAnalysis {
    */
   private boolean schalter = false;
 
-  private int countPlayers;
-
   private List<Double> strength;
   private List<Double> stdDev;
 
@@ -42,7 +40,6 @@ public class StrenghtAnalysis {
   public StrenghtAnalysis(final Raw_Situation sit) {
 
     this.sit = sit;
-    this.countPlayers = sit.getNumActive();
     this.strength = new ArrayList<>();
     this.stdDev = new ArrayList<>();
     // for (int i = 0; i < countPlayers; i++) {
@@ -94,37 +91,6 @@ public class StrenghtAnalysis {
 
         if (i != 0) { // ignore our own contribution
           double x = 1;
-          if (sit.getCommunityCards().size() == 0) {
-            switch (countPlayers) {
-            case 2:
-              x = 0.85;
-              break;
-            case 3:
-              x = 0.73;
-              break;
-            case 4:
-              x = 0.64;
-              break;
-            case 5:
-              x = 0.56;
-              break;
-            case 6:
-              x = 0.49;
-              break;
-            case 7:
-              x = 0.44;
-              break;
-            case 8:
-              x = 0.39;
-              break;
-            case 9:
-              x = 0.35;
-              break;
-            default:
-              x = .35;
-            }
-            x = x * .5;
-          }
 
           strength.add(Tools.round(contribution * x));
 

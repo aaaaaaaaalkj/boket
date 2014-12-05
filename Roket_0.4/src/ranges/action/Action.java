@@ -31,23 +31,7 @@ final class Action {
   }
 
   public static void main(final String[] args) {
-    Random rnd = new XSRandom();
-    rndTest(rnd);
 
   }
 
-  private static void rndTest(final Random rnd) {
-
-    long l = System.nanoTime();
-
-    for (int i = 0; i < 900000000; i++) {
-      rnd.nextInt(1000);
-    }
-
-    l = System.nanoTime() - l;
-
-    l = l / 1000000;
-
-    System.out.println(l);
-  }
 }

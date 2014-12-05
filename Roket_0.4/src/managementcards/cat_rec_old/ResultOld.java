@@ -11,7 +11,7 @@ import managementcards.catrecnew.ResultImpl;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-public final class ResultOld {
+public final class ResultOld implements IResult {
   private Cathegory cathegory;
   private int[] tieBreaker;
 
@@ -76,7 +76,10 @@ public final class ResultOld {
     return false;
   }
 
-  public int compareTo(final IResult res2) {
+  public int compareTo(@Nullable final IResult res2) {
+    if (null == res2) {
+      throw new IllegalArgumentException("compare to null");
+    }
     if (res2.getClass() == ResultOld.class) {
       ResultOld res = (ResultOld) res2;
       if (cathegory.ordinal() > res.cathegory.ordinal()) {

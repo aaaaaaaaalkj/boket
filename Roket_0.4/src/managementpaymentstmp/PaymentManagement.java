@@ -10,6 +10,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import strategy.PlayerDecision;
 import strategy.TypeOfDecision;
+
 import common.IOutcome;
 import common.IPlayer;
 
@@ -154,22 +155,24 @@ public class PaymentManagement implements IPayManagement {
     AmountOfJetons wholeAmount = amount.plus(player.getPost());
     AmountOfJetons stack = player.getStack().get();
 
+    AmountOfJetons amount1 = amount;
+
     Post post = new Post(stack, player.getPost(), highestBid, lastRaise,
         amount);
 
     if (post.lessThanHighestBid() && post.notAllIn()) {
-      amount = highestBid;
+      amount1 = highestBid;
     }
     if (post.moreThanCall()) {
       if (post.lessThanRaise() && post.notAllIn()) {
-        amount = highestBid.plus(lastRaise);
+        amount1 = highestBid.plus(lastRaise);
       }
       if (!wholeAmount.minus(highestBid).isEven()) {
-        amount = wholeAmount.plus(AmountOfJetons.SB);
+        amount1 = wholeAmount.plus(AmountOfJetons.SB);
       }
     }
-    amount = AmountOfJetons.min(amount, stack);
-    return amount;
+    amount1 = AmountOfJetons.min(amount, stack);
+    return amount1;
   }
 
   /**

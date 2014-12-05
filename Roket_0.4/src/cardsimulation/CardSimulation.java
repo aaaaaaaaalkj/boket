@@ -18,6 +18,7 @@ import cardsimulation.flopSimulation.Generator;
 import cardsimulation.flopSimulation.LateRoundHand;
 
 public class CardSimulation {
+  private static final int NUM_EXPERIMENTS = 6000;
   @SuppressWarnings("null")
   static final org.slf4j.Logger LOG = LoggerFactory
       .getLogger(CardSimulation.class);
@@ -45,7 +46,7 @@ public class CardSimulation {
   }
 
   public final double run() {
-    int numExperiments = 6000;
+
     int won = 0;
 
     double faktor;
@@ -66,10 +67,10 @@ public class CardSimulation {
 
     debug(handGen, faktor);
 
-    for (int i = 0; i < numExperiments; i++) {
+    for (int i = 0; i < NUM_EXPERIMENTS; i++) {
       won += experiment(handGen, faktor, prepairDeck());
     }
-    double res = Tools.round(((double) won) / numExperiments);
+    double res = Tools.round(((double) won) / NUM_EXPERIMENTS);
 
     return res;
   }

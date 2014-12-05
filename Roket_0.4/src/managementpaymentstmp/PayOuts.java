@@ -12,10 +12,11 @@ public class PayOuts {
 	private final Map<IPlayer, AmountOfJetons> map = new HashMap<>();
 
   public final void add(final IPlayer player, final AmountOfJetons amount) {
+    AmountOfJetons amount1 = amount;
     if (map.containsKey(player)) {
-      amount = amount.plus(map.get(player));
+      amount1 = amount1.plus(map.get(player));
     }
-		map.put(player, amount);
+    map.put(player, amount1);
 	}
 
   public final Set<IPlayer> keySet() {

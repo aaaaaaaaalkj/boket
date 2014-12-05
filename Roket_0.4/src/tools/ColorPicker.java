@@ -54,7 +54,7 @@ public class ColorPicker {
   // Rank.Seven, Rank.Four,
   // Rank.Two, Rank.Two);
 
-	public static void test1() {
+  public static void test1() {
 		new CatRec(
 				Card.S3, Card.AD, Tools.asList(Card.KC, Card.QC, Card.QD,
 						Card.KD, Card.AH))

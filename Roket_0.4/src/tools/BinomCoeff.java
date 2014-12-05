@@ -15,10 +15,11 @@ public class BinomCoeff {
 	private final int N;
 	private final int K;
 
-	public BinomCoeff(int n, int k) {
+  @SuppressWarnings("null")
+  public BinomCoeff(int n, int k) {
 		N = n;
 		K = k;
-		C = new int @NonNull [N + 1][K + 1];
+    C = new int[N + 1][K + 1];
 
 		for (int k_ = 1; k_ <= K; k_++) {
 			C[0][k_] = 0;
@@ -32,8 +33,9 @@ public class BinomCoeff {
 
 	}
 
-	public int hash(List<Card> cards) {// overloaded version for convinience
-		int @NonNull [] ar = new int @NonNull [cards.size()];
+  @SuppressWarnings("null")
+  public int hash(List<Card> cards) {// overloaded version for convinience
+    int[] ar = new int[cards.size()];
 		int i = 0;
 		for (Card c : cards) {
 			ar[i++] = c.ordinal();

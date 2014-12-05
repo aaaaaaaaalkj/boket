@@ -51,6 +51,8 @@ public final class AllResults { // Singleton
     }
   }
 
+  private static final int NUM_BEST_CARDS = 5;
+
   private void load() throws FileNotFoundException {
     Scanner scanner = new Scanner(new BufferedReader(new FileReader(
         filePath)));
@@ -67,7 +69,7 @@ public final class AllResults { // Singleton
       Cathegory cat = Cathegory.getCathegory(Integer.valueOf(numbers[0]));
       List<Rank> ranks = new ArrayList<>();
 
-      for (int i = 1; i <= 5; i++) {
+      for (int i = 1; i <= NUM_BEST_CARDS; i++) {
         ranks.add(
             Rank.VALUES.get(
                 Integer.valueOf(numbers[i]) - 2

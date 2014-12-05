@@ -19,10 +19,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import tools.Pos;
 
 public final class CardRecognition {
-  private static final Color CARD_EDGE = Constants.cardEdge;
-  @SuppressWarnings("null")
-  private static final Pos HAND_POS = Constants.centersOfPlayerCirles[0];
-  private static final int RADIUS = Constants.radiusOfPlayerCircles;
+  private static final Color CARD_EDGE = Constants.CARD_EDGE;
+  private static final Pos HAND_POS = Constants.CENTERS_OF_PLAYER_CIRLES.get(0);
+  private static final int RADIUS = Constants.RADIUS_OF_PLAYER_CIRCLES;
 
   private CardRecognition() {
   }
@@ -39,7 +38,7 @@ public final class CardRecognition {
 
   public static List<Card> recognizeCommunityCards(final Pos logo, final MyRobot robot) {
 
-    Pos pos = Constants.flop.plus(logo);
+    Pos pos = Constants.FLOP.plus(logo);
     List<Card> list = new ArrayList<>();
 
     for (int i = 0; i < 5; i++) {
@@ -51,7 +50,7 @@ public final class CardRecognition {
       if (card != null) {
         list.add(card);
       }
-      pos = hit.plus(Constants.cardOffset, 0);
+      pos = hit.plus(Constants.CARD_OFFSET, 0);
     }
     // TODO: maybe its possible that list.get(0) == null
     return list;

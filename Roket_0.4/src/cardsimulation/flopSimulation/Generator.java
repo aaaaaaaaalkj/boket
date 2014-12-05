@@ -40,9 +40,10 @@ public class Generator implements HandGenerator {
   }
 
   public final List<Card> getHand(final double contribution, final double stdDev) {
-    if (contribution > 1) {
+    double contribution1 = contribution;
+    if (contribution1 > 1) {
       // why is this possible?
-      contribution = 1;
+      contribution1 = 1;
     }
 
     double variance;
@@ -52,7 +53,7 @@ public class Generator implements HandGenerator {
     variance = stdDev;
 
     double randNumber;
-    randNumber = getRand(contribution, variance);
+    randNumber = getRand(contribution1, variance);
 
     int procent = (int) Math.round(randNumber * 100);
 
@@ -60,7 +61,7 @@ public class Generator implements HandGenerator {
 
     if (!map.containsKey(procent)) {
       throw new IllegalStateException("list is null: " + procent + " "
-          + contribution);
+          + contribution1);
     } else {
 
       List<LateRoundHand> list = map.get(procent);

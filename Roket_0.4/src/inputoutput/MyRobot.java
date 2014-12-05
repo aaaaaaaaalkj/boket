@@ -12,13 +12,15 @@ import org.eclipse.jdt.annotation.Nullable;
 import tools.Pos;
 
 public class MyRobot {
+  private static final int PERCEPTION_WIDHT = 1000;
+  private static final int PERCEPTION_HEIGHT = 800;
 	private final BufferedImage capture;
 
 	@SuppressWarnings("null")
 	public MyRobot() throws AWTException {
 		long l = System.currentTimeMillis();
 		this.capture = new Robot().createScreenCapture(
-				new Rectangle(0, 0, 1000, 800)
+        new Rectangle(0, 0, PERCEPTION_WIDHT, PERCEPTION_HEIGHT)
 				);
 		l = System.currentTimeMillis() - l;
 		// System.out.println("screen-cpature took " + l + " millis");

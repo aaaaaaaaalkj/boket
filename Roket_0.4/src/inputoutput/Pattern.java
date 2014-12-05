@@ -2,47 +2,60 @@ package inputoutput;
 
 import java.util.Arrays;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-public class Pattern {
+public final class Pattern {
 
-	private boolean[] value;
+  private boolean[] value;
 
-	public Pattern(int num) {
-		value = new boolean @NonNull [num];
-		for (int i = 0; i < value.length; i++)
-			value[i] = false;
-	}
+  @SuppressWarnings("null")
+  public Pattern(final int num) {
+    value = new boolean[num];
+    for (int i = 0; i < value.length; i++) {
+      value[i] = false;
+    }
+  }
 
-	public Pattern(int... k) {
-		value = new boolean @NonNull [k.length];
-		for (int i = 0; i < k.length; i++)
-			value[i] = k[i] == 1;
-	}
+  @SuppressWarnings("null")
+  public Pattern(final int... k) {
+    value = new boolean[k.length];
+    for (int i = 0; i < k.length; i++) {
+      value[i] = k[i] == 1;
+    }
+  }
 
-	public void set(int k) {
-		value[k] = true;
-	}
+  public void set(final int k) {
+    value[k] = true;
+  }
 
-	@Override
-	public boolean equals(@Nullable Object o) {
-		Pattern p;
-		if (o instanceof Pattern)
-			p = (Pattern) o;
-		else
-			return false;
-		if (p.value.length != value.length)
-			return false;
-		for (int i = 0; i < value.length; i++) {
-			if (value[i] != p.value[i])
-				return false;
-		}
-		return true;
-	}
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + Arrays.hashCode(value);
+    return result;
+  }
 
-	@SuppressWarnings("null")
-	public String toString() {
-		return Arrays.toString(value);
-	}
+  @Override
+  public boolean equals(@Nullable final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Pattern other = (Pattern) obj;
+    if (!Arrays.equals(value, other.value)) {
+      return false;
+    }
+    return true;
+  }
+
+  @SuppressWarnings("null")
+  public String toString() {
+    return Arrays.toString(value);
+  }
 }
