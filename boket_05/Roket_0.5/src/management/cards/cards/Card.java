@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import tools.Tools;
 
 /**
@@ -38,10 +40,12 @@ public final class Card implements Comparable<Card> {
 	private static final int GREATEST_NUMBER_RANK = 9;
 	private final Rank rank;
 	private final Suit suit;
+	private final int ordinal; // cached ordinal
 
 	private Card(final Rank rank, final Suit suit) {
 		this.rank = rank;
 		this.suit = suit;
+		this.ordinal = rank.ordinal() * Suit.count() + suit.ordinal() + 1;
 	}
 
 	public Rank getRank() {
@@ -52,22 +56,28 @@ public final class Card implements Comparable<Card> {
 		return suit;
 	}
 
-	public String toString() {
-		// return this.number + " of " + this.color;
-		return rank.shortString() + suit.shortString();
-	}
-
-	public void print() {
-		System.out.println(this.shortString());
-	}
-
 	@Override
 	public int compareTo(final Card c) {
 		return this.ordinal() - c.ordinal();
 	}
 
 	public int ordinal() { // 1-based
-		return rank.ordinal() * Suit.count() + suit.ordinal() + 1;
+		return ordinal;
+	}
+
+	@Override
+	public int hashCode() {
+		return ordinal; // cached unique value for each card
+	}
+
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		return this == obj; // multiton pattern
+	}
+
+	public String toString() {
+		// return this.number + " of " + this.color;
+		return rank.shortString() + suit.shortString();
 	}
 
 	public String shortString() {
@@ -81,6 +91,10 @@ public final class Card implements Comparable<Card> {
 			res = "_" + res;
 		}
 		return res;
+	}
+
+	public void print() {
+		System.out.println(this.shortString());
 	}
 
 	public static final Card D2 = new Card(Two, DIAMONDS);
