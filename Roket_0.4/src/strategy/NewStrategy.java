@@ -2,6 +2,7 @@ package strategy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -11,19 +12,18 @@ public final class NewStrategy implements IStrategy {
   private List<TypeOfDecision> preflop = new ArrayList<>();
   private List<TypeOfDecision> postflop = new ArrayList<>();
 
-  private NewStrategy() {
-
+  private NewStrategy(final Random rnd) {
     for (int i = 0; i < PreflopSelector.SIZE; i++) {
-      preflop.add(TypeOfDecision.random());
+      preflop.add(TypeOfDecision.random(rnd));
     }
     for (int i = 0; i < PostflopSelector.SIZE; i++) {
-      preflop.add(TypeOfDecision.random());
+      preflop.add(TypeOfDecision.random(rnd));
     }
 
   }
 
-  public static NewStrategy random() {
-    NewStrategy s = new NewStrategy();
+  public static NewStrategy random(final Random rnd) {
+    NewStrategy s = new NewStrategy(rnd);
     return s;
   }
 

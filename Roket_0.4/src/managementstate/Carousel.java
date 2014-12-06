@@ -36,15 +36,18 @@ public class Carousel implements IStateManagement {
 
   private GameStateImpl quiteEnd(final Round old) {
     int winningPlayer;
-    if (activePlayers.size() > 0) {
-      winningPlayer = activePlayers.iterator().next();
-    } else {
+
+    if (activePlayers.isEmpty() && allinPlayers.isEmpty()) {
       throw new IllegalStateException("no winning player found");
     }
+    Set<Integer> notFolded = getNotFolded();
+    // quiteEnd means there is only one player left
+    winningPlayer = notFolded.iterator().next();
+
     return GameStateImpl.quietEnd(
         old,
         winningPlayer,
-        getNotFolded());
+        notFolded);
   }
 
   private GameStateImpl gameEnd(final Round old) {

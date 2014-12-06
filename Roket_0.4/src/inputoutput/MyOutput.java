@@ -48,7 +48,7 @@ public class MyOutput {
   }
 
   public final void moveAndClick(final Pos p) {
-    robot.mouseMove(p.x, p.y);
+    robot.mouseMove(p.getX(), p.getY());
     try {
       Thread.sleep(WAIT_TIME);
     } catch (InterruptedException e) {
@@ -60,7 +60,7 @@ public class MyOutput {
   }
 
   public final void moveAndDoubleClick(final Pos p) {
-    robot.mouseMove(p.x, p.y);
+    robot.mouseMove(p.getX(), p.getY());
     robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
     robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);

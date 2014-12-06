@@ -31,13 +31,13 @@ public class MyRobot {
 	}
 
   public final Color getPixelColor(final Pos p) {
-		return new Color(capture.getRGB(p.x, p.y));
+		return new Color(capture.getRGB(p.getX(), p.getY()));
 	}
 
   public final void mouseMove(final Pos p) {
 		try {
 			Robot rb = new Robot();
-			rb.mouseMove(p.x, p.y);
+			rb.mouseMove(p.getX(), p.getY());
 			rb.mousePress(InputEvent.BUTTON1_MASK);
 			rb.mouseRelease(InputEvent.BUTTON1_MASK);
 		} catch (AWTException e) {
@@ -52,7 +52,7 @@ public class MyRobot {
    */
   @Nullable
   public final Pos pixelSearch(final Pos p, final Pos p2, final Color c) {
-		return pixelSearch(p.x, p.y, (p2.x - p.x), (p2.y - p.y), c);
+		return pixelSearch(p.getX(), p.getY(), (p2.getX() - p.getX()), (p2.getY() - p.getY()), c);
 	}
 
   @Nullable
@@ -74,10 +74,10 @@ public class MyRobot {
 	}
 
   public final int maxColor(final Pos pos, final Pos delta) {
-		int w = delta.x;
-		int h = delta.y;
+		int w = delta.getX();
+		int h = delta.getY();
 		int[] rgbs = new int[w * h];
-		int[] a = capture.getRGB(pos.x, pos.y, w, h, rgbs, 0, w);
+		int[] a = capture.getRGB(pos.getX(), pos.getY(), w, h, rgbs, 0, w);
 
 		int b = (2 << 7) - 1;
 		int g = (2 << 15) - 1 - b;
@@ -96,10 +96,10 @@ public class MyRobot {
 	}
 
   public final int pixelCheckSum(final Pos pos, final Pos pos2) {
-		int w = pos2.minus(pos).x;
-		int h = pos2.minus(pos).y;
+		int w = pos2.minus(pos).getX();
+		int h = pos2.minus(pos).getY();
 		int[] rgbs = new int[w * h];
-		int[] a = capture.getRGB(pos.x, pos.y, w, h, rgbs, 0, w);
+		int[] a = capture.getRGB(pos.getX(), pos.getY(), w, h, rgbs, 0, w);
 		int res = 0;
 		for (int i = 0; i < a.length; i++) {
 			res += i * a[i];

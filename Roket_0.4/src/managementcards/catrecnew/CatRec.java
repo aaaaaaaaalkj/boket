@@ -6,10 +6,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 import static managementcards.cards.Rank.Ace;
-import static managementcards.cards.Rank.Eight;
 import static managementcards.cards.Rank.Jack;
-import static managementcards.cards.Rank.Seven;
-import static managementcards.cards.Rank.Six;
 import static managementcards.cards.Rank.Ten;
 import static managementcards.cards.Rank.Two;
 import static managementcards.catrecnew.Cathegory.FOUR_OF_A_KIND;
@@ -81,6 +78,8 @@ public final class CatRec implements ICatRec {
     return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
   }
 
+  private static final int COUNT_BEST_CARDS = 5;
+
   private ResultImpl getPairBasedResult(final List<Rank> ranks) {
     List<@NonNull List<@NonNull Rank>> choosenCards;
     if (has(ranks, FOUR)) {
@@ -109,11 +108,12 @@ public final class CatRec implements ICatRec {
       return result(TWO_PAIR, choosenCards);
     }
     if (has(ranks, TWO)) {
-      choosenCards = Tools.asList(extract(ranks, TWO), getTop(ranks, 3));
+      choosenCards = Tools.asList(extract(ranks, TWO),
+          getTop(ranks, COUNT_BEST_CARDS - TWO.getValue()));
       return result(PAIR, choosenCards);
     }
     if (has(ranks, ONE)) {
-      choosenCards = Tools.asList(getTop(ranks, 5));
+      choosenCards = Tools.asList(getTop(ranks, COUNT_BEST_CARDS));
       return result(HIGH_CARD, choosenCards);
     }
     List<List<Rank>> list = Tools.emptyList();
@@ -172,7 +172,7 @@ public final class CatRec implements ICatRec {
 
   // +++++++++++++++++++++++++
   private ResultImpl result(final Cathegory cat, final List<List<Rank>> tieBreakers) {
-    List<Rank> tie2 = Tools.first(5, Tools.flatten(tieBreakers));
+    List<Rank> tie2 = Tools.first(COUNT_BEST_CARDS, Tools.flatten(tieBreakers));
     return new ResultImpl(cat, tie2);
   }
 
@@ -187,9 +187,9 @@ public final class CatRec implements ICatRec {
 
     // Flush
     for (Suit c : Suit.values()) {
-      if (map.containsKey(c) && map.get(c).size() >= 5) {
+      if (map.containsKey(c) && map.get(c).size() >= COUNT_BEST_CARDS) {
         List<Rank> tieBreakers = new ArrayList<>(map.get(c)
-            .subList(0, 5));
+            .subList(0, COUNT_BEST_CARDS));
         flushResult = Tools.of(new ResultImpl(Cathegory.FLUSH,
             tieBreakers));
         break;
@@ -282,57 +282,26 @@ public final class CatRec implements ICatRec {
     return res;
   }
 
-  private boolean checkDoubleGutshot() {
+  private static final int DRAWS_NEEDED_FOR_DOUBLE_GUTSHOT = 2;
+  private static final int CARDS_IN_WINDOW_NEEDED_FOR_GUTSHOT = 4;
+
+  public boolean checkDoubleGutshot2() {
     Set<Rank> ranks = new HashSet<>();
     for (Card c : all) {
       ranks.add(c.getRank());
     }
-    boolean res = false;
-    EnumSet<Rank> r2 = EnumSet.range(Two, Six);
-    r2.add(Ace);
-    for (Rank r : r2) {
-      boolean doubleGutshot = true;
-      doubleGutshot &= ranks.contains(r.next(0));
-      doubleGutshot &= ranks.contains(r.next(1));
-      doubleGutshot &= ranks.contains(r.next(2));
-      doubleGutshot &= !ranks.contains(r.next(3));
-      doubleGutshot &= ranks.contains(r.next(4));
-      doubleGutshot &= !ranks.contains(r.next(5));
-      doubleGutshot &= ranks.contains(r.next(6));
-      doubleGutshot &= ranks.contains(r.next(7));
-      doubleGutshot &= ranks.contains(r.next(8));
-
-      res |= doubleGutshot;
+    int count = 0;
+    for (Window w : Window.getDescValues()) {
+      int matchesInWindow = w.match(ranks);
+      if (matchesInWindow == CARDS_IN_WINDOW_NEEDED_FOR_GUTSHOT) {
+        count++;
+      }
     }
-    r2.add(Seven);
-    for (Rank r : r2) {
-      boolean doubleGutshot = true;
-      doubleGutshot &= ranks.contains(r.next(0));
-      doubleGutshot &= ranks.contains(r.next(1));
-      doubleGutshot &= !ranks.contains(r.next(2));
-      doubleGutshot &= ranks.contains(r.next(3));
-      doubleGutshot &= ranks.contains(r.next(4));
-      doubleGutshot &= !ranks.contains(r.next(5));
-      doubleGutshot &= ranks.contains(r.next(6));
-      doubleGutshot &= ranks.contains(r.next(7));
 
-      res |= doubleGutshot;
-    }
-    r2.add(Eight);
-    for (Rank r : r2) {
-      boolean doubleGutshot = true;
-      doubleGutshot &= ranks.contains(r.next(0));
-      doubleGutshot &= !ranks.contains(r.next(1));
-      doubleGutshot &= ranks.contains(r.next(2));
-      doubleGutshot &= ranks.contains(r.next(3));
-      doubleGutshot &= ranks.contains(r.next(4));
-      doubleGutshot &= !ranks.contains(r.next(5));
-      doubleGutshot &= ranks.contains(r.next(6));
-
-      res |= doubleGutshot;
-    }
-    return res;
+    return count == DRAWS_NEEDED_FOR_DOUBLE_GUTSHOT;
   }
+
+
 
   @SuppressWarnings("null")
   private boolean checkFlushDraw() {
@@ -438,7 +407,7 @@ public final class CatRec implements ICatRec {
   }
 
   public DrawType checkDraw() {
-    if (checkDoubleGutshot()) {
+    if (checkDoubleGutshot2()) {
       if (checkFlushDraw()) {
         return DrawType.MONSTER_DRAW;
       } else {

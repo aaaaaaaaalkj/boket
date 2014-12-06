@@ -74,6 +74,10 @@ public class XSRandom extends Random {
     return new XSRandom(getSeed());
   }
 
+  private static final int XOR_SHIFT_CONST_1 = 21;
+  private static final int XOR_SHIFT_CONST_2 = 35;
+  private static final int XOR_SHIFT_CONST_3 = 4;
+
   /**
    * Implementation of George Marsaglia's elegant Xorshift random generator 30% faster and better.
    * quality than the built-in java.util.random see also see
@@ -81,9 +85,9 @@ public class XSRandom extends Random {
    */
   protected final int next(final int nbits) {
     long x = seed;
-    x ^= (x << 21);
-    x ^= (x >>> 35);
-    x ^= (x << 4);
+    x ^= (x << XOR_SHIFT_CONST_1);
+    x ^= (x >>> XOR_SHIFT_CONST_2);
+    x ^= (x << XOR_SHIFT_CONST_3);
     seed = x;
     x &= ((1L << nbits) - 1);
     return (int) x;

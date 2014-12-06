@@ -14,6 +14,12 @@ import org.junit.Test;
 import common.Round;
 
 public class TestRotation {
+  private static final int NUM_SEATS = 4;
+  private static final double PROBABILITY_FOR_FOLD_RAISE = .2;
+  private static final int UTG = 3;
+  private static final int BUTTON = 0;
+  private static final int SMALL_BLIND = 1;
+  private static final int BIG_BLIND = 2;
 
   public static IStateManagement setUp(final int numSeats) {
     return Carousel.normalGameStart(numSeats);
@@ -22,24 +28,24 @@ public class TestRotation {
   @Test
   public final void quitEndTest() {
 
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
 
     IGameState state = m.step();
 
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
@@ -51,30 +57,30 @@ public class TestRotation {
   @Test
   public final void richMiddleManTest() {
 
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
 
     IGameState state = m.step();
 
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
 
@@ -86,30 +92,30 @@ public class TestRotation {
 
   @Test
   public final void earlyShowdownTest() {
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
     IGameState state = m.step();
 
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
 
     state = m.step();
@@ -120,32 +126,32 @@ public class TestRotation {
 
   @Test
   public final void allAllinTest() {
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
     IGameState state = m.step();
 
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
@@ -157,32 +163,32 @@ public class TestRotation {
 
   @Test
   public final void allAllinTest2() {
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
     IGameState state = m.step();
 
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
@@ -193,30 +199,30 @@ public class TestRotation {
 
   @Test
   public final void onlyOneAllInPlayer() {
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
     IGameState state = m.step();
 
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.allin();
     m.raised();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.fold();
 
@@ -228,86 +234,86 @@ public class TestRotation {
 
   @Test
   public final void showDownTest() {
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
     IGameState state = m.step();
 
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.PREFLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.PREFLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.FLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.FLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.FLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.FLOP);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.TURN);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.TURN);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.TURN);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.TURN);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.RIVER);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.RIVER);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 3);
+    assertTrue(state.getCurrentPlayer() == UTG);
     assertTrue(state.getRound() == Round.RIVER);
 
     state = m.step();
     assertFalse(state.gameEnded());
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.RIVER);
 
     state = m.step();
@@ -318,7 +324,7 @@ public class TestRotation {
 
   @Test
   public final void randomTest() {
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
     Collection<Integer> folded = new ArrayList<>();
     Collection<Integer> allin = new ArrayList<>();
 
@@ -334,14 +340,14 @@ public class TestRotation {
       // its never the turn of an allin player
       assertFalse(allin.contains(current));
 
-      if (Math.random() < .2) {
+      if (Math.random() < PROBABILITY_FOR_FOLD_RAISE) {
         m.fold();
         folded.add(current);
-      } else if (Math.random() < .2) {
+      } else if (Math.random() < PROBABILITY_FOR_FOLD_RAISE) {
         m.allin();
         allin.add(current);
 
-        if (Math.random() < .2) {
+        if (Math.random() < PROBABILITY_FOR_FOLD_RAISE) {
           m.raised();
 
         }
@@ -351,25 +357,26 @@ public class TestRotation {
 
   @Test
   public final void allinSeveralRoundsTest() {
-    IStateManagement m = setUp(3);
+    final int numPlayers = 3;
+    IStateManagement m = setUp(numPlayers);
     IGameState state;
 
     state = m.step();
-    assertTrue(state.getCurrentPlayer() == 0);
+    assertTrue(state.getCurrentPlayer() == BUTTON);
     assertTrue(state.getRound() == Round.PREFLOP);
     m.raised();
     m.allin();
 
     state = m.step();
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
 
     state = m.step();
-    assertTrue(state.getCurrentPlayer() == 2);
+    assertTrue(state.getCurrentPlayer() == BIG_BLIND);
     assertTrue(state.getRound() == Round.PREFLOP);
 
     state = m.step();
-    assertTrue(state.getCurrentPlayer() == 1);
+    assertTrue(state.getCurrentPlayer() == SMALL_BLIND);
     assertTrue(state.getRound() == Round.FLOP);
     m.fold();
 
@@ -380,18 +387,14 @@ public class TestRotation {
 
   @Test
   public final void randomTest2() {
-    IStateManagement m = setUp(4);
+    IStateManagement m = setUp(NUM_SEATS);
     Set<Integer> activePlayers = new HashSet<>();
-    activePlayers.add(0);
-    activePlayers.add(1);
-    activePlayers.add(2);
-    activePlayers.add(3);
-
     Set<Integer> todoPlayers = new HashSet<>();
-    todoPlayers.add(0);
-    todoPlayers.add(1);
-    todoPlayers.add(2);
-    todoPlayers.add(3);
+
+    for (int i = 0; i < NUM_SEATS; i++) {
+      activePlayers.add(i);
+      todoPlayers.add(i);
+    }
 
     int allinPlayers = 0;
 
@@ -411,13 +414,13 @@ public class TestRotation {
       assertTrue(activePlayers.contains(state.getCurrentPlayer()));
       todoPlayers.remove(state.getCurrentPlayer());
 
-      if (Math.random() < .2) {
+      if (Math.random() < PROBABILITY_FOR_FOLD_RAISE) {
         // System.out.println(state + ": fold");
         activePlayers.remove(state.getCurrentPlayer());
         m.fold();
       } else {
-        if (Math.random() < .2) {
-          if (Math.random() < .2) {
+        if (Math.random() < PROBABILITY_FOR_FOLD_RAISE) {
+          if (Math.random() < PROBABILITY_FOR_FOLD_RAISE) {
             // System.out.println(state + ": allin");
             allinPlayers++;
             m.allin();

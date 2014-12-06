@@ -134,7 +134,7 @@ public class ScreenScraper {
   void searchButton(Pos logo) {
     List<Pos> centersOfPlayerCirles = Constants.CENTERS_OF_PLAYER_CIRLES;
     Color c = new Color(12010269);
-    Pos button = robot.pixelSearch(logo.x, logo.y, 850, 550, c);
+    Pos button = robot.pixelSearch(logo.getX(), logo.getY(), 850, 550, c);
     if (null == button) {
       System.out.println("cant find button");
       return;

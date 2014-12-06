@@ -3,6 +3,23 @@ package managementcards.catrecnew;
 import static managementcards.cards.Card.AC;
 import static managementcards.cards.Card.AH;
 import static managementcards.cards.Card.AS;
+import static managementcards.cards.Card.C2;
+import static managementcards.cards.Card.C3;
+import static managementcards.cards.Card.C9;
+import static managementcards.cards.Card.D2;
+import static managementcards.cards.Card.D3;
+import static managementcards.cards.Card.D4;
+import static managementcards.cards.Card.D7;
+import static managementcards.cards.Card.D8;
+import static managementcards.cards.Card.D9;
+import static managementcards.cards.Card.H2;
+import static managementcards.cards.Card.H3;
+import static managementcards.cards.Card.H5;
+import static managementcards.cards.Card.H6;
+import static managementcards.cards.Card.H7;
+import static managementcards.cards.Card.H8;
+import static managementcards.cards.Card.H9;
+import static managementcards.cards.Card.JC;
 import static managementcards.cards.Card.JH;
 import static managementcards.cards.Card.JS;
 import static managementcards.cards.Card.KC;
@@ -13,32 +30,18 @@ import static managementcards.cards.Card.QC;
 import static managementcards.cards.Card.QD;
 import static managementcards.cards.Card.QH;
 import static managementcards.cards.Card.QS;
+import static managementcards.cards.Card.S2;
+import static managementcards.cards.Card.S3;
+import static managementcards.cards.Card.S4;
+import static managementcards.cards.Card.S5;
+import static managementcards.cards.Card.S6;
+import static managementcards.cards.Card.S7;
+import static managementcards.cards.Card.S8;
+import static managementcards.cards.Card.S9;
 import static managementcards.cards.Card.TC;
 import static managementcards.cards.Card.TD;
 import static managementcards.cards.Card.TH;
 import static managementcards.cards.Card.TS;
-import static managementcards.cards.Card.C2;
-import static managementcards.cards.Card.D2;
-import static managementcards.cards.Card.H2;
-import static managementcards.cards.Card.S2;
-import static managementcards.cards.Card.C3;
-import static managementcards.cards.Card.D3;
-import static managementcards.cards.Card.H3;
-import static managementcards.cards.Card.S3;
-import static managementcards.cards.Card.D4;
-import static managementcards.cards.Card.S4;
-import static managementcards.cards.Card.H5;
-import static managementcards.cards.Card.S5;
-import static managementcards.cards.Card.H6;
-import static managementcards.cards.Card.S6;
-import static managementcards.cards.Card.D7;
-import static managementcards.cards.Card.S7;
-import static managementcards.cards.Card.D8;
-import static managementcards.cards.Card.H8;
-import static managementcards.cards.Card.S8;
-import static managementcards.cards.Card.D9;
-import static managementcards.cards.Card.H9;
-import static managementcards.cards.Card.S9;
 import static managementcards.cards.Rank.Ace;
 import static managementcards.cards.Rank.Eight;
 import static managementcards.cards.Rank.Five;
@@ -70,6 +73,8 @@ import managementcards.cards.Rank;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
+
+import strategy.conditions.postflop.DrawType;
 
 public class TestCarRec {
 
@@ -335,6 +340,48 @@ public class TestCarRec {
     rec = create(H2, D7); // hand
     res = highCard(Seven, Two);
     assertTrue(rec.check().equals(res));
+  }
+
+  @Test
+  public final void testDraw1() {
+    DrawType res;
+
+    res = create(AH, KS, QS, TS, H8, D7, H6).checkDraw();
+    assertTrue(res.toString(), res == DrawType.DOUBLE_GUTSHOT);
+
+    res = create(KS, QS, TS, C9, D7, H6).checkDraw();
+    assertTrue(res.toString(), res == DrawType.DOUBLE_GUTSHOT);
+
+    res = create(QS, TS, C9, D8, H6).checkDraw();
+    assertTrue(res.toString(), res == DrawType.DOUBLE_GUTSHOT);
+
+    res = create(S3, QS, TS, C9, D8, H6).checkDraw();
+    assertTrue(res.toString(), res == DrawType.DOUBLE_GUTSHOT);
+
+    res = create(AS, C3, QS, TS, C9, D8, H6).checkDraw();
+    assertTrue(res.toString(), res == DrawType.DOUBLE_GUTSHOT);
+
+    res = create(AH, KS, QS, TS, H8, D7, H5).checkDraw();
+    assertTrue(res.toString(), res == DrawType.GUTSHOT);
+
+    res = create(AH, KS, QS, S3, H8, D7, H6).checkDraw();
+    assertTrue(res.toString(), res == DrawType.NONE);
+
+    res = create(AH, KS, QS, S3, H8, H7, H6).checkDraw();
+    assertTrue(res.toString(), res == DrawType.FLUSH_DRAW);
+
+    res = create(KS, QS, JC, TS, H8).checkDraw();
+    assertTrue(res.toString(), res == DrawType.OESD);
+
+    res = create(AH, KS, QS, TS, H8, H7, H5).checkDraw();
+    assertTrue(res.toString(), res == DrawType.FLUSH_DRAW);
+
+    res = create(AH, KH, QS, TS, H8, D7, H6).checkDraw();
+    assertTrue(res.toString(), res == DrawType.MONSTER_DRAW);
+
+    res = create(KS, QS, JS, TS, H8).checkDraw();
+    assertTrue(res.toString(), res == DrawType.MONSTER_DRAW);
+
   }
 
 }

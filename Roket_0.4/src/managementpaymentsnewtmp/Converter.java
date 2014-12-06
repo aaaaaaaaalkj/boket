@@ -21,45 +21,39 @@ public class Converter {
     this.stackSize = pay.getStack(player);
   }
 
-  public final Decision convert(final TypeOfDecision d) {
-    int value = 0;
+  /**
+   * 
+   * @param decision
+   *          - low-level decision
+   * @return - high-level decision
+   */
+  public final Decision convert(final TypeOfDecision decision) {
 
-    switch (d) {
-    case ALL_IN:
+    if (decision == TypeOfDecision.ALL_IN) {
       return Decision.allin();
-    case FOLD:
-      return Decision.fold();
-    case CALL:
-      return tryCall(a);
-    case POST_BB:
-      break;
-    case POST_SB:
-      break;
-    case RAISE_HALF_STACK:
-      value = stackSize / 2;
-      break;
-    case RAISE_FIFTH_STACK:
-      value = stackSize / 5;
-      break;
-    case RAISE_TENTH_STACK:
-      value = stackSize / 10;
-      break;
-    case RAISE_QUARTER_POT:
-      value = potSize / 4;
-      break;
-    case RAISE_HALF_POT:
-      value = potSize / 2;
-      break;
-    case RAISE_POT_SIZE:
-      value = potSize;
-      break;
-    case RAISE_DOUBLE_POT:
-      value = potSize * 2;
-      break;
-    default:
-      throw new AssertionError("Unknown "
-          + TypeOfDecision.class.getSimpleName() + ": " + d);
     }
+    if (decision == TypeOfDecision.FOLD) {
+      return Decision.fold();
+    }
+    if (decision == TypeOfDecision.POST_BB) {
+      return tryBetRaise(0);
+    }
+    if (decision == TypeOfDecision.POST_SB) {
+      return tryBetRaise(0);
+    }
+    if (decision == TypeOfDecision.CALL) {
+      return tryCall(a);
+    }
+
+    int value = 0;
+    if (decision.isPotCentred()) {
+      value = potSize;
+    } else {
+      value = stackSize;
+    }
+    // decision has a factor for the pot or stack which determines how much to bet
+    value = (int) (value * decision.getFactor());
+
     return tryBetRaise(value);
   }
 

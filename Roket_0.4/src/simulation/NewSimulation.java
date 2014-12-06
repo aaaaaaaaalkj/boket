@@ -18,6 +18,7 @@ import strategy.ISituation;
 import strategy.IStrategy;
 import strategy.SituationImpl;
 import strategy.TypeOfDecision;
+
 import common.Round;
 
 public class NewSimulation {
@@ -30,11 +31,10 @@ public class NewSimulation {
   private static final Logger LOG = Logger.getLogger(NewSimulation.class
       .getName());
 
-  public NewSimulation() {
-    int numSeats = 5;
+  public NewSimulation(int numSeats, int stackSize) {
     this.strategies = new ArrayList<>();
     this.cardMandagement = new CardManagement(numSeats, new Random());
-    this.payManagement = PayManagementNew.newInstance(numSeats, 100);
+    this.payManagement = PayManagementNew.newInstance(numSeats, stackSize);
     this.stateManagement = new Carousel(numSeats);
   }
 

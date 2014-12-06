@@ -28,7 +28,7 @@ public final class CardRecognition {
 
   @Nullable
   private static Pos searchCard(final Pos pos, final MyRobot robot) {
-    Pos hit = robot.pixelSearch(pos.x, pos.y, 25, 25, CARD_EDGE);
+    Pos hit = robot.pixelSearch(pos.getX(), pos.getY(), 25, 25, CARD_EDGE);
     if (null == hit) {
       return null;
     }
