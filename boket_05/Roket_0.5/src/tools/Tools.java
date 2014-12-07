@@ -126,6 +126,11 @@ public final class Tools {
 	}
 
 	@SuppressWarnings("null")
+	public static <T> Set<T> unmodifiableSet(final Set<? extends T> list) {
+		return Collections.unmodifiableSet(list);
+	}
+
+	@SuppressWarnings("null")
 	public static String substring(final String s, final int beginIndex,
 			final int endIndex) {
 		return s.substring(beginIndex, endIndex);

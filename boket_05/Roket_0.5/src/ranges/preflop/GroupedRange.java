@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import management.cards.cards.Card;
 import management.cards.cards.Rank;
 import management.cards.cards.Suit;
 
@@ -301,7 +302,8 @@ public enum GroupedRange implements Range {
 				if (i == j == suited) {
 					Suit s1 = Suit.VALUES.get(i);
 					Suit s2 = Suit.VALUES.get(j);
-					ranges.add(ElementRange.find(r1, s1, r2, s2));
+					ranges.add(ElementRange.find(Card.instance(r1, s1),
+							Card.instance(r2, s2)));
 				}
 			}
 		}
@@ -348,7 +350,7 @@ public enum GroupedRange implements Range {
 			// random but not equal to suit1
 			s2 = Suit.random2(rnd, /* dead suit: */s1);
 		}
-		return ElementRange.find(r1, s1, r2, s2);
+		return ElementRange.find(Card.instance(r1, s1), Card.instance(r2, s2));
 	}
 
 }

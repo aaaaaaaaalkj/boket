@@ -30,9 +30,10 @@ final class Action {
 
 	}
 
-
-
-
 	public static void main(final String[] args) {
+		for (Card c : Card.getAllCards()) {
+			System.out
+					.println(c + "(" + c.getRank() + "," + c.getSuit() + "),");
+		}
 	}
 }

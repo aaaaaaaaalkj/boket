@@ -42,18 +42,19 @@ public class SimpleRange implements Range, Cloneable {
 
 	public final SimpleRange removeAssociated(final Iterable<Card> cards) {
 		for (Card c : cards) {
-			elements.removeAll(ElementRange.find(c));
+			elements.removeAll(ElementRange.findAssociated(c));
 		}
 		return this;
 	}
 
 	public final SimpleRange removeAssociated(final Card card) {
-		elements.removeAll(ElementRange.find(card));
+		elements.removeAll(ElementRange.findAssociated(card));
 		return this;
 	}
 
 	public final SimpleRange removeAssociated(final ElementRange e) {
-		elements.removeAll(ElementRange.find(e));
+		elements.removeAll(ElementRange.findAssociated(e.getFirstCard()));
+		elements.removeAll(ElementRange.findAssociated(e.getSecondCard()));
 		return this;
 	}
 

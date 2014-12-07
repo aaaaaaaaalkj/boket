@@ -2,6 +2,7 @@ package ranges.preflop;
 
 import java.util.Random;
 
+import management.cards.cards.Card;
 import management.cards.cards.Rank;
 import management.cards.cards.Suit;
 import ranges.ElementRange;
@@ -102,6 +103,6 @@ public class GroupedPlusRange implements Range {
 			int index = f + rnd.nextInt(r1.ordinal() - f);
 			r2 = Rank.VALUES.get(index);
 		}
-		return ElementRange.find(r1, s1, r2, s2);
+		return ElementRange.find(Card.instance(r1, s1), Card.instance(r2, s2));
 	}
 }

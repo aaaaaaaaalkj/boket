@@ -40,7 +40,7 @@ public class BinomCoeff {
 		int[] ar = new int[cards.size()];
 		int i = 0;
 		for (Card c : cards) {
-			ar[i++] = c.ordinal();
+			ar[i++] = c.ordinal1based();
 		}
 		return hash(ar);
 	}
@@ -128,13 +128,13 @@ public class BinomCoeff {
 									// * prim[c7.ordinal()];
 
 									int hash = coeff.hash(
-											c1.ordinal(),
-											c2.ordinal(),
-											c3.ordinal(),
-											c4.ordinal(),
-											c5.ordinal(),
-											c6.ordinal(),
-											c7.ordinal()
+											c1.ordinal1based(),
+											c2.ordinal1based(),
+											c3.ordinal1based(),
+											c4.ordinal1based(),
+											c5.ordinal1based(),
+											c6.ordinal1based(),
+											c7.ordinal1based()
 											);
 
 									ResultImpl res = new CatRec(
