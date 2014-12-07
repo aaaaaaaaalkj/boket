@@ -99,192 +99,210 @@ import static ranges.ElementRange._5s_4h;
 
 import org.junit.Test;
 
+import ranges.preflop.GroupedPlusRange;
+import ranges.preflop.GroupedRange;
+
 public class JUnitTests {
-  private static final int NUMBER_OF_POSSIBLE_PAIRS = 78;
-  private static final int NUMBER_OF_POSSIBLE_ACES_OFFSUIT = 144;
-  private static final int NUMBER_OF_SUITED_GROUPED = 4;
+	private static final int NUMBER_OF_POSSIBLE_PAIRS = 78;
+	private static final int NUMBER_OF_POSSIBLE_ACES_OFFSUIT = 144;
+	private static final int NUMBER_OF_SUITED_GROUPED = 4;
 
-  @Test
-  public final void testUngroup() {
-    SimpleRange range, target;
+	@Test
+	public final void testFindElementRange() {
+		for (ElementRange r1 : ElementRange.VALUES) {
+			ElementRange r2 = ElementRange.find(
+					r1.getRank1(), r1.getSuit1(),
+					r1.getRank2(), r1.getSuit2());
 
-    target = new SimpleRange();
-    target.add(_2c_2d);
-    target.add(_2c_2h);
-    target.add(_2c_2s);
-    target.add(_2h_2d);
-    target.add(_2s_2h);
-    target.add(_2s_2d);
+			ElementRange r3 = ElementRange.find(
+					r1.getRank2(), r1.getSuit2(),
+					r1.getRank1(), r1.getSuit1());
+			assertTrue(r1 == r2);
+			assertTrue(r1 == r3);
+		}
+	}
 
-    range = GroupedRange._22.ungroup();
-    assertTrue(range.equals(target));
+	@Test
+	public final void testUngroup() {
+		SimpleRange range, target;
 
-    // ++++++++++++++++++++++++
+		target = new SimpleRange();
+		target.add(_2c_2d);
+		target.add(_2c_2h);
+		target.add(_2c_2s);
+		target.add(_2h_2d);
+		target.add(_2s_2h);
+		target.add(_2s_2d);
 
-    target = new SimpleRange();
-    target.add(_3c_2d);
-    target.add(_3c_2h);
-    target.add(_3c_2s);
-    target.add(_3h_2d);
-    target.add(_3s_2h);
-    target.add(_3s_2d);
+		range = GroupedRange._22.ungroup();
+		assertTrue(range.equals(target));
 
-    target.add(_3d_2c);
-    target.add(_3h_2c);
-    target.add(_3s_2c);
-    target.add(_3d_2h);
-    target.add(_3h_2s);
-    target.add(_3d_2s);
+		// ++++++++++++++++++++++++
 
-    range = GroupedRange._32o.ungroup();
-    assertTrue(range.equals(target));
+		target = new SimpleRange();
+		target.add(_3c_2d);
+		target.add(_3c_2h);
+		target.add(_3c_2s);
+		target.add(_3h_2d);
+		target.add(_3s_2h);
+		target.add(_3s_2d);
 
-    // ++++++++++++++++++++++++
+		target.add(_3d_2c);
+		target.add(_3h_2c);
+		target.add(_3s_2c);
+		target.add(_3d_2h);
+		target.add(_3h_2s);
+		target.add(_3d_2s);
 
-    target = new SimpleRange();
-    target.add(_3c_2c);
-    target.add(_3h_2h);
-    target.add(_3s_2s);
-    target.add(_3d_2d);
+		range = GroupedRange._32o.ungroup();
+		assertTrue(range.equals(target));
 
-    range = GroupedRange._32.ungroup();
-    assertTrue(range.equals(target));
-  }
+		// ++++++++++++++++++++++++
 
-  @Test
-  public final void testUngroupPlus() {
-    SimpleRange range, target;
+		target = new SimpleRange();
+		target.add(_3c_2c);
+		target.add(_3h_2h);
+		target.add(_3s_2s);
+		target.add(_3d_2d);
 
-    target = new SimpleRange();
-    target.add(_5s_2h);
-    target.add(_5s_3h);
-    target.add(_5s_4h);
-    target.add(_5c_2h);
-    target.add(_5c_3h);
-    target.add(_5c_4h);
-    target.add(_5d_2h);
-    target.add(_5d_3h);
-    target.add(_5d_4h);
+		range = GroupedRange._32.ungroup();
+		assertTrue(range.equals(target));
+	}
 
-    target.add(_5s_2d);
-    target.add(_5s_3d);
-    target.add(_5s_4d);
-    target.add(_5c_2d);
-    target.add(_5c_3d);
-    target.add(_5c_4d);
-    target.add(_5h_2d);
-    target.add(_5h_3d);
-    target.add(_5h_4d);
+	@Test
+	public final void testUngroupPlus() {
+		SimpleRange range, target;
 
-    target.add(_5h_2s);
-    target.add(_5h_3s);
-    target.add(_5h_4s);
-    target.add(_5c_2s);
-    target.add(_5c_3s);
-    target.add(_5c_4s);
-    target.add(_5d_2s);
-    target.add(_5d_3s);
-    target.add(_5d_4s);
+		target = new SimpleRange();
+		target.add(_5s_2h);
+		target.add(_5s_3h);
+		target.add(_5s_4h);
+		target.add(_5c_2h);
+		target.add(_5c_3h);
+		target.add(_5c_4h);
+		target.add(_5d_2h);
+		target.add(_5d_3h);
+		target.add(_5d_4h);
 
-    target.add(_5h_2c);
-    target.add(_5h_3c);
-    target.add(_5h_4c);
-    target.add(_5s_2c);
-    target.add(_5s_3c);
-    target.add(_5s_4c);
-    target.add(_5d_2c);
-    target.add(_5d_3c);
-    target.add(_5d_4c);
+		target.add(_5s_2d);
+		target.add(_5s_3d);
+		target.add(_5s_4d);
+		target.add(_5c_2d);
+		target.add(_5c_3d);
+		target.add(_5c_4d);
+		target.add(_5h_2d);
+		target.add(_5h_3d);
+		target.add(_5h_4d);
 
-    range = new GroupedPlusRange(GroupedRange._52o).ungroup();
-    assertTrue(target.equals(range));
+		target.add(_5h_2s);
+		target.add(_5h_3s);
+		target.add(_5h_4s);
+		target.add(_5c_2s);
+		target.add(_5c_3s);
+		target.add(_5c_4s);
+		target.add(_5d_2s);
+		target.add(_5d_3s);
+		target.add(_5d_4s);
 
-    // ++++++++++++++++++++++++
+		target.add(_5h_2c);
+		target.add(_5h_3c);
+		target.add(_5h_4c);
+		target.add(_5s_2c);
+		target.add(_5s_3c);
+		target.add(_5s_4c);
+		target.add(_5d_2c);
+		target.add(_5d_3c);
+		target.add(_5d_4c);
 
-    target = new SimpleRange();
+		range = new GroupedPlusRange(GroupedRange._52o).ungroup();
+		assertTrue(target.equals(range));
 
-    target.add(_4s_2s);
-    target.add(_4h_2h);
-    target.add(_4d_2d);
-    target.add(_4c_2c);
+		// ++++++++++++++++++++++++
 
-    target.add(_4s_3s);
-    target.add(_4h_3h);
-    target.add(_4d_3d);
-    target.add(_4c_3c);
+		target = new SimpleRange();
 
-    range = new GroupedPlusRange(GroupedRange._42).ungroup();
-    assertTrue(target.equals(range));
+		target.add(_4s_2s);
+		target.add(_4h_2h);
+		target.add(_4d_2d);
+		target.add(_4c_2c);
 
-    // ++++++++++++++++++++++++
+		target.add(_4s_3s);
+		target.add(_4h_3h);
+		target.add(_4d_3d);
+		target.add(_4c_3c);
 
-    target = new SimpleRange();
+		range = new GroupedPlusRange(GroupedRange._42).ungroup();
+		assertTrue(target.equals(range));
 
-    target.add(Qc_Qd);
-    target.add(Qs_Qd);
-    target.add(Qh_Qd);
-    target.add(Qc_Qs);
-    target.add(Qs_Qh);
-    target.add(Qc_Qh);
+		// ++++++++++++++++++++++++
 
-    target.add(Kc_Kd);
-    target.add(Ks_Kd);
-    target.add(Kh_Kd);
-    target.add(Kc_Ks);
-    target.add(Ks_Kh);
-    target.add(Kc_Kh);
+		target = new SimpleRange();
 
-    target.add(Ac_Ad);
-    target.add(As_Ad);
-    target.add(Ah_Ad);
-    target.add(Ac_As);
-    target.add(As_Ah);
-    target.add(Ac_Ah);
+		target.add(Qc_Qd);
+		target.add(Qs_Qd);
+		target.add(Qh_Qd);
+		target.add(Qc_Qs);
+		target.add(Qs_Qh);
+		target.add(Qc_Qh);
 
-    range = new GroupedPlusRange(GroupedRange.QQ).ungroup();
-    assertTrue(target.equals(range));
-  }
+		target.add(Kc_Kd);
+		target.add(Ks_Kd);
+		target.add(Kh_Kd);
+		target.add(Kc_Ks);
+		target.add(Ks_Kh);
+		target.add(Kc_Kh);
 
-  @Test
-  public final void testGrouped() {
-    assertTrue(_3h_2s.grouped() == GroupedRange._32o);
-    assertTrue(_3h_2h.grouped() == GroupedRange._32);
-    assertTrue(_3s_3h.grouped() == GroupedRange._33);
-  }
+		target.add(Ac_Ad);
+		target.add(As_Ad);
+		target.add(Ah_Ad);
+		target.add(Ac_As);
+		target.add(As_Ah);
+		target.add(Ac_Ah);
 
-  @Test
-  public final void testGrouptedPlus() {
-    GroupedPlusRange r;
+		range = new GroupedPlusRange(GroupedRange.QQ).ungroup();
+		assertTrue(target.equals(range));
+	}
 
-    r = new GroupedPlusRange(GroupedRange._22);
-    assertTrue(r.size() == NUMBER_OF_POSSIBLE_PAIRS);
-    assertTrue(r.contains(Ac_Ad));
-    assertTrue(r.contains(_2c_2h));
-    assertTrue(r.contains(Tc_Td));
+	@Test
+	public final void testGrouped() {
+		assertTrue(_3h_2s.grouped() == GroupedRange._32o);
+		assertTrue(_3h_2h.grouped() == GroupedRange._32);
+		assertTrue(_3s_3h.grouped() == GroupedRange._33);
+	}
 
-    assertFalse(r.contains(Ac_Kd));
-    assertFalse(r.contains(Ac_Kc));
+	@Test
+	public final void testGrouptedPlus() {
+		GroupedPlusRange r;
 
-    r = new GroupedPlusRange(GroupedRange.A2o);
-    assertTrue(r.size() == NUMBER_OF_POSSIBLE_ACES_OFFSUIT);
-    assertTrue(r.contains(Ac_Qd));
-    assertTrue(r.contains(Ad_4h));
-    assertTrue(r.contains(As_8d));
+		r = new GroupedPlusRange(GroupedRange._22);
+		assertTrue(r.size() == NUMBER_OF_POSSIBLE_PAIRS);
+		assertTrue(r.contains(Ac_Ad));
+		assertTrue(r.contains(_2c_2h));
+		assertTrue(r.contains(Tc_Td));
 
-    assertFalse(r.contains(Ac_Ad));
-    assertFalse(r.contains(Ks_8d));
+		assertFalse(r.contains(Ac_Kd));
+		assertFalse(r.contains(Ac_Kc));
 
-    r = new GroupedPlusRange(GroupedRange._32);
-    assertTrue(r.size() == NUMBER_OF_SUITED_GROUPED);
-    assertTrue(r.contains(_3c_2c));
-    assertTrue(r.contains(_3h_2h));
-    assertTrue(r.contains(_3s_2s));
-    assertTrue(r.contains(_3d_2d));
+		r = new GroupedPlusRange(GroupedRange.A2o);
+		assertTrue(r.size() == NUMBER_OF_POSSIBLE_ACES_OFFSUIT);
+		assertTrue(r.contains(Ac_Qd));
+		assertTrue(r.contains(Ad_4h));
+		assertTrue(r.contains(As_8d));
 
-    assertFalse(r.contains(_3d_2c));
-    assertFalse(r.contains(_3c_3d));
-    assertFalse(r.contains(_4c_3d));
-    assertFalse(r.contains(_2c_2d));
+		assertFalse(r.contains(Ac_Ad));
+		assertFalse(r.contains(Ks_8d));
 
-  }
+		r = new GroupedPlusRange(GroupedRange._32);
+		assertTrue(r.size() == NUMBER_OF_SUITED_GROUPED);
+		assertTrue(r.contains(_3c_2c));
+		assertTrue(r.contains(_3h_2h));
+		assertTrue(r.contains(_3s_2s));
+		assertTrue(r.contains(_3d_2d));
+
+		assertFalse(r.contains(_3d_2c));
+		assertFalse(r.contains(_3c_3d));
+		assertFalse(r.contains(_4c_3d));
+		assertFalse(r.contains(_2c_2d));
+
+	}
 }

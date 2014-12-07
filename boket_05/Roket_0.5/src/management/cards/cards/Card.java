@@ -19,7 +19,7 @@ import static management.cards.cards.Suit.HEARTS;
 import static management.cards.cards.Suit.SPADES;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +36,9 @@ import tools.Tools;
  *
  */
 
+@SuppressWarnings("null")
 public final class Card implements Comparable<Card> {
-	private static final int GREATEST_NUMBER_RANK = 9;
+	private static final int GREATEST_NUMBER_RANK = 7;
 	private final Rank rank;
 	private final Suit suit;
 	private final int ordinal; // cached ordinal
@@ -150,10 +151,11 @@ public final class Card implements Comparable<Card> {
 	public static final Card CK = new Card(King, CLUBS);
 	public static final Card CA = new Card(Ace, CLUBS);
 
-	private static final Map<Suit, Map<Rank, Card>> CARDS = new HashMap<>();
+	private static final Map<Suit, Map<Rank, Card>> CARDS = new EnumMap<>(
+			Suit.class);
 	static {
 		for (Suit s : Suit.VALUES) {
-			CARDS.put(s, new HashMap<>());
+			CARDS.put(s, new EnumMap<>(Rank.class));
 		}
 		CARDS.get(CLUBS).put(Two, C2);
 		CARDS.get(CLUBS).put(Three, C3);
@@ -212,7 +214,7 @@ public final class Card implements Comparable<Card> {
 		CARDS.get(DIAMONDS).put(Ace, DA);
 	}
 
-	public static Card newInstance(final Rank rank, final Suit suit) {
+	public static Card instance(final Rank rank, final Suit suit) {
 		return CARDS.get(suit).get(rank);
 	}
 
@@ -220,7 +222,7 @@ public final class Card implements Comparable<Card> {
 	static {
 		for (Rank r : Rank.VALUES) {
 			for (Suit s : Suit.VALUES) {
-				ALL_CARDS.add(newInstance(r, s));
+				ALL_CARDS.add(instance(r, s));
 			}
 		}
 	}

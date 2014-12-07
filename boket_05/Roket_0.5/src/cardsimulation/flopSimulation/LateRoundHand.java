@@ -61,7 +61,7 @@ public class LateRoundHand {
 		List<Card> cards = new ArrayList<Card>();
 		for (Suit suit : Suit.VALUES) {
 			for (Rank rank : Rank.VALUES) {
-				Card c = Card.newInstance(rank, suit);
+				Card c = Card.instance(rank, suit);
 				cards.add(c);
 			}
 		}

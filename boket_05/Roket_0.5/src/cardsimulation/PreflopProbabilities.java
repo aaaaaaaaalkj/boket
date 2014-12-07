@@ -183,9 +183,9 @@ public class PreflopProbabilities implements HandSupplier {
 						.collect(Tools.toList());
 
 				PossiblePreflopHand hand = new PossiblePreflopHand(
-						Card.newInstance(
+						Card.instance(
 								first, firstSuit),
-						Card.newInstance(second, secondSuit), probabilities);
+						Card.instance(second, secondSuit), probabilities);
 				add(hand);
 
 			}

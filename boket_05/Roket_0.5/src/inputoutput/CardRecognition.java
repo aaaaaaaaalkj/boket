@@ -97,7 +97,7 @@ public final class CardRecognition {
 			System.out.println("no card num found");
 			return null;
 		}
-		return Card.newInstance(resNum, resColor);
+		return Card.instance(resNum, resColor);
 	}
 
 	@Nullable

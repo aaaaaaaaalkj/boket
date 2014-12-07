@@ -63,7 +63,7 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 			for (int i = 0; i < cards.size(); i++) {
 				Card card = cards.get(i);
 				if (card.getSuit() == Suit.DIAMONDS) {
-					cards.set(i, Card.newInstance(card.getRank(), missingSuit));
+					cards.set(i, Card.instance(card.getRank(), missingSuit));
 				}
 			}
 		}
@@ -73,7 +73,7 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
 			if (card.getSuit() == suitOfFirst) {
-				cards.set(i, Card.newInstance(card.getRank(), Suit.diamonds()));
+				cards.set(i, Card.instance(card.getRank(), Suit.diamonds()));
 			}
 		}
 		if (cards.stream().map(Card::getSuit).collect(Tools.toSet()).size() == 1) {
@@ -81,27 +81,27 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 		}
 		// if only one other suit as diamonds is present, replace it with hearts
 		if (cards.get(1).getSuit() == cards.get(2).getSuit()) {
-			cards.set(1, Card.newInstance(cards.get(1).getRank(), Suit.HEARTS));
-			cards.set(2, Card.newInstance(cards.get(2).getRank(), Suit.HEARTS));
+			cards.set(1, Card.instance(cards.get(1).getRank(), Suit.HEARTS));
+			cards.set(2, Card.instance(cards.get(2).getRank(), Suit.HEARTS));
 			return;
 		}
 		// if the suit of the second card is diamonds, replace the third suit
 		// with
 		// hearts
 		if (cards.get(1).getSuit() == Suit.DIAMONDS) {
-			cards.set(2, Card.newInstance(cards.get(2).getRank(), Suit.HEARTS));
+			cards.set(2, Card.instance(cards.get(2).getRank(), Suit.HEARTS));
 			return;
 		}
 		// if the suit of the third card is diamonds then replace the suit of
 		// the second card with hearts
 		if (cards.get(2).getSuit() == Suit.DIAMONDS) {
-			cards.set(1, Card.newInstance(cards.get(1).getRank(), Suit.HEARTS));
+			cards.set(1, Card.instance(cards.get(1).getRank(), Suit.HEARTS));
 			return;
 		}
 		// since the suits of second and third card differ and are not diamonds
 		// at this position, we can savely replace them with hearts and spades
-		cards.set(1, Card.newInstance(cards.get(1).getRank(), Suit.HEARTS));
-		cards.set(2, Card.newInstance(cards.get(2).getRank(), Suit.SPADES));
+		cards.set(1, Card.instance(cards.get(1).getRank(), Suit.HEARTS));
+		cards.set(2, Card.instance(cards.get(2).getRank(), Suit.SPADES));
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 
 		for (Suit s : Suit.VALUES) {
 			for (Rank r : Rank.VALUES) {
-				list.add(Card.newInstance(r, s));
+				list.add(Card.instance(r, s));
 			}
 		}
 		for (int i = 0; i < list.size(); i++) {

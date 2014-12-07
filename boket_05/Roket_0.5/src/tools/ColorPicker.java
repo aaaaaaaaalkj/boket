@@ -51,6 +51,7 @@ public class ColorPicker {
 	// Card.Ad,
 	// Card.Ah, Card.Kc, Card.Qc);
 	// static List<Rank> window = Tools.asList(Five, Four, Three, Two, Ace);
+	@SuppressWarnings("unused")
 	private static List<Rank> ranks = Tools.asList(Rank.Five, Rank.King,
 			Rank.Three,
 			Rank.Seven, Rank.Four,
@@ -175,6 +176,8 @@ public class ColorPicker {
 		LOG.info("Entering application.");
 		// new ColorPicker().test2();
 		comparePerformance();
+
+
 
 		System.exit(1);
 

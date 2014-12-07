@@ -1,4 +1,4 @@
-package ranges;
+package ranges.preflop;
 
 import static management.cards.cards.Rank.Ace;
 import static management.cards.cards.Rank.Eight;
@@ -19,12 +19,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import management.cards.cards.Rank;
 import management.cards.cards.Suit;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+
+import ranges.ElementRange;
+import ranges.Range;
+import ranges.SimpleRange;
 
 public enum GroupedRange implements Range {
 	AA(Ace, Ace, false),
@@ -199,11 +203,19 @@ public enum GroupedRange implements Range {
 
 	private final Rank r1, r2;
 	private final boolean suited;
+	private final int size;
+
+	private static final int NUMBER_OF_EQUAL_PAIRS = 6;
+	private static final int NUMBER_OF_EQUAL_SUITED = 4;
+	private static final int NUMBER_OF_EQUAL_OFFSUITS = 12;
 
 	private GroupedRange(final Rank r1, final Rank r2, final boolean suited) {
 		this.r1 = r1;
 		this.r2 = r2;
 		this.suited = suited;
+		this.size = suited ? NUMBER_OF_EQUAL_SUITED
+				: r1 == r2 ? NUMBER_OF_EQUAL_PAIRS
+						: NUMBER_OF_EQUAL_OFFSUITS;
 	}
 
 	private static class Finder {
@@ -257,7 +269,7 @@ public enum GroupedRange implements Range {
 	}
 
 	@SuppressWarnings("null")
-	public static final List<@NonNull GroupedRange> VALUES = Collections
+	public static final List<ranges.preflop.GroupedRange> VALUES = Collections
 			.unmodifiableList(Arrays.asList(values()));
 
 	private static final Map<Finder, GroupedRange> MAP = new HashMap<>();
@@ -279,7 +291,9 @@ public enum GroupedRange implements Range {
 		return res;
 	}
 
-	public static void ungroup2(final SimpleRange ranges, final Rank r1,
+	public static void ungroup2(
+			final SimpleRange ranges,
+			final Rank r1,
 			final Rank r2,
 			final boolean suited) {
 		for (int i = 0; i < Suit.VALUES.size(); i++) {
@@ -311,15 +325,9 @@ public enum GroupedRange implements Range {
 		}
 	}
 
-	private static final int NUMBER_OF_EQUAL_PAIRS = 6;
-	private static final int NUMBER_OF_EQUAL_SUITED = 4;
-	private static final int NUMBER_OF_EQUAL_OFFSUITS = 12;
-
 	@Override
 	public int size() {
-		return isSuited() ? NUMBER_OF_EQUAL_SUITED
-				: isPair() ? NUMBER_OF_EQUAL_PAIRS
-						: NUMBER_OF_EQUAL_OFFSUITS;
+		return size;
 	}
 
 	public Rank getRank1() {
@@ -328,6 +336,19 @@ public enum GroupedRange implements Range {
 
 	public Rank getRank2() {
 		return r2;
+	}
+
+	@Override
+	public ElementRange getRandom(final Random rnd) {
+		Suit s1 = Suit.random(rnd);
+		Suit s2;
+		if (suited) {
+			s2 = s1;
+		} else {
+			// random but not equal to suit1
+			s2 = Suit.random2(rnd, /* dead suit: */s1);
+		}
+		return ElementRange.find(r1, s1, r2, s2);
 	}
 
 }

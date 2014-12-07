@@ -1,7 +1,6 @@
 package management.cards.cards;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -12,7 +11,7 @@ import tools.Tools;
 
 public enum Rank {
 	Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace;
-	private static final String ALL = "23456789TJQKA";
+	private static final String CHARS = "23456789TJQKA";
 
 	public boolean isConnected(final Rank rank) {
 		return Math.abs(ordinal() - rank.ordinal()) == 1;
@@ -20,8 +19,8 @@ public enum Rank {
 
 	// values() creates a new array each call. better to cache
 	@SuppressWarnings("null")
-	public static final List<@NonNull Rank> VALUES = Collections
-			.unmodifiableList(Arrays
+	public static final List<@NonNull Rank> VALUES = Tools
+			.unmodifiableList(Tools
 					.asList(values()));
 
 	public static List<Rank> valuesReversed() {
@@ -68,25 +67,29 @@ public enum Rank {
 	}
 
 	public static Rank fromShortString(final String str) {
-		if (str.length() != 1 || !ALL.contains(str)) {
+		if (str.length() != 1 || !CHARS.contains(str)) {
 			throw new IllegalArgumentException(str
 					+ " is not a short String for a CardNum!");
 		}
-		return VALUES.get(ALL.indexOf(str));
+		return VALUES.get(CHARS.indexOf(str));
 	}
 
 	public String shortString() {
-		return Tools.substring(ALL, this.ordinal(), this.ordinal() + 1);
+		return Tools.substring(CHARS, this.ordinal(), this.ordinal() + 1);
 	}
 
-	private static final int GREATEST_NUMBER_RANK = 9;
+	private static final int GREATEST_NUMBER_RANK = 7;
 
 	public String shortString2() {
 		return (ordinal() <= GREATEST_NUMBER_RANK ? "_" : "")
-				+ Tools.substring(ALL, this.ordinal(), this.ordinal() + 1);
+				+ Tools.substring(CHARS, this.ordinal(), this.ordinal() + 1);
 	}
 
 	public void print() {
 		System.out.println(this);
+	}
+
+	public static int count() {
+		return VALUES.size();
 	}
 }

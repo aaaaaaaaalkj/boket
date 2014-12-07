@@ -1,7 +1,9 @@
 package management.cards.cards;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
 
@@ -20,8 +22,32 @@ public enum Suit {
 			.unmodifiableList(Arrays
 					.asList(values()));
 
-	public static Suit random(final Random r) {
-		return VALUES.get(r.nextInt(VALUES.size()));
+	public static List<Suit> getValues() {
+		return VALUES;
+	}
+
+	@SuppressWarnings("null")
+	private static final EnumMap<Suit, List<Suit>> WITHOUT = new EnumMap<>(
+			Suit.class);
+	static {
+		WITHOUT.put(CLUBS, new ArrayList<>(VALUES));
+		WITHOUT.put(SPADES, new ArrayList<>(VALUES));
+		WITHOUT.put(HEARTS, new ArrayList<>(VALUES));
+		WITHOUT.put(DIAMONDS, new ArrayList<>(VALUES));
+
+		WITHOUT.get(CLUBS).remove(CLUBS);
+		WITHOUT.get(DIAMONDS).remove(DIAMONDS);
+		WITHOUT.get(HEARTS).remove(HEARTS);
+		WITHOUT.get(SPADES).remove(SPADES);
+	}
+
+	public static Suit random(final Random rnd) {
+		return VALUES.get(rnd.nextInt(VALUES.size()));
+	}
+
+	public static Suit random2(final Random rnd, Suit deadSuit) {
+		final List<Suit> selection = WITHOUT.get(deadSuit);
+		return selection.get(rnd.nextInt(selection.size()));
 	}
 
 	public String shortString() {
