@@ -101,6 +101,7 @@ public class SimpleRange implements Range, Cloneable {
 		// }
 	}
 
+	@SuppressWarnings("unused")
 	private static void code4Enum2() {
 		List<Rank> ranks = new ArrayList<>(Rank.VALUES);
 		Collections.reverse(ranks);

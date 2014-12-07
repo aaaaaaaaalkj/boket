@@ -48,10 +48,13 @@ public class Experiment {
 			range.removeAssociated(c);
 		}
 
+		// TODO: zwischenspeichern der range, um sie später zurückzusetzen
+
 		for (int player = 0; player < countPlayers; player++) {
 			ElementRange hand = range.getRandom(rnd);
 			ElementRange._2c_2d.getCards();
 			range.removeAssociated(hand);
+			stats.put(hand, new Stat());
 		}
 
 	}
