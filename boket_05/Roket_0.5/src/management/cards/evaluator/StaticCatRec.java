@@ -9,11 +9,12 @@ import management.cards.catrecnew.IResult;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-public class StaticCatRec implements ICatRecBase {
+public final class StaticCatRec implements ICatRecBase {
   private final HandEvaluator eval;
-  private @Nullable List<Card> cards;
-
-  private static @Nullable StaticCatRec instance;
+  @Nullable
+  private List<Card> cards;
+  @Nullable
+  private static StaticCatRec instance;
 
   public static StaticCatRec getInstance() {
     if (instance != null) {
@@ -33,17 +34,17 @@ public class StaticCatRec implements ICatRecBase {
     }
   }
 
-  public void setCards(List<Card> cards) {
+  public void setCards(final List<Card> cards) {
     this.cards = cards;
   }
 
   @Override
-  public final IResult check() {
+  public IResult check() {
     if (cards != null) {
       return eval.getResult(cards);
     } else {
       throw new IllegalArgumentException(
-          "setCards() must be called before chekc() is called.");
+          "setCards() must be called before check() is called.");
     }
   }
 
