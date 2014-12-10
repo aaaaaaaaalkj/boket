@@ -17,6 +17,7 @@ import management.cards.cards.Rank;
 import management.cards.cards.Suit;
 import management.cards.catrecnew.CatRec;
 import management.cards.catrecnew.ResultImpl;
+import management.cards.evaluator.HandEvaluator;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.LoggerFactory;
@@ -201,7 +202,7 @@ public class ColorPicker {
         Card.SJ
         );
 
-    HandEvaluator ev = new HandEvaluator();
+    HandEvaluator ev = HandEvaluator.getInstance();
 
     short score = ev.getScore(cards);
     // System.out.println(cards.stream().map(Card::ordinal)

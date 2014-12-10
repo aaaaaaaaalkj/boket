@@ -5,15 +5,15 @@ import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
 import strategy.conditions.postflop.StraightDanger;
 
-public interface ICatRec {
+public interface ICatRec extends ICatRecBase {
 
-	FlushDanger checkFlushDanger();
+  FlushDanger checkFlushDanger();
 
-	StraightDanger checkStraightDanger();
+  StraightDanger checkStraightDanger();
 
-	PairBasedDanger checkPairBasedDanger();
+  PairBasedDanger checkPairBasedDanger();
 
-	DrawType checkDraw();
+  DrawType checkDraw();
 
-	IResult check();
+  IResult check();
 }

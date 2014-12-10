@@ -188,6 +188,13 @@ public final class Tools {
 		return tie2;
 	}
 
+  /**
+   * Get the first num items from list
+   * 
+   * @param num
+   * @param list
+   * @return
+   */
 	public static <E> List<E> first(final int num, final List<E> list) {
 		return subList(list, 0, Math.min(num, list.size()));
 	}
