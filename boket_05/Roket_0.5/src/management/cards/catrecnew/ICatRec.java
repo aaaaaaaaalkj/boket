@@ -18,5 +18,6 @@ public interface ICatRec extends ICatRecBase {
 
   DrawType checkDraw(List<Card> all);
 
+  @Override
   IResult check(List<Card> all);
 }

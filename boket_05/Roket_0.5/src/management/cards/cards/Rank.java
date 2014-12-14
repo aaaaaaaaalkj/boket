@@ -24,7 +24,7 @@ public enum Rank {
 					.asList(values()));
 
 	public static List<Rank> valuesReversed() {
-		List<Rank> res = new ArrayList<Rank>(VALUES);
+    List<Rank> res = new ArrayList<>(VALUES);
 		Collections.reverse(res);
 		return res;
 	}
@@ -36,9 +36,8 @@ public enum Rank {
 	public Rank prev() {
 		if (this == Two) {
 			return Ace;
-		} else {
-			return VALUES.get(this.ordinal() - 1);
 		}
+    return VALUES.get(this.ordinal() - 1);
 	}
 
 	public Rank next(final int i) {
@@ -57,9 +56,8 @@ public enum Rank {
 	public Rank next() {
 		if (this == Ace) {
 			return Two;
-		} else {
-			return VALUES.get(this.ordinal() + 1);
 		}
+    return VALUES.get(this.ordinal() + 1);
 	}
 
 	public boolean lessThan(final Rank r) {

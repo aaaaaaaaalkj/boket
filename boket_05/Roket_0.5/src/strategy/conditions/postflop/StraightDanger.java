@@ -24,12 +24,11 @@ public enum StraightDanger {
   public String toString() {
     if (this == NONE) {
       return "NO";
-    } else {
-      @SuppressWarnings("null")
-      @NonNull
-      String res = super.toString();
-      return res;
     }
+    @SuppressWarnings("null")
+    @NonNull
+    String res = super.toString();
+    return res;
   }
 
 

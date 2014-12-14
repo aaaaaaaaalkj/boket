@@ -33,9 +33,8 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 		cards.sort((a, b) -> {
 			if (a.getRank().compareTo(b.getRank()) != 0) {
 				return a.getRank().compareTo(b.getRank());
-			} else {
-				return a.getSuit().compareTo(b.getSuit()) * (-1);
 			}
+      return a.getSuit().compareTo(b.getSuit()) * (-1);
 		});
 		Collections.reverse(cards);
 	}
@@ -44,9 +43,8 @@ public class CommunityCardsX implements Comparable<CommunityCardsX> {
 		cards.sort((a, b) -> {
 			if (a.getRank().compareTo(b.getRank()) != 0) {
 				return a.getRank().compareTo(b.getRank());
-			} else {
-				return a.getSuit().compareTo(b.getSuit());
 			}
+      return a.getSuit().compareTo(b.getSuit());
 		});
 		Collections.reverse(cards);
 		long diamonds = cards.stream()

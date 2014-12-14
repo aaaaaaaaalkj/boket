@@ -15,7 +15,8 @@ public class Generator implements HandSupplier {
 	private static final Random RND = new Random();
 	private final Map<Integer, List<LateRoundHand>> map;
 
-	public final double getRand(final double contribution, final double variance) {
+  public static final double getRand(final double contribution,
+      final double variance) {
 		double randNumber = (RND.nextGaussian() * variance) + contribution;
 
 		if (randNumber > 1) {
@@ -65,24 +66,22 @@ public class Generator implements HandSupplier {
 		if (!map.containsKey(procent)) {
 			throw new IllegalStateException("list is null: " + procent + " "
 					+ contribution1);
-		} else {
+    }
+    List<LateRoundHand> list = map.get(procent);
 
-			List<LateRoundHand> list = map.get(procent);
+    if (procent < PROCENT / 2) {
+      while (list.isEmpty()) {
+        list = map.get(procent++);
+      }
+    } else {
+      while (list.isEmpty()) {
+        list = map.get(procent--);
+      }
+    }
 
-			if (procent < PROCENT / 2) {
-				while (list.isEmpty()) {
-					list = map.get(procent++);
-				}
-			} else {
-				while (list.isEmpty()) {
-					list = map.get(procent--);
-				}
-			}
+    int index = (int) Math.floor(Math.random() * list.size());
 
-			int index = (int) Math.floor(Math.random() * list.size());
-
-			return list.get(index).getCards();
-		}
+    return list.get(index).getCards();
 	}
 
 	@Override

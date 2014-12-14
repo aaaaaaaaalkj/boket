@@ -80,9 +80,8 @@ public final class CardRecognition {
 		}
 		if (first != null && second != null) {
 			return new Hand(first, second);
-		} else {
-			return null;
 		}
+    return null;
 	}
 
 	@Nullable
@@ -131,9 +130,8 @@ public final class CardRecognition {
 		if (resNum == null) {
 			System.out.println("cant recognize card" + myPattern);
 			return null;
-		} else {
-			return resNum;
 		}
+    return resNum;
 
 	}
 

@@ -1369,7 +1369,7 @@ public enum ElementRange implements Range {
    * 
    * @return the index of ElementRange for these two cards
    */
-  private static int index(Card card1, Card card2) {
+  private static int index(final Card card1, final Card card2) {
     int c1 = card1.ordinal();
     int c2 = card2.ordinal();
     int max = Math.max(c1, c2);
@@ -1393,7 +1393,7 @@ public enum ElementRange implements Range {
     }
   }
 
-  private static Set<ElementRange> computeAssociated(Card c) {
+  private static Set<ElementRange> computeAssociated(final Card c) {
     EnumSet<ElementRange> set = EnumSet.noneOf(ElementRange.class);
     for (Card c2 : Card.getAllCards()) {
       if (c != c2) {

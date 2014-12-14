@@ -58,7 +58,7 @@ public class LateRoundHand {
   }
 
   public static List<Card> createAllCards() {
-    List<Card> cards = new ArrayList<Card>();
+    List<Card> cards = new ArrayList<>();
     for (Suit suit : Suit.VALUES) {
       for (Rank rank : Rank.VALUES) {
         Card c = Card.instance(rank, suit);
@@ -72,7 +72,7 @@ public class LateRoundHand {
     List<Card> cards = createAllCards();
     cards.removeAll(community.getCards());
 
-    List<LateRoundHand> hands = new ArrayList<LateRoundHand>();
+    List<LateRoundHand> hands = new ArrayList<>();
 
     for (int i = 0; i < cards.size(); i++) {
       for (int j = i + 1; j < cards.size(); j++) {
@@ -87,15 +87,15 @@ public class LateRoundHand {
       final List<LateRoundHand> hands,
       final CommunityCardsX communityCards, final int countIter) {
 
-    List<Card> community = new ArrayList<Card>();
+    List<Card> community = new ArrayList<>();
     community.addAll(communityCards.getCards());
 
     for (int run = 0; run < countIter; run++) {
-      Set<Card> allCards = new HashSet<Card>();
+      Set<Card> allCards = new HashSet<>();
       allCards.addAll(createAllCards());
       allCards.removeAll(communityCards.getCards());
 
-      List<LateRoundHand> players = new ArrayList<LateRoundHand>();
+      List<LateRoundHand> players = new ArrayList<>();
 
       while (players.size() < numPlayers) {
         int index = (int) (Math.random() * hands.size());
@@ -110,7 +110,7 @@ public class LateRoundHand {
         }
       }
 
-      List<Card> allCards2 = new ArrayList<Card>();
+      List<Card> allCards2 = new ArrayList<>();
       allCards2.addAll(allCards);
 
       int index1 = (int) (Math.random() * allCards2.size());
@@ -142,9 +142,8 @@ public class LateRoundHand {
           .reduce(ResultImpl.bottom(), (a, b) -> {
             if (a.compareTo(b) > 0) {
               return a;
-            } else {
-              return b;
             }
+            return b;
           });
 
       results.entrySet().stream()
@@ -197,9 +196,8 @@ public class LateRoundHand {
 
       if (aScore > bScore) {
         return 1;
-      } else {
-        return -1;
       }
+      return -1;
 
     });
 

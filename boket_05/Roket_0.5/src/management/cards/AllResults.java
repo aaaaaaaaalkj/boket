@@ -18,84 +18,82 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 public final class AllResults { // Singleton
-	private final Map<ResultImpl, @NonNull Short> scores;
-	private final Map<Short, @NonNull ResultImpl> scoresInverseMap;
-	private final String filePath;
+  private final Map<ResultImpl, @NonNull Short> scores;
+  private final Map<Short, @NonNull ResultImpl> scoresInverseMap;
+  private final String filePath;
 
-	private AllResults(final String file) throws FileNotFoundException {
-		scores = new HashMap<>();
-		scoresInverseMap = new HashMap<>();
-		filePath = file;
-		load();
-	}
+  private AllResults(final String file) throws FileNotFoundException {
+    scores = new HashMap<>();
+    scoresInverseMap = new HashMap<>();
+    filePath = file;
+    load();
+  }
 
-	@Nullable
-	private static AllResults myInstance;
+  @Nullable
+  private static AllResults myInstance;
 
-	public static AllResults getInstance(final String file)
-			throws FileNotFoundException {
-		AllResults res = myInstance;
-		if (null == res) {
-			myInstance = new AllResults(file);
-			res = myInstance;
-		}
-		return res;
-	}
+  public static AllResults getInstance(final String file)
+      throws FileNotFoundException {
+    AllResults res = myInstance;
+    if (null == res) {
+      myInstance = new AllResults(file);
+      res = myInstance;
+    }
+    return res;
+  }
 
-	public short getScore(final ResultImpl res) {
-		if (scores.containsKey(res)) {
-			return scores.get(res);
-		} else {
-			throw new IllegalArgumentException("No Score is defined for res: "
-					+ res);
-		}
-	}
+  public short getScore(final ResultImpl res) {
+    if (scores.containsKey(res)) {
+      return scores.get(res);
+    }
+    throw new IllegalArgumentException("No Score is defined for res: "
+        + res);
+  }
 
-	private static final int NUM_BEST_CARDS = 5;
+  private static final int NUM_BEST_CARDS = 5;
 
-	private void load() throws FileNotFoundException {
-		Scanner scanner = new Scanner(new BufferedReader(new FileReader(
-				filePath)));
+  private void load() throws FileNotFoundException {
+    List<@NonNull ResultImpl> results = new ArrayList<>();
 
-		String s;
+    try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(
+        filePath)));) {
 
-		List<@NonNull ResultImpl> results = new ArrayList<>();
+      String s;
+      while (scanner.hasNext()) {
+        s = scanner.next();
 
-		while (scanner.hasNext()) {
-			s = scanner.next();
+        String[] numbers = s.split(",");
 
-			String[] numbers = s.split(",");
+        Cathegory cat = Cathegory.getCathegory(Integer.valueOf(numbers[0]));
 
-			Cathegory cat = Cathegory.getCathegory(Integer.valueOf(numbers[0]));
+        List<@NonNull Rank> ranks = new ArrayList<>();
 
-			List<@NonNull Rank> ranks = new ArrayList<>();
+        for (int i = 1; i <= NUM_BEST_CARDS; i++) {
+          ranks.add(
+              Rank.VALUES.get(
+                  Integer.valueOf(numbers[i]) - 2
+                  )
+              );
+        }
 
-			for (int i = 1; i <= NUM_BEST_CARDS; i++) {
-				ranks.add(
-						Rank.VALUES.get(
-								Integer.valueOf(numbers[i]) - 2
-								)
-						);
-			}
+        ResultImpl res = new ResultImpl(cat, ranks);
 
-			ResultImpl res = new ResultImpl(cat, ranks);
+        results.add(res);
+      }
+    }
 
-			results.add(res);
-		}
+    Collections.sort(results);
 
-		Collections.sort(results);
+    for (int index = 0; index < results.size(); index++) {
+      ResultImpl res = results.get(index);
+      short score = (short) (index + 1); // score is 1-based
+      scores.put(res, score);
+      scoresInverseMap.put(score, res);
+    }
 
-		for (int index = 0; index < results.size(); index++) {
-			ResultImpl res = results.get(index);
-			short score = (short) (index + 1); // score is 1-based
-			scores.put(res, score);
-			scoresInverseMap.put(score, res);
-		}
+  }
 
-		scanner.close();
-	}
-
-	public ResultImpl getResult(final short score) {
-		return scoresInverseMap.get(score);
-	}
+  public ResultImpl getResult(final short score) {
+    return scoresInverseMap.get(score);
+  }
 }

@@ -48,19 +48,17 @@ public class GroupedPlusRange implements Range {
 	private static final int NUMBER_OF_EQUAL_SUITED = 4;
 	private static final int NUMBER_OF_EQUAL_OFFSUITS = 12;
 
-	private final int computeSize() {
+  private int computeSize() {
 		if (isPair()) {
 			int count = Rank.VALUES.size() - first.getRank1().ordinal();
 			// each grouped pair has 6 items in it
 			return count * NUMBER_OF_EQUAL_PAIRS;
-		} else {
-			int count = first.getRank1().ordinal() - first.getRank2().ordinal();
-			if (isSuited()) {
-				return count * NUMBER_OF_EQUAL_SUITED;
-			} else {
-				return count * NUMBER_OF_EQUAL_OFFSUITS;
-			}
 		}
+    int count = first.getRank1().ordinal() - first.getRank2().ordinal();
+    if (isSuited()) {
+      return count * NUMBER_OF_EQUAL_SUITED;
+    }
+    return count * NUMBER_OF_EQUAL_OFFSUITS;
 	}
 
 	@Override

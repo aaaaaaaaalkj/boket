@@ -92,7 +92,7 @@ public class Raw_Situation {
     return b.toString();
   }
 
-  private Raw_Situation(@Nullable Hand hand,
+  Raw_Situation(@Nullable Hand hand,
       List<@NonNull Card> communityCards, int checkSum,
       boolean[] activeStatus, double[] posts,
       double[] stacks, int button, double pot,
@@ -219,8 +219,8 @@ public class Raw_Situation {
       itsMyTurn = false;
     }
 
-    public Builder hand(@Nullable Hand hand) {
-      this.hand = hand;
+    public Builder hand(@Nullable Hand hand1) {
+      this.hand = hand1;
       return this;
     }
 
@@ -256,18 +256,18 @@ public class Raw_Situation {
       return this;
     }
 
-    public Builder communityCards(List<Card> communityCards) {
-      this.communityCards = communityCards;
+    public Builder communityCards(List<Card> communityCards1) {
+      this.communityCards = communityCards1;
       return this;
     }
 
-    public Builder checkSum(int checkSum) {
-      this.checkSum = checkSum;
+    public Builder checkSum(int checkSum1) {
+      this.checkSum = checkSum1;
       return this;
     }
 
-    public Builder activeStatus(boolean... activeStatus) {
-      this.activeStatus = activeStatus;
+    public Builder activeStatus(boolean... activeStatus1) {
+      this.activeStatus = activeStatus1;
       return this;
     }
 
@@ -279,8 +279,8 @@ public class Raw_Situation {
       return this;
     }
 
-    public Builder activeStatus(int index, boolean activeStatus) {
-      this.activeStatus[index] = activeStatus;
+    public Builder activeStatus(int index, boolean activeStatus1) {
+      this.activeStatus[index] = activeStatus1;
       return this;
     }
 
@@ -289,8 +289,8 @@ public class Raw_Situation {
       return this;
     }
 
-    public Builder posts(double... posts) {
-      this.posts = posts;
+    public Builder posts(double... posts1) {
+      this.posts = posts1;
       return this;
     }
 
@@ -299,8 +299,8 @@ public class Raw_Situation {
       return this;
     }
 
-    public Builder stacks(double... stacks) {
-      this.stacks = stacks;
+    public Builder stacks(double... stacks1) {
+      this.stacks = stacks1;
       return this;
     }
 
@@ -323,23 +323,23 @@ public class Raw_Situation {
       return this;
     }
 
-    public Builder button(int button) {
-      this.button = button;
+    public Builder button(int button1) {
+      this.button = button1;
       return this;
     }
 
-    public Builder pot(double pot) {
-      this.pot = pot;
+    public Builder pot(double pot1) {
+      this.pot = pot1;
       return this;
     }
 
-    public Builder potAdd(double pot) {
-      this.pot += pot;
+    public Builder potAdd(double pot1) {
+      this.pot += pot1;
       return this;
     }
 
-    public Builder itsMyTurn(boolean itsMyTurn) {
-      this.itsMyTurn = itsMyTurn;
+    public Builder itsMyTurn(boolean itsMyTurn1) {
+      this.itsMyTurn = itsMyTurn1;
       return this;
     }
 
@@ -358,7 +358,8 @@ public class Raw_Situation {
       return this;
     }
 
-    public Builder brownButtons(boolean... brownButtons) {
+    public Builder brownButtons(
+        @SuppressWarnings("hiding") boolean... brownButtons) {
       this.brownButtons = brownButtons;
       return this;
     }

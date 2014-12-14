@@ -9,6 +9,7 @@ public final class Pos {
     this.setY(y);
   }
 
+  @Override
   public String toString() {
     return "[" + getX() + "," + getY() + "]";
   }
@@ -35,8 +36,8 @@ public final class Pos {
     return new Pos(getX() - p.getX(), getY() - p.getY());
   }
 
-  public Pos minus(final int x, final int y) {
-    return new Pos(this.getX() - x, this.getY() - y);
+  public Pos minus(final int x1, final int y1) {
+    return new Pos(this.getX() - x1, this.getY() - y1);
   }
 
   public int getY() {

@@ -77,60 +77,64 @@ import org.junit.Test;
 import strategy.conditions.postflop.DrawType;
 import tools.Tools;
 
-public class TestCarRec {
+public final class TestCardRec {
+
+  private TestCardRec() {
+    // do not instantiate
+  }
 
   private static ICatRec rec = new CatRec();
 
-  private IResult create() {
+  private static IResult create() {
     return rec.check(new ArrayList<>());
   }
 
   // private static StaticCatRec staticCatRec = new StaticCatRec();
 
   @SuppressWarnings("null")
-  private IResult create(final Card... cards) {
+  private static IResult create(final Card... cards) {
     return rec.check(Tools.asList(cards));
 
   }
 
-  private IResult highCard(@NonNull final Rank... ranks) {
+  private static IResult highCard(@NonNull final Rank... ranks) {
     return new ResultImpl(HIGH_CARD, ranks);
   }
 
-  private IResult pair(@NonNull final Rank... ranks) {
+  private static IResult pair(@NonNull final Rank... ranks) {
     return new ResultImpl(PAIR, ranks);
   }
 
-  private IResult twoPair(@NonNull final Rank... ranks) {
+  private static IResult twoPair(@NonNull final Rank... ranks) {
     return new ResultImpl(TWO_PAIR, ranks);
   }
 
-  private IResult threeOfAKind(@NonNull final Rank... ranks) {
+  private static IResult threeOfAKind(@NonNull final Rank... ranks) {
     return new ResultImpl(THREE_OF_A_KIND, ranks);
   }
 
-  private IResult straight(@NonNull final Rank... ranks) {
+  private static IResult straight(@NonNull final Rank... ranks) {
     return new ResultImpl(STRAIGHT, ranks);
   }
 
-  private IResult flush(@NonNull final Rank... ranks) {
+  private static IResult flush(@NonNull final Rank... ranks) {
     return new ResultImpl(FLUSH, ranks);
   }
 
-  private IResult fullHouse(@NonNull final Rank... ranks) {
+  private static IResult fullHouse(@NonNull final Rank... ranks) {
     return new ResultImpl(FULL_HOUSE, ranks);
   }
 
-  private IResult fourOfAKind(@NonNull final Rank... ranks) {
+  private static IResult fourOfAKind(@NonNull final Rank... ranks) {
     return new ResultImpl(FOUR_OF_A_KIND, ranks);
   }
 
-  private IResult straightFlush(@NonNull final Rank... ranks) {
+  private static IResult straightFlush(@NonNull final Rank... ranks) {
     return new ResultImpl(STRAIGHT_FLUSH, ranks);
   }
 
   @Test
-  public final void testStraightFlush() {
+  public static void testStraightFlush() {
     IResult got;
     IResult expected;
 
@@ -173,7 +177,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testFourOfAKind() {
+  public static void testFourOfAKind() {
     IResult got;
     IResult expected;
 
@@ -212,7 +216,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testFullHouse() {
+  public static void testFullHouse() {
     IResult got;
     IResult expected;
     got = create(HA, HK, SQ, HJ, HT, DK, SK, ST);
@@ -233,7 +237,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testFlush() {
+  public static void testFlush() {
     IResult got;
     IResult expected;
     got = create(HA, HK, SQ, HJ, HT, SK, H5); // straight
@@ -258,7 +262,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testStraight() {
+  public static void testStraight() {
     IResult got;
     IResult expected;
     got = create(HA, SK, SQ, HJ, HT, SK, H5);
@@ -283,7 +287,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testThreeOfAKind() {
+  public static void testThreeOfAKind() {
     IResult got;
     IResult expected;
     got = create(HA, SK, SJ, HJ, HT, SJ, H5);
@@ -297,7 +301,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testTwoPair() {
+  public static void testTwoPair() {
     IResult got;
     IResult expected;
     got = create(HA, SK, SJ, HJ, HT, DK, H5);
@@ -310,7 +314,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testPair() {
+  public static void testPair() {
     IResult got;
     IResult res;
     got = create(HA, SK, S4, HJ, HT, DK, H5);
@@ -331,7 +335,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testHighCard() {
+  public static void testHighCard() {
     IResult got;
     IResult res;
     got = create(HA, SK, S4, HJ, HT, D8, H5);
@@ -348,7 +352,7 @@ public class TestCarRec {
   }
 
   @Test
-  public final void testDraw1() {
+  public static void testDraw1() {
     DrawType res;
 
     res = checkDraw(HA, SK, SQ, ST, H8, D7, H6);
@@ -390,7 +394,7 @@ public class TestCarRec {
   }
 
   @SuppressWarnings("null")
-  private DrawType checkDraw(Card... cards) {
+  private static DrawType checkDraw(final Card... cards) {
     return rec.checkDraw(Tools.asList(cards));
   }
 

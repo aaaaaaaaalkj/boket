@@ -120,10 +120,9 @@ public class PreflopProbabilities implements HandSupplier {
 			// System.out.println(index + ": " + hands.get(index));
 			// return hands.get(index);
 
-		} else {
-			throw new IllegalStateException("list is null " + countPlayers
-					+ " " + procent);
 		}
+    throw new IllegalStateException("list is null " + countPlayers
+        + " " + procent);
 
 	}
 

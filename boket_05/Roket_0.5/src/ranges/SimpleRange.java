@@ -11,12 +11,13 @@ import management.cards.cards.Rank;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import tools.UnmodifiableIterator;
 import tools.RandomEnumSet;
+import tools.UnmodifiableIterator;
 
 public class SimpleRange implements Range, Cloneable, Iterable<ElementRange> {
   private final RandomEnumSet<ElementRange> elements;
 
+  @Override
   public final SimpleRange clone() {
     return new SimpleRange(elements.clone());
   }
@@ -38,6 +39,7 @@ public class SimpleRange implements Range, Cloneable, Iterable<ElementRange> {
     return elements.remove(e);
   }
 
+  @Override
   public final ElementRange getRandom(final Random rnd) {
     return elements.getRandom(rnd);
   }
@@ -65,6 +67,7 @@ public class SimpleRange implements Range, Cloneable, Iterable<ElementRange> {
     return elements.contains(r);
   }
 
+  @Override
   public final int size() {
     return elements.size();
   }
@@ -162,8 +165,9 @@ public class SimpleRange implements Range, Cloneable, Iterable<ElementRange> {
     return elements.equals(other.elements);
   }
 
+  @SuppressWarnings("all")
   @Override
-  public Iterator<ElementRange> iterator() {
+  public final Iterator<ElementRange> iterator() {
     // dont allow the iterator to remove elements
     return new UnmodifiableIterator<ElementRange>(elements.iterator());
   }

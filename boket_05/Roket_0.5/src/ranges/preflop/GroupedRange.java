@@ -322,9 +322,8 @@ public enum GroupedRange implements Range {
 		if ((r1 == r.getRank1() && r2 == r.getRank2())
 				|| (r1 == r.getRank2() && r2 == r.getRank1())) {
 			return r.isSuited() == this.isSuited();
-		} else {
-			return false;
 		}
+    return false;
 	}
 
 	@Override

@@ -26,15 +26,15 @@ public enum PairBasedDanger {
 		return VALUES.get(Math.min((int) l, getCount() - 1));
 	}
 
-	public String toString() {
+  @Override
+  public String toString() {
 		@SuppressWarnings("null")
 		@NonNull
 		String res = super.toString();
 		if (this == NONE) {
 			return "NO";
-		} else {
-			return res;
 		}
+    return res;
 	}
 
 

@@ -45,41 +45,40 @@ public final class AllResults { // Singleton
   public short getScore(final ResultImpl res) {
     if (scores.containsKey(res)) {
       return scores.get(res);
-    } else {
-      throw new IllegalArgumentException("No Score is defined for res: "
-          + res);
     }
+    throw new IllegalArgumentException("No Score is defined for res: "
+        + res);
   }
 
   private static final int NUM_BEST_CARDS = 5;
 
   private void load() throws FileNotFoundException {
-    Scanner scanner = new Scanner(
-        new BufferedReader(new FileReader(filePath)));
-
-    String s;
-
     List<ResultImpl> results = new ArrayList<>();
+    try (Scanner scanner = new Scanner(
+        new BufferedReader(new FileReader(filePath)));) {
 
-    while (scanner.hasNext()) {
-      s = scanner.next();
+      String s;
 
-      String[] numbers = s.split(",");
+      while (scanner.hasNext()) {
+        s = scanner.next();
 
-      Cathegory cat = Cathegory.getCathegory(Integer.valueOf(numbers[0]));
-      List<Rank> ranks = new ArrayList<>();
+        String[] numbers = s.split(",");
 
-      for (int i = 1; i <= NUM_BEST_CARDS; i++) {
-        ranks.add(
-            Rank.VALUES.get(
-                Integer.valueOf(numbers[i]) - 2
-                )
-            );
+        Cathegory cat = Cathegory.getCathegory(Integer.valueOf(numbers[0]));
+        List<Rank> ranks = new ArrayList<>();
+
+        for (int i = 1; i <= NUM_BEST_CARDS; i++) {
+          ranks.add(
+              Rank.VALUES.get(
+                  Integer.valueOf(numbers[i]) - 2
+                  )
+              );
+        }
+
+        ResultImpl res = new ResultImpl(cat, ranks);
+
+        results.add(res);
       }
-
-      ResultImpl res = new ResultImpl(cat, ranks);
-
-      results.add(res);
     }
 
     Collections.sort(results);
@@ -91,7 +90,6 @@ public final class AllResults { // Singleton
       scoresInverseMap.put(score, res);
     }
 
-    scanner.close();
   }
 
   public ResultImpl getResult(final short score) {

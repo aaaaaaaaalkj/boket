@@ -35,7 +35,7 @@ public class ColorPicker {
     // TODO Auto-generated constructor stub
   }
 
-  public final void test2() throws AWTException {
+  public final static void test2() throws AWTException {
     ScreenScraper scraper = new ScreenScraper();
     Raw_Situation raw = scraper.getSituation();
     raw.print();
@@ -131,6 +131,10 @@ public class ColorPicker {
   }
 
   public static int test1c(int i) {
+    int x = i + 1;
+    x++;
+    int y = x;
+    x = y;
     return 0;
 
   }
@@ -196,7 +200,7 @@ public class ColorPicker {
   }
 
   @SuppressWarnings("unused")
-  private void generateCodeForCards() {
+  private static void generateCodeForCards() {
     for (Suit s : Suit.VALUES) {
       for (Rank r : Rank.VALUES) {
         String underScore = r.ordinal() < 8 ? "_" : "";
@@ -253,7 +257,7 @@ public class ColorPicker {
 
   }
 
-  public final void findColorAtMousePosition() {
+  public final static void findColorAtMousePosition() {
     try {
       Robot r = new Robot();
       Point p = MouseInfo.getPointerInfo().getLocation();
@@ -273,7 +277,7 @@ public class ColorPicker {
   }
 
   @Nullable
-  private Pos recognizeLogo(final MyRobot robot) {
+  private static Pos recognizeLogo(final MyRobot robot) {
     // Farbe im Logo von Pokerstars
     Color c = new Color(0x00FFCAC5);
     Pos logo = robot.pixelSearch(0, 0, 100, 250, c);
@@ -284,7 +288,7 @@ public class ColorPicker {
     // Color cardColor = getPixelColor(new Pos().plus(9, 25));
   }
 
-  public final void start(final MyRobot robot) {
+  public final static void start(final MyRobot robot) {
     Pos logo = recognizeLogo(robot);
     // Color refColor = new Color(12010269);
     // logger.info(refColor);
@@ -297,7 +301,7 @@ public class ColorPicker {
       Color c = robot.getPixelColor(p);
       LOG.debug("[}", c);
 
-      robot.mouseMove(p);
+      MyRobot.mouseMove(p);
     }
     // 38,231
   }

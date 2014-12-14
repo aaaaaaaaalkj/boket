@@ -106,14 +106,18 @@ import org.junit.Test;
 import ranges.preflop.GroupedPlusRange;
 import ranges.preflop.GroupedRange;
 
-public class JUnitTests {
+public final class JUnitTests {
   private static final int NUMBER_OF_POSSIBLE_PAIRS = 78;
   private static final int NUMBER_OF_POSSIBLE_ACES_OFFSUIT = 144;
   private static final int NUMBER_OF_SUITED_GROUPED = 4;
   private static final int NUMBER_OF_CARDS = 52;
 
+  private JUnitTests() {
+    // do not instantiate this class
+  }
+
   @Test
-  public final void testAssociated() {
+  public static void testAssociated() {
     for (Card c : Card.getAllCards()) {
 
       Set<ElementRange> set = ElementRange.findAssociated(c);
@@ -129,7 +133,7 @@ public class JUnitTests {
   }
 
   @Test
-  public final void testFindElementRange() {
+  public static void testFindElementRange() {
     for (ElementRange r1 : ElementRange.VALUES) {
       ElementRange r2 = ElementRange.find(
           r1.getFirstCard(),
@@ -144,7 +148,7 @@ public class JUnitTests {
   }
 
   @Test
-  public final void testUngroup() {
+  public static void testUngroup() {
     SimpleRange range, target;
 
     target = new SimpleRange();
@@ -191,7 +195,7 @@ public class JUnitTests {
   }
 
   @Test
-  public final void testUngroupPlus() {
+  public static void testUngroupPlus() {
     SimpleRange range, target;
 
     target = new SimpleRange();
@@ -285,14 +289,14 @@ public class JUnitTests {
   }
 
   @Test
-  public final void testGrouped() {
+  public static void testGrouped() {
     assertTrue(_3h_2s.grouped() == GroupedRange._32o);
     assertTrue(_3h_2h.grouped() == GroupedRange._32);
     assertTrue(_3s_3h.grouped() == GroupedRange._33);
   }
 
   @Test
-  public final void testGrouptedPlus() {
+  public static void testGrouptedPlus() {
     GroupedPlusRange r;
 
     r = new GroupedPlusRange(GroupedRange._22);

@@ -9,11 +9,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 @SuppressWarnings("null")
 public class ListWrapper<E> implements List<E> {
-  private List<List<@Nullable E>> lists;
+  List<List<@Nullable E>> lists;
 
   @SafeVarargs
-  public
-  ListWrapper(List<E>... lists) {
+  public ListWrapper(List<E>... lists) {
     this.lists = Tools.asList(lists);
   }
 
@@ -72,7 +71,8 @@ public class ListWrapper<E> implements List<E> {
 
     @Override
     public boolean hasNext() {
-      return listIndex < lists.size() && index < lists.get(listIndex).size();
+      return listIndex < lists.size()
+          && index < lists.get(listIndex).size();
     }
 
     @Override

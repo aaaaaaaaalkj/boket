@@ -83,10 +83,8 @@ public final class Tools {
 		Optional<@NonNull T> opt = Optional.of(d);
 		if (opt == null) {
 			return empty();
-		} else {
-			return opt;
 		}
-		// }
+    return opt;
 	}
 
 	public static <T> Optional<T> empty() {
@@ -100,24 +98,23 @@ public final class Tools {
 			@Nullable final Stream<@Nullable Integer> stream) {
 		if (stream == null) {
 			return empty();
-		} else {
-			Optional<@Nullable Integer> res = stream.min(Comparator
-					.naturalOrder());
-			@NonNull
-			Optional<@NonNull Integer> res2;
-			if (res.isPresent()) {
-				Integer nullable = res.get();
-				if (nullable == null) {
-					// will never happen
-					res2 = empty();
-				} else {
-					res2 = of(nullable);
-				}
-			} else {
-				res2 = empty();
-			}
-			return res2;
 		}
+    Optional<@Nullable Integer> res = stream.min(Comparator
+        .naturalOrder());
+    @NonNull
+    Optional<@NonNull Integer> res2;
+    if (res.isPresent()) {
+      Integer nullable = res.get();
+      if (nullable == null) {
+        // will never happen
+        res2 = empty();
+      } else {
+        res2 = of(nullable);
+      }
+    } else {
+      res2 = empty();
+    }
+    return res2;
 	}
 
 	@SuppressWarnings("null")

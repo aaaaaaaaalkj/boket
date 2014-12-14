@@ -12,14 +12,18 @@ import management.cards.catrecnew.IResult;
 
 import org.junit.Test;
 
-public class JUnitTestEvaluator {
+public final class JUnitTestEvaluator {
   private static final int NUM_SELECTION_CARDS = 7;
   private static final int NUM_TESTS = 10000;
 
   private static HandEvaluator staticCatRec = HandEvaluator.getInstance();
   private static CatRec liveCatRec = new CatRec();
 
-  private List<Card> generate7Cards(final Random rnd) {
+  private JUnitTestEvaluator() {
+    // do not instantiate
+  }
+
+  private static List<Card> generate7Cards(final Random rnd) {
     List<Card> cards = new ArrayList<>();
 
     List<Card> all = new ArrayList<>(Card.getAllCards());
@@ -32,7 +36,7 @@ public class JUnitTestEvaluator {
   }
 
   @Test
-  public final void test() {
+  public static void test() {
     List<Card> cards;
     IResult expected, got;
     Random rnd = new Random();

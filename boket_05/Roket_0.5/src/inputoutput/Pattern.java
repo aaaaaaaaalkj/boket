@@ -54,6 +54,7 @@ public final class Pattern {
     return true;
   }
 
+  @Override
   @SuppressWarnings("null")
   public String toString() {
     return Arrays.toString(value);

@@ -6,18 +6,22 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class JunitCardTest {
-	private static final int NUM_CARDS = 52;
+public final class JunitCardTest {
+  private static final int NUM_CARDS = 52;
 
-	@Test
-	public void test() {
-		List<Card> cards = Card.getAllCards();
-		assertTrue(cards.size() == NUM_CARDS);
+  private JunitCardTest() {
+    // do not instantiate
+  }
 
-		for (Card c : cards) {
-			Card c2 = Card.instance(c.getRank(), c.getSuit());
-			assertTrue(c == c2);
-		}
-	}
+  @Test
+  public static void test() {
+    List<Card> cards = Card.getAllCards();
+    assertTrue(cards.size() == NUM_CARDS);
+
+    for (Card c : cards) {
+      Card c2 = Card.instance(c.getRank(), c.getSuit());
+      assertTrue(c == c2);
+    }
+  }
 
 }

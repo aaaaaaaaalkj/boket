@@ -1,6 +1,6 @@
 package ranges.action;
 
-public class Stat {
+public final class Stat {
   private int played;
   private int won;
 
@@ -9,7 +9,7 @@ public class Stat {
     won = 0;
   }
 
-  public void won(boolean won2) {
+  public void won(final boolean won2) {
     if (won2) {
       won++;
     }

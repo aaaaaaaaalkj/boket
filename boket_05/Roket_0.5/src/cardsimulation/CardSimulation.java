@@ -100,7 +100,7 @@ public class CardSimulation {
     return list;
   }
 
-  private List<Card> pop(final List<Card> deck, final int count) {
+  private static List<Card> pop(final List<Card> deck, final int count) {
     List<Integer> indexe = new ArrayList<>();
 
     while (indexe.size() < count) {

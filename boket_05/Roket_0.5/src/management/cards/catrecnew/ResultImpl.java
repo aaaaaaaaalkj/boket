@@ -83,10 +83,9 @@ public final class ResultImpl implements IResult {
 			}
 
 			return 0;
-		} else {
-			throw new IllegalArgumentException(res2
-					+ " can not be compared to " + this);
 		}
+    throw new IllegalArgumentException(res2
+        + " can not be compared to " + this);
 	}
 
 	@Override

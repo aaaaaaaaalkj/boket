@@ -23,6 +23,7 @@ public class UnmodifiableIterator<E> implements Iterator<E> {
   /**
    * remove is not supported by SimpleIterator. This is the whole point of this class.
    */
+  @Override
   public void remove() {
     throw new UnsupportedOperationException("remove");
   }

@@ -108,7 +108,8 @@ public enum Card {
 		return ordinal() + 1;
 	}
 
-	public String toString() {
+	@Override
+  public String toString() {
 		// return this.number + " of " + this.color;
 		return rank.shortString() + suit.shortString();
 		// return suit.shortString().toUpperCase() + rank.shortString();

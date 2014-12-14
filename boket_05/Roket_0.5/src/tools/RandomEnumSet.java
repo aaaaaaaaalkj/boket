@@ -23,14 +23,15 @@ public class RandomEnumSet<@NonNull E extends Enum<E>> extends AbstractSet<E>
 		this(clazz, Tools.emptyList());
 	}
 
-	public RandomEnumSet<E> clone() {
+  @Override
+  public RandomEnumSet<E> clone() {
 		return new RandomEnumSet<>(clazz, dta);
 	}
 
 	public RandomEnumSet(Class<E> clazz, Collection<E> items) {
 		this.clazz = clazz;
-		this.dta = new ArrayList<E>();
-		this.idx = new EnumMap<E, @Nullable Integer>(clazz);
+    this.dta = new ArrayList<>();
+    this.idx = new EnumMap<>(clazz);
 		addAll(items);
 	}
 

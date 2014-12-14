@@ -34,7 +34,7 @@ public class MyRobot {
 		return new Color(capture.getRGB(p.getX(), p.getY()));
 	}
 
-  public final void mouseMove(final Pos p) {
+  public final static void mouseMove(final Pos p) {
 		try {
 			Robot rb = new Robot();
 			rb.mouseMove(p.getX(), p.getY());

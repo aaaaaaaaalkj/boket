@@ -138,8 +138,8 @@ public class MyOutput {
 
   }
 
-  final List<Integer> digits(final int i) {
-    List<Integer> digits = new ArrayList<Integer>();
+  final static List<Integer> digits(final int i) {
+    List<Integer> digits = new ArrayList<>();
 
     if (i == 0) {
       digits.add(i);

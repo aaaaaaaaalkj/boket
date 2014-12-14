@@ -62,6 +62,7 @@ public class XSRandom extends Random {
    * @param seed
    *          the new seed
    */
+  @Override
   public final synchronized void setSeed(final long seed) {
     this.seed = seed;
     super.setSeed(seed);
@@ -70,6 +71,7 @@ public class XSRandom extends Random {
   /**
    * Returns an XSRandom object with the same state as the original.
    */
+  @Override
   public final XSRandom clone() {
     return new XSRandom(getSeed());
   }
@@ -83,6 +85,7 @@ public class XSRandom extends Random {
    * quality than the built-in java.util.random see also see
    * http://www.javamex.com/tutorials/random_numbers/xorshift.shtml
    */
+  @Override
   protected final int next(final int nbits) {
     long x = seed;
     x ^= (x << XOR_SHIFT_CONST_1);

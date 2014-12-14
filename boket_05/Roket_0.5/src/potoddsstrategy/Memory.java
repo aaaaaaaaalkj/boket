@@ -17,9 +17,8 @@ public class Memory {
 		}
 		if (highestBid.containsKey(round)) {
 			return highestBid.get(round);
-		} else {
-			return 0.;
 		}
+    return 0.;
 	}
 
 	final void setPot(final Integer round, final Double value) {
@@ -34,9 +33,8 @@ public class Memory {
 		}
 		if (pot.containsKey(round)) {
 			return pot.get(round);
-		} else {
-			return MIN_VALUE;
 		}
+    return MIN_VALUE;
 	}
 
 }

@@ -75,7 +75,7 @@ public final class Experiment {
     }
   }
 
-  private void dealHands(SimpleRange workingRange) {
+  private void dealHands(final SimpleRange workingRange) {
     for (int player = 0; player < countPlayers; player++) {
       ElementRange hand = workingRange.getRandom(rnd);
       hands.set(player, hand);
@@ -83,7 +83,7 @@ public final class Experiment {
     }
   }
 
-  private List<Card> cards(List<Card> hand, List<Card> community) {
+  private List<Card> cards(final List<Card> hand, final List<Card> community) {
     sevenCards.set(0, hand.get(0));
     sevenCards.set(1, hand.get(1));
 
@@ -127,7 +127,7 @@ public final class Experiment {
     hands.clear();
   }
 
-  public final void reverse() {
+  public void reverse() {
     List<Card> newCards = communityCards
         .subList(countBaseCards, COUNT_COMMUNITY_CARDS);
     all.addAll(newCards);
