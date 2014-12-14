@@ -8,7 +8,6 @@ import java.util.Random;
 
 import management.cards.cards.Card;
 import management.cards.catrecnew.CatRec;
-import management.cards.catrecnew.ICatRecBase;
 import management.cards.catrecnew.IResult;
 
 import org.junit.Test;
@@ -17,17 +16,8 @@ public class JUnitTestEvaluator {
   private static final int NUM_SELECTION_CARDS = 7;
   private static final int NUM_TESTS = 10000;
 
-  private static StaticCatRec staticCatRec = StaticCatRec.getInstance();
-
-  private ICatRecBase createStatic(final List<Card> cards) {
-    staticCatRec.setCards(cards);
-    return staticCatRec;
-  }
-
-  @SuppressWarnings("null")
-  private ICatRecBase createLive(final List<Card> cards) {
-    return new CatRec(cards.subList(0, 2), cards.subList(2, cards.size()));
-  }
+  private static HandEvaluator staticCatRec = HandEvaluator.getInstance();
+  private static CatRec liveCatRec = new CatRec();
 
   private List<Card> generate7Cards(final Random rnd) {
     List<Card> cards = new ArrayList<>();
@@ -50,8 +40,8 @@ public class JUnitTestEvaluator {
     for (int i = 0; i < NUM_TESTS; i++) {
       cards = generate7Cards(rnd);
 
-      expected = createLive(cards).check();
-      got = createStatic(cards).check();
+      expected = liveCatRec.check(cards);
+      got = staticCatRec.check(cards);
 
       assertTrue(
           "expected " + expected

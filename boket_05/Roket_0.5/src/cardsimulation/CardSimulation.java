@@ -12,147 +12,150 @@ import management.cards.catrecnew.ResultImpl;
 
 import org.slf4j.LoggerFactory;
 
+import tools.ListWrapper;
 import tools.Tools;
 import cardsimulation.flopSimulation.CommunityCardsX;
 import cardsimulation.flopSimulation.Generator;
 import cardsimulation.flopSimulation.LateRoundHand;
 
 public class CardSimulation {
-	private static final int NUM_EXPERIMENTS = 6000;
-	@SuppressWarnings("null")
-	static final org.slf4j.Logger LOG = LoggerFactory
-			.getLogger(CardSimulation.class);
-	private final List<Card> hand;
-	private final List<Card> community;
-	private final int numPlayers;
-	private final Random rnd = new Random();
-	// private final List<List<PossibleHand>> hands;
-	private static final HandSupplier PREFLOP = new PreflopProbabilities();
-	private List<Double> activeContributors;
-	private List<Double> stdDev;
+  private static final int NUM_EXPERIMENTS = 6000;
+  @SuppressWarnings("null")
+  static final org.slf4j.Logger LOG = LoggerFactory
+      .getLogger(CardSimulation.class);
+  private final List<Card> hand;
+  private final List<Card> community;
+  private final int numPlayers;
+  private final Random rnd = new Random();
+  // private final List<List<PossibleHand>> hands;
+  private static final HandSupplier PREFLOP = new PreflopProbabilities();
+  private List<Double> activeContributors;
+  private List<Double> stdDev;
 
-	public CardSimulation(final int count,
-			final List<Double> activeContributors,
-			final List<Double> stddev,
-			final Hand hand,
-			final List<Card> community) {
-		this.stdDev = stddev;
-		this.activeContributors = activeContributors;
-		this.numPlayers = count;
-		this.hand = Tools.asList(hand.getFirst(), hand.getSecond());
-		this.community = new ArrayList<>();
-		this.community.addAll(community);
-		// this.hands = new ArrayList<>();
+  public CardSimulation(final int count,
+      final List<Double> activeContributors,
+      final List<Double> stddev,
+      final Hand hand,
+      final List<Card> community) {
+    this.stdDev = stddev;
+    this.activeContributors = activeContributors;
+    this.numPlayers = count;
+    this.hand = Tools.asList(hand.getFirst(), hand.getSecond());
+    this.community = new ArrayList<>();
+    this.community.addAll(community);
+    // this.hands = new ArrayList<>();
 
-	}
+  }
 
-	private static final int NUMBER_OF_SIMULATIONS = 30000;
+  private static final int NUMBER_OF_SIMULATIONS = 30000;
 
-	public final double run() {
+  public final double run() {
 
-		int won = 0;
+    int won = 0;
 
-		double faktor;
+    double faktor;
 
-		HandSupplier handGen;
-		if (community.size() == 0) {
-			faktor = 1;
-			handGen = PREFLOP;
-		} else {
-			faktor = 2;
-			List<LateRoundHand> hands = null;
+    HandSupplier handGen;
+    if (community.size() == 0) {
+      faktor = 1;
+      handGen = PREFLOP;
+    } else {
+      faktor = 2;
+      List<LateRoundHand> hands = null;
 
-			CommunityCardsX community1 = new CommunityCardsX(community);
-			hands = LateRoundHand.createAll(community1);
-			LateRoundHand.simulation(numPlayers, hands, community1,
-					NUMBER_OF_SIMULATIONS);
-			handGen = new Generator(hands);
-		}
+      CommunityCardsX community1 = new CommunityCardsX(community);
+      hands = LateRoundHand.createAll(community1);
+      LateRoundHand.simulation(numPlayers, hands, community1,
+          NUMBER_OF_SIMULATIONS);
+      handGen = new Generator(hands);
+    }
 
-		debug(handGen, faktor);
+    debug(handGen, faktor);
 
-		for (int i = 0; i < NUM_EXPERIMENTS; i++) {
-			won += experiment(handGen, faktor, prepairDeck());
-		}
-		double res = Tools.round(((double) won) / NUM_EXPERIMENTS);
+    for (int i = 0; i < NUM_EXPERIMENTS; i++) {
+      won += experiment(handGen, faktor, prepairDeck());
+    }
+    double res = Tools.round(((double) won) / NUM_EXPERIMENTS);
 
-		return res;
-	}
+    return res;
+  }
 
-	private void debug(final HandSupplier handGen, final double faktor) {
-		for (int player = 1; player < numPlayers; player++) {
-			List<Card> cards = handGen.getHand(numPlayers,
-					activeContributors.get(player - 1) * faktor,
-					stdDev.get(player - 1));
-			LOG.debug("{}: {{} {}]", player, cards.get(0), cards.get(1));
+  private void debug(final HandSupplier handGen, final double faktor) {
+    for (int player = 1; player < numPlayers; player++) {
+      List<Card> cards = handGen.getHand(numPlayers,
+          activeContributors.get(player - 1) * faktor,
+          stdDev.get(player - 1));
+      LOG.debug("{}: {{} {}]", player, cards.get(0), cards.get(1));
 
-		}
+    }
 
-	}
+  }
 
-	private List<Card> prepairDeck() {
-		List<Card> list = new ArrayList<>(Card.getAllCards());
-		list.remove(hand.get(0));
-		list.remove(hand.get(1));
-		list.removeAll(community);
-		Collections.shuffle(list, rnd);
-		return list;
-	}
+  private List<Card> prepairDeck() {
+    List<Card> list = new ArrayList<>(Card.getAllCards());
+    list.remove(hand.get(0));
+    list.remove(hand.get(1));
+    list.removeAll(community);
+    Collections.shuffle(list, rnd);
+    return list;
+  }
 
-	private List<Card> pop(final List<Card> deck, final int count) {
-		List<Integer> indexe = new ArrayList<>();
+  private List<Card> pop(final List<Card> deck, final int count) {
+    List<Integer> indexe = new ArrayList<>();
 
-		while (indexe.size() < count) {
-			int i = (int) Math.floor(Math.random() * deck.size());
-			do {
-				i++;
-				if (i >= deck.size()) {
-					i = 0;
-				}
-			} while (indexe.contains(i));
-			indexe.add(i);
-		}
-		return indexe.stream().map(deck::get).collect(Tools.toList());
-	}
+    while (indexe.size() < count) {
+      int i = (int) Math.floor(Math.random() * deck.size());
+      do {
+        i++;
+        if (i >= deck.size()) {
+          i = 0;
+        }
+      } while (indexe.contains(i));
+      indexe.add(i);
+    }
+    return indexe.stream().map(deck::get).collect(Tools.toList());
+  }
 
-	private static final int MAX_NUMBER_OF_COMMUNITY_CARDS = 5;
+  private static final int MAX_NUMBER_OF_COMMUNITY_CARDS = 5;
 
-	public final int experiment(final HandSupplier handGen,
-			final double faktor,
-			final List<Card> deck) {
+  public final int experiment(final HandSupplier handGen,
+      final double faktor,
+      final List<Card> deck) {
 
-		List<Card> communityCards;
+    List<Card> communityCards;
 
-		if (community.size() >= MAX_NUMBER_OF_COMMUNITY_CARDS) {
-			communityCards = community;
-		} else {
-			communityCards = new ArrayList<>();
-			communityCards.addAll(community);
+    if (community.size() >= MAX_NUMBER_OF_COMMUNITY_CARDS) {
+      communityCards = community;
+    } else {
+      communityCards = new ArrayList<>();
+      communityCards.addAll(community);
 
-			communityCards.addAll(pop(deck, MAX_NUMBER_OF_COMMUNITY_CARDS
-					- community.size()));
-		}
+      communityCards.addAll(pop(deck, MAX_NUMBER_OF_COMMUNITY_CARDS
+          - community.size()));
+    }
 
-		ResultImpl myResult = new CatRec(hand, communityCards).check();
+    ResultImpl myResult = new CatRec().check(new ListWrapper<>(hand,
+        communityCards));
 
-		// logger.info(myResult);
+    // logger.info(myResult);
 
-		for (int player = 1; player < numPlayers; player++) {
-			List<Card> hisHand;
+    for (int player = 1; player < numPlayers; player++) {
+      List<Card> hisHand;
 
-			hisHand = handGen.getHand(numPlayers,
-					activeContributors.get(player - 1) * faktor,
-					stdDev.get(player - 1)
-					);
+      hisHand = handGen.getHand(numPlayers,
+          activeContributors.get(player - 1) * faktor,
+          stdDev.get(player - 1)
+          );
 
-			// logger.info(hisHand);
+      // logger.info(hisHand);
 
-			ResultImpl result = new CatRec(hisHand, communityCards).check();
-			if (result.compareTo(myResult) > 0) {
-				// logger.info("-----" + result);
-				return 0;
-			}
-		}
-		return 1;
-	}
+      ResultImpl result = new CatRec().check(new ListWrapper<>(hisHand,
+          communityCards));
+      if (result.compareTo(myResult) > 0) {
+        // logger.info("-----" + result);
+        return 0;
+      }
+    }
+    return 1;
+  }
 }

@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
+import java.util.ArrayList;
 import java.util.List;
 
 import management.cards.AllResults;
@@ -24,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import potoddsstrategy.PotOddsDecision;
 import potoddsstrategy.PotOddsStrategy;
-import ranges.ElementRange;
 
 public class ColorPicker {
   @SuppressWarnings("null")
@@ -67,7 +67,7 @@ public class ColorPicker {
     }
 
     public void test() {
-
+      // do nothing
     }
   }
 
@@ -106,16 +106,33 @@ public class ColorPicker {
 
   static Test1 test1 = new Test1(Rank.Ace);
   static Test2 test2 = new Test2(Rank.Ace);
+  // static Card[] cards3 = new Card[7];
 
-  public static void test1() {
-    ElementRange.find(Card.C2, Card.C2);
+  static ArrayList<Card> cards2 = new ArrayList<>();
+  static {
+    cards2.add(Card.C2);
+    cards2.add(Card.C4);
+    cards2.add(Card.C5);
+    cards2.add(Card.C6);
+    cards2.add(Card.C7);
+    cards2.add(Card.C8);
+    cards2.add(Card.C9);
   }
 
-  private static void test1b() {
-    ElementRange.findAssociated(Card.C2);
+  public static int test1(int i) {
+    return (i % 2) * 2 - 1;
   }
 
-  public static void test1c() {
+  private static int test1b(int i) {
+    if (i % 2 == 1) {
+      return -1;
+    }
+    return 1;
+  }
+
+  public static int test1c(int i) {
+    return 0;
+
   }
 
   public static void comparePerformance() {
@@ -125,24 +142,42 @@ public class ColorPicker {
     long sum3 = 0;
     long l;
 
-    int num = 500000000;
+    int res1 = 0;
+    int res2 = 0;
+    int res3 = 0;
+
+    int num = 40000;
+
+    for (int i = 0; i < num; i++) {
+      for (int j = 0; j < num; j++) {
+        // do nothing
+      }
+
+    }
+
     l = System.nanoTime();
     for (int i = 0; i < num; i++) {
-      test1();
+      for (int j = 0; j < num; j++) {
+        res1 += test1(i);
+      }
     }
     l = System.nanoTime() - l;
     sum1 += l;
 
     l = System.nanoTime();
     for (int i = 0; i < num; i++) {
-      test1b();
+      for (int j = 0; j < num; j++) {
+        res2 += test1b(i);
+      }
     }
     l = System.nanoTime() - l;
     sum2 += l;
 
     l = System.nanoTime();
     for (int i = 0; i < num; i++) {
-      test1c();
+      for (int j = 0; j < num; j++) {
+        res3 += test1c(i);
+      }
     }
     l = System.nanoTime() - l;
     sum3 += l;
@@ -155,6 +190,7 @@ public class ColorPicker {
     lAll /= 1000000;
     LOG.info("all: {}", lAll);
 
+    LOG.info("res1: {}, res2: {}, res3: {}", res1, res2, res3);
     LOG.info("test1: {}, test2: {}, test3: {}", sum1, sum2, sum3);
 
   }
@@ -208,15 +244,7 @@ public class ColorPicker {
     // System.out.println(cards.stream().map(Card::ordinal)
     // .collect(Tools.toList()));
 
-    ResultImpl res = new CatRec(
-        cards.get(0), cards.get(1), Tools.asList(
-            cards.get(2),
-            cards.get(3),
-            cards.get(4),
-            cards.get(5),
-            cards.get(6)
-            ))
-        .check();
+    ResultImpl res = new CatRec().check(cards);
     short score2 = allRes.getScore(res);
 
     System.out.println("score1: " + score + " , score2: " + score2);

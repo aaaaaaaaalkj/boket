@@ -48,32 +48,26 @@ public final class CatRec implements ICatRec {
   @SuppressWarnings("null")
   static final org.slf4j.Logger LOG = LoggerFactory
       .getLogger(CatRec.class);
-  private List<Card> all;
-  private List<Card> community;
 
-  public CatRec(final Card first, final Card second, final List<Card> communityCards) {
-    this(Tools.asList(first, second), communityCards);
+  public CatRec() {
+    // final List<@NonNull Card> hand,
+    // final List<@NonNull Card> communityCards
   }
 
-  public CatRec(final List<@NonNull Card> hand, final List<@NonNull Card> communityCards) {
-
-    all = new ArrayList<>();
-    all.addAll(hand);
-    all.addAll(communityCards);
+  /**
+   * @Parameter cards - list of cards. first two are hand-cards. last 5 are community cards
+   */
+  @Override
+  public ResultImpl check(List<Card> cards) {
+    List<Card> all = new ArrayList<>(cards);
     Collections.sort(all);
     Collections.reverse(all);
-
-    community = new ArrayList<>(communityCards);
-
-  }
-
-  public ResultImpl check() {
 
     List<Rank> ranks = Tools.map(all, Card::getRank);
 
     ResultImpl pairB = getPairBasedResult(ranks);
 
-    ResultImpl flushB = getFlushOrStraightResult();
+    ResultImpl flushB = getFlushOrStraightResult(all);
 
     return (flushB.compareTo(pairB) > 0) ? flushB : pairB;
   }
@@ -171,12 +165,13 @@ public final class CatRec implements ICatRec {
   }
 
   // +++++++++++++++++++++++++
-  private ResultImpl result(final Cathegory cat, final List<List<Rank>> tieBreakers) {
+  private ResultImpl result(final Cathegory cat,
+      final List<List<Rank>> tieBreakers) {
     List<Rank> tie2 = Tools.first(COUNT_BEST_CARDS, Tools.flatten(tieBreakers));
     return new ResultImpl(cat, tie2);
   }
 
-  private ResultImpl getFlushOrStraightResult() {
+  private ResultImpl getFlushOrStraightResult(List<Card> all) {
 
     Map<Suit, List<Rank>> map;
     map = Tools.groupingBy(all, Card::getSuit, Card::getRank);
@@ -232,7 +227,7 @@ public final class CatRec implements ICatRec {
     }
   }
 
-  private boolean checkOESD() {
+  private boolean checkOESD(List<Card> all) {
     Set<Rank> ranks = new HashSet<>();
     for (Card c : all) {
       ranks.add(c.getRank());
@@ -255,7 +250,7 @@ public final class CatRec implements ICatRec {
     return res;
   }
 
-  private boolean checkGutshot() {
+  private boolean checkGutshot(List<Card> all) {
     @SuppressWarnings("null")
     Set<Rank> ranks = all.stream()
         .map(Card::getRank)
@@ -285,7 +280,7 @@ public final class CatRec implements ICatRec {
   private static final int DRAWS_NEEDED_FOR_DOUBLE_GUTSHOT = 2;
   private static final int CARDS_IN_WINDOW_NEEDED_FOR_GUTSHOT = 4;
 
-  public boolean checkDoubleGutshot2() {
+  public boolean checkDoubleGutshot2(List<Card> all) {
     Set<Rank> ranks = new HashSet<>();
     for (Card c : all) {
       ranks.add(c.getRank());
@@ -301,19 +296,18 @@ public final class CatRec implements ICatRec {
     return count == DRAWS_NEEDED_FOR_DOUBLE_GUTSHOT;
   }
 
-
-
   @SuppressWarnings("null")
-  private boolean checkFlushDraw() {
+  private Boolean checkFlushDraw(List<Card> all) {
     return all.stream()
         .collect(groupingBy(Card::getSuit, counting()))
         .values().stream()
         .max(naturalOrder())
         .map(x -> x == 4)
-        .orElse(false);
+        .orElse(Boolean.FALSE);
   }
 
-  public PairBasedDanger checkPairBasedDanger() {
+  @Override
+  public PairBasedDanger checkPairBasedDanger(List<Card> community) {
     List<Rank> ranks = Tools.map(community, Card::getRank);
     ResultImpl pairB = getPairBasedResult(ranks);
     Cathegory c = pairB.getCathegory();
@@ -333,7 +327,8 @@ public final class CatRec implements ICatRec {
    * 
    * @see management.cards.catrecnew.ICatRec#checkStraightDanger()
    */
-  public StraightDanger checkStraightDanger() {
+  @Override
+  public StraightDanger checkStraightDanger(List<Card> community) {
 
     @SuppressWarnings("null")
     Function<Window, Long> countMatchesInWindow = window -> community
@@ -389,8 +384,9 @@ public final class CatRec implements ICatRec {
     }
   }
 
+  @Override
   @SuppressWarnings("null")
-  public FlushDanger checkFlushDanger() {
+  public FlushDanger checkFlushDanger(List<Card> community) {
     if (community.isEmpty()) {
       return FlushDanger.NONE;
     }
@@ -406,22 +402,23 @@ public final class CatRec implements ICatRec {
         .orElse(FlushDanger.NONE);
   }
 
-  public DrawType checkDraw() {
-    if (checkDoubleGutshot2()) {
-      if (checkFlushDraw()) {
+  @Override
+  public DrawType checkDraw(List<Card> all) {
+    if (checkDoubleGutshot2(all)) {
+      if (checkFlushDraw(all)) {
         return DrawType.MONSTER_DRAW;
       } else {
         return DrawType.DOUBLE_GUTSHOT;
       }
-    } else if (checkOESD()) {
-      if (checkFlushDraw()) {
+    } else if (checkOESD(all)) {
+      if (checkFlushDraw(all)) {
         return DrawType.MONSTER_DRAW;
       } else {
         return DrawType.OESD;
       }
-    } else if (checkFlushDraw()) {
+    } else if (checkFlushDraw(all)) {
       return DrawType.FLUSH_DRAW;
-    } else if (checkGutshot()) {
+    } else if (checkGutshot(all)) {
       return DrawType.GUTSHOT;
     } else {
       return DrawType.NONE;

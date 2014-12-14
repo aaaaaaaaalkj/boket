@@ -143,10 +143,8 @@ public class BinomCoeff {
                       c7.ordinal1based()
                       );
 
-                  ResultImpl res = new CatRec(
-                      c1, c2, Tools.asList(c3, c4, c5,
-                          c6, c7))
-                      .check();
+                  ResultImpl res = new CatRec().check(
+                      Tools.asList(c1, c2, c3, c4, c5, c6, c7));
                   short score = allRes.getScore(res);
 
                   // System.out.println(

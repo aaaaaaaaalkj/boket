@@ -1,5 +1,8 @@
 package management.cards.catrecnew;
 
+import java.util.List;
+
+import management.cards.cards.Card;
 import strategy.conditions.postflop.DrawType;
 import strategy.conditions.postflop.FlushDanger;
 import strategy.conditions.postflop.PairBasedDanger;
@@ -7,13 +10,13 @@ import strategy.conditions.postflop.StraightDanger;
 
 public interface ICatRec extends ICatRecBase {
 
-  FlushDanger checkFlushDanger();
+  FlushDanger checkFlushDanger(List<Card> community);
 
-  StraightDanger checkStraightDanger();
+  StraightDanger checkStraightDanger(List<Card> community);
 
-  PairBasedDanger checkPairBasedDanger();
+  PairBasedDanger checkPairBasedDanger(List<Card> community);
 
-  DrawType checkDraw();
+  DrawType checkDraw(List<Card> all);
 
-  IResult check();
+  IResult check(List<Card> all);
 }

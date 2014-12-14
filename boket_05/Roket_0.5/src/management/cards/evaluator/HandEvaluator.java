@@ -6,13 +6,14 @@ import java.util.List;
 
 import management.cards.AllResults;
 import management.cards.cards.Card;
+import management.cards.catrecnew.ICatRecBase;
 import management.cards.catrecnew.IResult;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 import tools.Tools;
 
-public final class HandEvaluator {
+public final class HandEvaluator implements ICatRecBase {
   private static final String EVALUATED_HANDS_FILE_NAME = "hand_evaluator.ser";
   private static final String RESULTS_TYPES_FILE_NAME = "cathegories.txt";
   private static final int NUM_CARDS = 52;
@@ -24,19 +25,22 @@ public final class HandEvaluator {
   private final BinomCoeff bino;
 
   @SuppressWarnings("null")
-  private HandEvaluator() throws ClassNotFoundException, IOException {
-    map = (short[]) Tools.deserialize(EVALUATED_HANDS_FILE_NAME);
+  private HandEvaluator() {
+    try {
+      map = (short[]) Tools.deserialize(EVALUATED_HANDS_FILE_NAME);
 
-    this.bino = new BinomCoeff(NUM_CARDS, NUM_CARDS_NEEDED);
+      this.bino = new BinomCoeff(NUM_CARDS, NUM_CARDS_NEEDED);
 
-    this.allRes = AllResults.getInstance(RESULTS_TYPES_FILE_NAME);
+      this.allRes = AllResults.getInstance(RESULTS_TYPES_FILE_NAME);
+    } catch (ClassNotFoundException | IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Nullable
   private static HandEvaluator singeltonInstance;
 
-  public static HandEvaluator getInstance() throws ClassNotFoundException,
-      IOException {
+  public static HandEvaluator getInstance() {
     HandEvaluator instance;
     if (null != singeltonInstance) {
       instance = singeltonInstance;
@@ -54,13 +58,12 @@ public final class HandEvaluator {
     return score;
   }
 
-
-  public IResult getResult(final List<Card> cards) {
+  @Override
+  public IResult check(final List<Card> cards) {
     short score = getScore(cards);
     IResult res = allRes.getResult(score);
     return res;
 
   }
-
 
 }
