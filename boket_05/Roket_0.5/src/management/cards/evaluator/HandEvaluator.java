@@ -54,6 +54,9 @@ public final class HandEvaluator implements ICatRecBase {
   public short getScore(final List<Card> cards) {
     Collections.sort(cards);
     int hash = bino.hash(cards);
+
+    assert hash >= 0 : "" + cards;
+
     short score = map[hash - OFFSET];
     return score;
   }

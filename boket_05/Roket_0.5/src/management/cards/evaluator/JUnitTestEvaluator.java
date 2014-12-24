@@ -19,7 +19,7 @@ public final class JUnitTestEvaluator {
   private static HandEvaluator staticCatRec = HandEvaluator.getInstance();
   private static CatRec liveCatRec = new CatRec();
 
-  private JUnitTestEvaluator() {
+  public JUnitTestEvaluator() {
     // do not instantiate
   }
 
@@ -35,8 +35,9 @@ public final class JUnitTestEvaluator {
     return cards;
   }
 
+  @SuppressWarnings("static-method")
   @Test
-  public static void test() {
+  public void test() {
     List<Card> cards;
     IResult expected, got;
     Random rnd = new Random();

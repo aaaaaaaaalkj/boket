@@ -1,8 +1,8 @@
 package tools;
 
-import inputoutput.MyRobot;
-import inputoutput.Raw_Situation;
-import inputoutput.ScreenScraper;
+import io.screen.MyRobot;
+import io.screen.RawSituation;
+import io.screen.ScreenScraper;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -23,8 +23,11 @@ import management.cards.evaluator.HandEvaluator;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.LoggerFactory;
 
-import potoddsstrategy.PotOddsDecision;
-import potoddsstrategy.PotOddsStrategy;
+import potodd.sstrategy.PotOddsDecision;
+import potodd.sstrategy.PotOddsStrategy;
+import ranges.ConsistencyChecker;
+import ranges.ElementRange;
+import ranges.SimpleRange;
 
 public class ColorPicker {
   @SuppressWarnings("null")
@@ -37,7 +40,7 @@ public class ColorPicker {
 
   public final static void test2() throws AWTException {
     ScreenScraper scraper = new ScreenScraper();
-    Raw_Situation raw = scraper.getSituation();
+    RawSituation raw = scraper.getSituation();
     raw.print();
     PotOddsStrategy strategy = new PotOddsStrategy(raw);
     LOG.info("{}", strategy);
@@ -119,24 +122,26 @@ public class ColorPicker {
     cards2.add(Card.C9);
   }
 
-  public static int test1(int i) {
-    return (i % 2) * 2 - 1;
+  static final SimpleRange range = SimpleRange.full();
+
+  public static boolean test1(List<ElementRange> hands, List<Card> commCards) {
+
+    boolean res = ConsistencyChecker.areConsistent(hands, commCards);
+
+    return res;
+
   }
 
-  private static int test1b(int i) {
-    if (i % 2 == 1) {
-      return -1;
-    }
-    return 1;
+  private static int test1b(int i, int res2) {
+    // return Math.max(i, res2);
+    return i - res2;
   }
 
-  public static int test1c(int i) {
-    int x = i + 1;
-    x++;
-    int y = x;
-    x = y;
-    return 0;
+  private static final int CHAR_BIT = 8;
+  private static final int INT_SIZE = 32;
 
+  public static int test1c(int x, int y) {
+    return x - (x - y) * ((x - y) >> 31 & 1);
   }
 
   public static void comparePerformance() {
@@ -150,19 +155,25 @@ public class ColorPicker {
     int res2 = 0;
     int res3 = 0;
 
-    int num = 40000;
+    int num = 316;
+
+    List<ElementRange> hands = new ArrayList<>();
+    hands.add(ElementRange._5s_4h);
+    hands.add(ElementRange._5h_2d);
+    hands.add(ElementRange._5h_3c);
+
+    List<Card> commCards = Tools.asList(Card.C2, Card.C3, Card.C6);
 
     for (int i = 0; i < num; i++) {
       for (int j = 0; j < num; j++) {
-        // do nothing
+        // warm up
       }
-
     }
 
     l = System.nanoTime();
     for (int i = 0; i < num; i++) {
       for (int j = 0; j < num; j++) {
-        res1 += test1(i);
+        test1(hands, commCards);
       }
     }
     l = System.nanoTime() - l;
@@ -171,7 +182,7 @@ public class ColorPicker {
     l = System.nanoTime();
     for (int i = 0; i < num; i++) {
       for (int j = 0; j < num; j++) {
-        res2 += test1b(i);
+        res2 = test1b(i | j, res2);
       }
     }
     l = System.nanoTime() - l;
@@ -180,7 +191,7 @@ public class ColorPicker {
     l = System.nanoTime();
     for (int i = 0; i < num; i++) {
       for (int j = 0; j < num; j++) {
-        res3 += test1c(i);
+        res3 = test1c(i | j, res3);
       }
     }
     l = System.nanoTime() - l;

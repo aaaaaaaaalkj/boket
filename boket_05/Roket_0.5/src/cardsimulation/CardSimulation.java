@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import management.cards.cards.Card;
-import management.cards.cards.Hand;
 import management.cards.catrecnew.CatRec;
 import management.cards.catrecnew.ResultImpl;
 
@@ -35,12 +34,12 @@ public class CardSimulation {
   public CardSimulation(final int count,
       final List<Double> activeContributors,
       final List<Double> stddev,
-      final Hand hand,
+      final List<Card> hand,
       final List<Card> community) {
     this.stdDev = stddev;
     this.activeContributors = activeContributors;
     this.numPlayers = count;
-    this.hand = Tools.asList(hand.getFirst(), hand.getSecond());
+    this.hand = hand;
     this.community = new ArrayList<>();
     this.community.addAll(community);
     // this.hands = new ArrayList<>();

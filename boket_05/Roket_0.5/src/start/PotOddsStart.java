@@ -1,8 +1,8 @@
 package start;
 
-import inputoutput.MyOutput;
-import inputoutput.Raw_Situation;
-import inputoutput.ScreenScraper;
+import io.screen.MyOutput;
+import io.screen.RawSituation;
+import io.screen.ScreenScraper;
 
 import java.awt.AWTException;
 import java.awt.image.BufferedImage;
@@ -12,8 +12,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import management.payments.decisions.DecisionType;
-import potoddsstrategy.PotOddsDecision;
-import potoddsstrategy.PotOddsStrategy;
+import potodd.sstrategy.PotOddsDecision;
+import potodd.sstrategy.PotOddsStrategy;
 import tools.Pos;
 
 public final class PotOddsStart {
@@ -58,7 +58,7 @@ public final class PotOddsStart {
     while (true) {
       ScreenScraper scraper = new ScreenScraper();
 
-      Raw_Situation raw = scraper.getSituation();
+      RawSituation raw = scraper.getSituation();
 
       if (raw.getBrownButtons()[0] && !raw.getBrownButtons()[1]
           && !raw.getBrownButtons()[2]) {
@@ -85,7 +85,7 @@ public final class PotOddsStart {
 
   private static void handleSituation(final ScreenScraper scraper,
       final boolean myTurn) {
-    Raw_Situation raw = scraper.getSituation();
+    RawSituation raw = scraper.getSituation();
 
     saveImage(scraper.getScreenshot(), "");
 

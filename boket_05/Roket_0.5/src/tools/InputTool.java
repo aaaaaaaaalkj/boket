@@ -1,6 +1,6 @@
 package tools;
 
-import inputoutput.Pattern;
+import io.screen.Pattern;
 
 import java.awt.Color;
 

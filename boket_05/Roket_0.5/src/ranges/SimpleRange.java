@@ -11,16 +11,11 @@ import management.cards.cards.Rank;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import tools.RandomEnumSet;
-import tools.UnmodifiableIterator;
+import tools.collections.RandomEnumSet;
+import tools.collections.UnmodifiableIterator;
 
-public class SimpleRange implements Range, Cloneable, Iterable<ElementRange> {
+public final class SimpleRange implements Range {
   private final RandomEnumSet<ElementRange> elements;
-
-  @Override
-  public final SimpleRange clone() {
-    return new SimpleRange(elements.clone());
-  }
 
   @SuppressWarnings("null")
   public SimpleRange() {
@@ -31,48 +26,44 @@ public class SimpleRange implements Range, Cloneable, Iterable<ElementRange> {
     this.elements = elements;
   }
 
-  public final void add(final ElementRange e) {
+  public void add(final ElementRange e) {
     elements.add(e);
   }
 
-  public final boolean remove(final ElementRange e) {
-    return elements.remove(e);
-  }
-
   @Override
-  public final ElementRange getRandom(final Random rnd) {
+  public ElementRange getRandom(final Random rnd, double score) {
     return elements.getRandom(rnd);
   }
 
-  public final SimpleRange removeAssociated(final Iterable<Card> cards) {
-    for (Card c : cards) {
-      elements.removeAll(ElementRange.findAssociated(c));
-    }
-    return this;
-  }
+  // public SimpleRange removeAssociated(final Iterable<Card> cards) {
+  // for (Card c : cards) {
+  // elements.removeAll(ElementRange.findAssociated(c));
+  // }
+  // return this;
+  // }
 
-  public final SimpleRange removeAssociated(final Card card) {
-    elements.removeAll(ElementRange.findAssociated(card));
-    return this;
-  }
+  // public SimpleRange removeAssociated(final Card card) {
+  // elements.removeAll(ElementRange.findAssociated(card));
+  // return this;
+  // }
 
-  public final SimpleRange removeAssociated(final ElementRange e) {
-    elements.removeAll(ElementRange.findAssociated(e.getFirstCard()));
-    elements.removeAll(ElementRange.findAssociated(e.getSecondCard()));
-    return this;
-  }
+  // public SimpleRange removeAssociated(final ElementRange e) {
+  // elements.removeAll(ElementRange.findAssociated(e.getFirstCard()));
+  // elements.removeAll(ElementRange.findAssociated(e.getSecondCard()));
+  // return this;
+  // }
 
   @Override
-  public final boolean contains(final ElementRange r) {
+  public boolean contains(final ElementRange r) {
     return elements.contains(r);
   }
 
   @Override
-  public final int size() {
+  public int size() {
     return elements.size();
   }
 
-  public final void addAll(final SimpleRange other) {
+  public void addAll(final SimpleRange other) {
     this.elements.addAll(other.elements);
   }
 
@@ -141,7 +132,22 @@ public class SimpleRange implements Range, Cloneable, Iterable<ElementRange> {
         ElementRange.VALUES));
   }
 
-  public final boolean containsAll(final SimpleRange target) {
+  public static SimpleRange broadwayHands() {
+
+    List<Card> cards = Card.broadwayCards();
+
+    SimpleRange res = new SimpleRange();
+
+    for (int i = 0; i < cards.size(); i++) {
+      for (int j = i + 1; j < cards.size(); j++) {
+        res.add(ElementRange.find(cards.get(i), cards.get(j)));
+      }
+    }
+
+    return res;
+  }
+
+  public boolean containsAll(final SimpleRange target) {
     return elements.containsAll(target.elements);
   }
 

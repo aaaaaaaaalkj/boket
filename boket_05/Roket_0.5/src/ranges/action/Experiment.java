@@ -1,32 +1,39 @@
 package ranges.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
 
 import management.cards.cards.Card;
 import management.cards.evaluator.HandEvaluator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ranges.ElementRange;
+import ranges.FlexRange;
 import ranges.SimpleRange;
+import tools.Tools;
 
 public final class Experiment {
-  private static final int COUNT_COMMUNITY_CARDS = 5;
-  private final List<Card> all;
-  private final List<Card> communityCards;
-  private final int countBaseCards;
+  @SuppressWarnings("null")
+  static final Logger LOG = LoggerFactory.getLogger(Experiment.class);
+
+  private final CardsManager cards;
 
   private final Random rnd;
-  private final SimpleRange baseRange;
-  private SimpleRange range;
+  private final FlexRange baseRange;
   private final int countPlayers;
 
   private final EnumMap<ElementRange, Stat> stats;
-  private final List<ElementRange> hands;
+
   private final List<Short> scores;
   private final HandEvaluator rec;
 
-  private final List<Card> sevenCards;
+  private int numExperiments;
+  private int numConsistent;
 
   @SuppressWarnings("null")
   public Experiment(
@@ -34,105 +41,112 @@ public final class Experiment {
       final List<Card> communityBase,
       final int countPlayers,
       final Random rnd) {
+    this.numExperiments = 0;
+    this.numConsistent = 0;
     this.stats = new EnumMap<>(ElementRange.class);
-    this.sevenCards = new ArrayList<>();
+
     this.countPlayers = countPlayers;
-    this.countBaseCards = communityBase.size();
-    this.all = new ArrayList<>(Card.getAllCards());
-    this.all.remove(communityBase);
-    this.communityCards = new ArrayList<>(communityBase);
+    this.cards = new CardsManager(communityBase, countPlayers);
     this.rnd = rnd;
-    this.baseRange = range.clone();
-    this.baseRange.removeAssociated(communityBase);
-    this.range = baseRange.clone();
-    this.hands = new ArrayList<>();
+    this.baseRange = new FlexRange(range);
+    this.baseRange.blockCards(communityBase);
+    this.baseRange.setMarker("start");
+
     this.scores = new ArrayList<>();
     this.rec = HandEvaluator.getInstance();
 
-    for (int i = 0; i < 7; i++) {
-      // prefill with junk for speed-optimization
-      // we can use set(index,value) instead of add()... clear()
-      this.sevenCards.add(Card.C2);
-    }
     for (int i = 0; i < countPlayers; i++) {
       // prefill with junk for speed-optimization
       // we can use set(index,value) instead of add()... clear()
-      this.hands.add(ElementRange._2c_2d);
       this.scores.add((short) 0);
     }
     for (ElementRange e : baseRange) {
-      stats.put(e, new Stat());
+      stats.put(e, new Stat(e));
     }
 
   }
 
-  private void fillCommunityCards() {
-    while (communityCards.size() < COUNT_COMMUNITY_CARDS) {
-      int index = rnd.nextInt(all.size());
-      Card c = all.remove(index);
-      communityCards.add(c);
-      range.removeAssociated(c);
-    }
-  }
-
-  private void dealHands(final SimpleRange workingRange) {
+  @SuppressWarnings("null")
+  private void updateScores() {
     for (int player = 0; player < countPlayers; player++) {
-      ElementRange hand = workingRange.getRandom(rnd);
-      hands.set(player, hand);
-      workingRange.removeAssociated(hand);
+      // cards will be sorted by rec
+      short score = rec.getScore(cards.sevenCards(player));
+      scores.set(player, score);
     }
   }
 
-  private List<Card> cards(final List<Card> hand, final List<Card> community) {
-    sevenCards.set(0, hand.get(0));
-    sevenCards.set(1, hand.get(1));
+  private short computeMaxScore() {
+    short maxScore = 0;
+    for (int player = 0; player < countPlayers; player++) {
+      maxScore = Tools.max(maxScore, scores.get(player));
+    }
+    return maxScore;
+  }
 
-    sevenCards.set(2, community.get(0));
-    sevenCards.set(3, community.get(1));
-    sevenCards.set(4, community.get(2));
-    sevenCards.set(5, community.get(3));
-    sevenCards.set(6, community.get(4));
-    return sevenCards;
+  private void updateStats(int maxScore) {
+    for (int player = 0; player < countPlayers; player++) {
+      boolean result = scores.get(player) == maxScore;
+      ElementRange hand = cards.get(player);
+      stats.get(hand).outcome(result);
+    }
+  }
+
+  private void dealHands() {
+    for (int player = 0; player < countPlayers; player++) {
+      ElementRange hand = baseRange.getRandom(rnd, 1 /* 100% */);
+      cards.set(player, hand);
+      // baseRange.blockHand(hand);
+    }
   }
 
   public void next() {
-    fillCommunityCards();
+    cards.drawCommunityCards(rnd, baseRange);
+    baseRange.setMarker("community cards");
 
     for (int i = 0; i < 100; i++) {
-      dealHands(range.clone());
+      dealHands();
 
-      short maxScore = 0;
-
-      for (int player = 0; player < countPlayers; player++) {
-        List<Card> hand = hands.get(player).getCards();
-
-        // cards will be sorted by rec
-        short score = rec.getScore(cards(hand, communityCards));
-        if (score > maxScore) {
-          score = maxScore;
-        }
-        scores.set(player, score);
+      numExperiments++;
+      if (cards.areConsistent()) {
+        numConsistent++;
       }
 
-      for (int player = 0; player < countPlayers; player++) {
-        stats.get(hands.get(player))
-            .won(scores.get(player) == maxScore);
-      }
+      // LOG.info("{}", hands);
+
+      updateScores();
+
+      short maxScore = computeMaxScore();
+
+      updateStats(maxScore);
+      baseRange.resetTo("community cards");
 
     }
-    revoke();
+    cards.reverse();
+    baseRange.resetTo("start");
   }
 
-  private void revoke() {
-    hands.clear();
+  public void assignScore() {
+    List<Stat> res = new ArrayList<>(stats.values());
+    Collections.sort(res);
+
+    double min = res.get(0).success();
+    double max = res.get(res.size() - 1).success();
+
+    for (int i = 0; i < res.size(); i++) {
+      res.get(i).computeScore(min, max);
+    }
   }
 
-  public void reverse() {
-    List<Card> newCards = communityCards
-        .subList(countBaseCards, COUNT_COMMUNITY_CARDS);
-    all.addAll(newCards);
-    newCards.clear();
-    this.range = baseRange.clone();
+  public void printStats() {
+    double consistent = Tools.round((double) numConsistent / numExperiments) * 100;
+    System.out.println(consistent + " % consistent");
+
+    List<Stat> res = new ArrayList<>(stats.values());
+
+    Collections.sort(res);
+
+    System.out.println(res);
+
   }
 
 }

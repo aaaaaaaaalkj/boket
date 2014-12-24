@@ -22,8 +22,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 
@@ -1427,6 +1429,11 @@ public enum ElementRange implements Range {
             );
   }
 
+  @Override
+  public String toString() {
+    return "[" + cards.get(0) + " " + cards.get(1) + "]";
+  }
+
   public boolean isPair() {
     return r1 == r2;
   }
@@ -1470,7 +1477,7 @@ public enum ElementRange implements Range {
   }
 
   @Override
-  public ElementRange getRandom(final Random rnd) {
+  public ElementRange getRandom(final Random rnd, double score) {
     return this;
   }
 
@@ -1484,5 +1491,26 @@ public enum ElementRange implements Range {
 
   public Card getSecondCard() {
     return cards.get(1);
+  }
+
+  @Override
+  public Iterator<ElementRange> iterator() {
+    final ElementRange that = this;
+    return new Iterator<ElementRange>() {
+      boolean done = false;
+
+      @Override
+      public @NonNull ElementRange next() {
+        if (done) {
+          throw new NoSuchElementException("Iterator has no more values");
+        }
+        return that;
+      }
+
+      @Override
+      public boolean hasNext() {
+        return done;
+      }
+    };
   }
 }

@@ -1,12 +1,16 @@
 package ranges;
 
+import java.util.Iterator;
 import java.util.Random;
 
-public interface Range {
-	boolean contains(ElementRange r);
+public interface Range extends Iterable<ElementRange> {
+  boolean contains(ElementRange r);
 
-	int size();
+  int size();
 
-	ElementRange getRandom(Random rnd);
+  ElementRange getRandom(Random rnd, double score);
+
+  @Override
+  Iterator<ElementRange> iterator();
 
 }

@@ -1,5 +1,6 @@
 package ranges;
 
+import static management.cards.cards.Rank.Ace;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static ranges.ElementRange.Ac_Ad;
@@ -13,9 +14,11 @@ import static ranges.ElementRange.Ah_Ad;
 import static ranges.ElementRange.As_8d;
 import static ranges.ElementRange.As_Ad;
 import static ranges.ElementRange.As_Ah;
+import static ranges.ElementRange.Kc_2c;
 import static ranges.ElementRange.Kc_Kd;
 import static ranges.ElementRange.Kc_Kh;
 import static ranges.ElementRange.Kc_Ks;
+import static ranges.ElementRange.Kc_Qc;
 import static ranges.ElementRange.Kh_Kd;
 import static ranges.ElementRange.Ks_8d;
 import static ranges.ElementRange.Ks_Kd;
@@ -97,6 +100,8 @@ import static ranges.ElementRange._5s_4c;
 import static ranges.ElementRange._5s_4d;
 import static ranges.ElementRange._5s_4h;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import management.cards.cards.Card;
@@ -105,19 +110,84 @@ import org.junit.Test;
 
 import ranges.preflop.GroupedPlusRange;
 import ranges.preflop.GroupedRange;
+import tools.Tools;
 
+@SuppressWarnings("static-method")
 public final class JUnitTests {
   private static final int NUMBER_OF_POSSIBLE_PAIRS = 78;
   private static final int NUMBER_OF_POSSIBLE_ACES_OFFSUIT = 144;
   private static final int NUMBER_OF_SUITED_GROUPED = 4;
   private static final int NUMBER_OF_CARDS = 52;
 
-  private JUnitTests() {
+  public JUnitTests() {
     // do not instantiate this class
   }
 
   @Test
-  public static void testAssociated() {
+  public void testFindGrouped() {
+    assertTrue(GroupedRange.AA == GroupedRange.find(Ace, Ace));
+
+    for (GroupedRange range : GroupedRange.VALUES) {
+      assertTrue(range == GroupedRange.find(range.getRank1(),
+          range.getRank2(), range.isSuited()));
+    }
+
+  }
+
+  @Test
+  public void testConsistency() {
+    List<ElementRange> hands = new ArrayList<>();
+    hands.add(_5s_4h);
+    hands.add(_5s_2d);
+
+    List<Card> commCards = Tools.asList(Card.C2, Card.C3, Card.C6);
+
+    boolean res = ConsistencyChecker.areConsistent(hands, commCards);
+
+    assertTrue(!res);
+  }
+
+  @Test
+  public void testConsistency2() {
+    List<ElementRange> hands = new ArrayList<>();
+    hands.add(_5s_4h);
+    hands.add(_5h_2d);
+
+    List<Card> commCards = Tools.asList(Card.C2, Card.C3, Card.C6);
+
+    boolean res = ConsistencyChecker.areConsistent(hands, commCards);
+
+    assertTrue(res);
+  }
+
+  @Test
+  public void testConsistency3() {
+    List<ElementRange> hands = new ArrayList<>();
+    hands.add(_5s_4h);
+    hands.add(_5h_2d);
+    hands.add(_5h_3c);
+
+    List<Card> commCards = Tools.asList(Card.C2, Card.C3, Card.C6);
+
+    boolean res = ConsistencyChecker.areConsistent(hands, commCards);
+
+    assertTrue(!res);
+  }
+
+  @Test
+  public void testBroadWayCards() {
+    SimpleRange range = SimpleRange.broadwayHands();
+
+    assertTrue(range.contains(As_Ah));
+    assertTrue(range.contains(Kc_Qc));
+
+    assertFalse(range.contains(Kc_2c));
+    assertFalse(range.contains(ElementRange._3d_2h));
+
+  }
+
+  @Test
+  public void testAssociated() {
     for (Card c : Card.getAllCards()) {
 
       Set<ElementRange> set = ElementRange.findAssociated(c);
@@ -133,7 +203,7 @@ public final class JUnitTests {
   }
 
   @Test
-  public static void testFindElementRange() {
+  public void testFindElementRange() {
     for (ElementRange r1 : ElementRange.VALUES) {
       ElementRange r2 = ElementRange.find(
           r1.getFirstCard(),
@@ -148,7 +218,7 @@ public final class JUnitTests {
   }
 
   @Test
-  public static void testUngroup() {
+  public void testUngroup() {
     SimpleRange range, target;
 
     target = new SimpleRange();
@@ -195,7 +265,7 @@ public final class JUnitTests {
   }
 
   @Test
-  public static void testUngroupPlus() {
+  public void testUngroupPlus() {
     SimpleRange range, target;
 
     target = new SimpleRange();
@@ -289,14 +359,14 @@ public final class JUnitTests {
   }
 
   @Test
-  public static void testGrouped() {
+  public void testGrouped() {
     assertTrue(_3h_2s.grouped() == GroupedRange._32o);
     assertTrue(_3h_2h.grouped() == GroupedRange._32);
     assertTrue(_3s_3h.grouped() == GroupedRange._33);
   }
 
   @Test
-  public static void testGrouptedPlus() {
+  public void testGrouptedPlus() {
     GroupedPlusRange r;
 
     r = new GroupedPlusRange(GroupedRange._22);
