@@ -3,8 +3,6 @@ package io.file;
 import java.util.EnumMap;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import ranges.atry.CountPlayers;
 import ranges.preflop.GroupedRange;
 
@@ -40,7 +38,6 @@ public class PreflopScoreDef2 implements PreflopScoreDefinition {
   }
 
   @Override
-  @Nullable
   public Double getScore(GroupedRange range, CountPlayers countPlayers) {
     return map.get(range).get(countPlayers);
   }

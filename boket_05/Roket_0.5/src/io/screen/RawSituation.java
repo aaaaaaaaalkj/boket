@@ -9,7 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import tools.Tools;
 
-public class RawSituation {
+public class RawSituation implements CardSituation {
   public static final int NUM_SEATS = 9;
   public static final double BIG_BLIND = 0.02;
   private final int checkSum;

@@ -41,4 +41,8 @@ public enum CountPlayers {
     return VALUES.get(i);
   }
 
+  public static int size() {
+    return VALUES.size();
+  }
+
 }

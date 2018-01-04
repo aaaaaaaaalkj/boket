@@ -57,7 +57,7 @@ final class Action {
 
   public static void main(final String[] args) {
 
-    start(Tools.asList(Card.C2, Card.C7),
+    start(Tools.asList(Card.TWO_CLUBS, Card.SEVEN_CLUBS),
         Tools.asList(), 9);
 
   }

@@ -42,11 +42,11 @@ public class CardsManager {
     }
 
     for (int i = 0; i < 7; i++) {
-      this.sevenCards.add(Card.C2);
+      this.sevenCards.add(Card.TWO_CLUBS);
     }
 
     while (communityCards.size() < COUNT_COMMUNITY_CARDS) {
-      communityCards.add(Card.C2);
+      communityCards.add(Card.TWO_CLUBS);
     }
   }
 

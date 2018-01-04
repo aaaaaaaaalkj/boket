@@ -13,7 +13,7 @@ import ranges.atry.ScoreInterval;
 public class SimulationImpl implements Simulation {
 
   @Override
-  public @NonNull SimSituation prepareSituation(@NonNull RawSituation raw) {
+  public @NonNull SimSituation prepareSituation(RawSituation raw) {
     return new SimSituation() {
       @Override
       public List<ScoreInterval> getScores() {

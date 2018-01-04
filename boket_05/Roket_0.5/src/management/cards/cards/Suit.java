@@ -53,33 +53,33 @@ public enum Suit {
   public String shortString() {
     switch (this) {
     case DIAMONDS:
-      return "d";
+			return "♦";
     case HEARTS:
-      return "h";
+			return "♥";
     case SPADES:
-      return "s";
+			return "♠";
     case CLUBS:
-      return "c";
+			return "♣";
     default:
       throw new RuntimeException("Unexpected suit: " + this);
     }
   }
 
-  public static Suit fromShortString(final String s) {
-    if (s.equals("d")) {
-      return DIAMONDS;
-    }
-    if (s.equals("h")) {
-      return HEARTS;
-    }
-    if (s.equals("s")) {
-      return SPADES;
-    }
-    if (s.equals("c")) {
-      return CLUBS;
-    }
-    throw new RuntimeException(s + " is not a short String for a color!");
-  }
+	// public static Suit fromShortString(final String s) {
+	// if (s.equals("♦")) {
+	// return DIAMONDS;
+	// }
+	// if (s.equals("♥")) {
+	// return HEARTS;
+	// }
+	// if (s.equals("♠")) {
+	// return SPADES;
+	// }
+	// if (s.equals("♣")) {
+	// return CLUBS;
+	// }
+	// throw new RuntimeException(s + " is not a short String for a color!");
+	// }
 
   public static int count() {
     return VALUES.size();

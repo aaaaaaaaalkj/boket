@@ -19,6 +19,7 @@ import managementstate.IGameState;
 import managementstate.IStateManagement;
 import start.StrategyDefinitions;
 import tools.Tools;
+
 import common.IOutcome;
 import common.IPlayer;
 import common.PlayerImpl;

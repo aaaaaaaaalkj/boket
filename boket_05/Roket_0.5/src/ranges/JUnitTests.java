@@ -140,7 +140,7 @@ public final class JUnitTests {
     hands.add(_5s_4h);
     hands.add(_5s_2d);
 
-    List<Card> commCards = Tools.asList(Card.C2, Card.C3, Card.C6);
+    List<Card> commCards = Tools.asList(Card.TWO_CLUBS, Card.THREE_CLUBS, Card.SIX_CLUBS);
 
     boolean res = ConsistencyChecker.areConsistent(hands, commCards);
 
@@ -153,7 +153,7 @@ public final class JUnitTests {
     hands.add(_5s_4h);
     hands.add(_5h_2d);
 
-    List<Card> commCards = Tools.asList(Card.C2, Card.C3, Card.C6);
+    List<Card> commCards = Tools.asList(Card.TWO_CLUBS, Card.THREE_CLUBS, Card.SIX_CLUBS);
 
     boolean res = ConsistencyChecker.areConsistent(hands, commCards);
 
@@ -167,7 +167,7 @@ public final class JUnitTests {
     hands.add(_5h_2d);
     hands.add(_5h_3c);
 
-    List<Card> commCards = Tools.asList(Card.C2, Card.C3, Card.C6);
+    List<Card> commCards = Tools.asList(Card.TWO_CLUBS, Card.THREE_CLUBS, Card.SIX_CLUBS);
 
     boolean res = ConsistencyChecker.areConsistent(hands, commCards);
 

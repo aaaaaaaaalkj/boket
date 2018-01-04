@@ -66,6 +66,26 @@ public class Carousel implements IStateManagement {
       return gameEnd(oldRound);
     }
 
+    goToNextRoundIfEverybodyIsDone();
+
+    findNextActivePlayer();
+
+    return GameStateImpl.create(
+        round,
+        oldRound,
+        currentIndex,
+        activePlayers.size(),
+        getNotFolded());
+  }
+
+  private final void findNextActivePlayer() {
+    do {
+      currentIndex = (currentIndex == numSeats) ? 0 : currentIndex + 1;
+    } while (!activePlayers.contains(currentIndex));
+    todoPlayers.remove(currentIndex);
+  }
+
+  private final void goToNextRoundIfEverybodyIsDone() {
     if (todoPlayers.isEmpty()) {
       Round next = round.next();
       if (next == null) {
@@ -79,14 +99,6 @@ public class Carousel implements IStateManagement {
       }
     }
 
-    do {
-      currentIndex = currentIndex == numSeats ? 0 : currentIndex + 1;
-    } while (!activePlayers.contains(currentIndex));
-
-    todoPlayers.remove(currentIndex);
-
-    return GameStateImpl.create(round, oldRound, currentIndex,
-        activePlayers.size(), getNotFolded());
   }
 
   private Set<Integer> getNotFolded() {

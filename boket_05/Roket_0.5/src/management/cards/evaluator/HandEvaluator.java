@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import management.cards.AllResults;
 import management.cards.cards.Card;
 import management.cards.catrecnew.ICatRecBase;
 import management.cards.catrecnew.IResult;
-
-import org.eclipse.jdt.annotation.Nullable;
-
 import tools.Tools;
 
 public final class HandEvaluator implements ICatRecBase {
@@ -24,7 +23,6 @@ public final class HandEvaluator implements ICatRecBase {
   private final short[] map;
   private final BinomCoeff bino;
 
-  @SuppressWarnings("null")
   private HandEvaluator() {
     try {
       map = (short[]) Tools.deserialize(EVALUATED_HANDS_FILE_NAME);
